@@ -16,6 +16,10 @@
       "from": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList_0",
       "set": { "_metadata_": "F2_Default" } },
 
+    { "op": "set", "create": true, "type": 0,
+      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+      "field": "_ChampionshipSetup_instancecount_", "value": "1" },
+
     { "op": "add-row",
       "table": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
       "from": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default].ChampionshipSetup_0" },

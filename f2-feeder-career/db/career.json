@@ -94,6 +94,60 @@
       "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships",
       "field": "_ChampionshipReference_instancecount_",
       "value": "2"
+    },
+    {
+      "op": "set",
+      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
+      "field": "car_1",
+      "value": "f2_car_25"
+    },
+    {
+      "op": "set",
+      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
+      "field": "car_1_spec",
+      "value": "invicta_25_generic"
+    },
+    {
+      "op": "set",
+      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
+      "field": "driver_1",
+      "value": "leonardo_fornaroli"
+    },
+    {
+      "op": "set",
+      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
+      "field": "car_2",
+      "value": "f2_car_25"
+    },
+    {
+      "op": "set",
+      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
+      "field": "car_2_spec",
+      "value": "mpmotorsport_25_generic"
+    },
+    {
+      "op": "set",
+      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
+      "field": "driver_2",
+      "value": "richard_verschoor"
+    },
+    {
+      "op": "set",
+      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
+      "field": "car_3",
+      "value": "f2_car_25"
+    },
+    {
+      "op": "set",
+      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
+      "field": "car_3_spec",
+      "value": "campos_25_generic"
+    },
+    {
+      "op": "set",
+      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
+      "field": "driver_3",
+      "value": "arvid_lindblad"
     }
   ]
 }

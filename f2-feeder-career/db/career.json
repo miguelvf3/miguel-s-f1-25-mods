@@ -83,14 +83,6 @@
       "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
       "field": "ChampionshipSetup_1.event_list",
       "value": "F1_career_26"
-    },
-    {
-      "op": "add-row",
-      "table": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships",
-      "from": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships.ChampionshipReference_0",
-      "set": {
-        "Championship": "F2_2025_career"
-      }
     }
   ]
 }

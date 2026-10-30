@@ -1,38 +1,96 @@
 {
   "schema_version": 1,
   "ops": [
-    { "op": "add-row", "table": "schedule.event_lists",
+    {
+      "op": "add-row",
+      "table": "schedule.event_lists",
       "from": "schedule.event_lists.event_list[_metadata_=F2_2024_career]",
-      "set": { "_metadata_": "F2_2025_career" } },
-
-    { "op": "add-row", "table": "championships",
+      "set": {
+        "_metadata_": "F2_2025_career"
+      }
+    },
+    {
+      "op": "add-row",
+      "table": "championships",
       "from": "championships.Championship[_metadata_=F2_2024_career]",
-      "set": { "_metadata_": "F2_2025_career",
-               "event_list": "F2_2025_career",
-               "ComCareerSetup_0.entrant_list": "career_f2_2025_for_f1_2026",
-               "ComCareerSetup_0.setup_data": "f1_career_2026" } },
-
-    { "op": "add-row", "table": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups",
+      "set": {
+        "_metadata_": "F2_2025_career",
+        "event_list": "F2_2025_career",
+        "ComCareerSetup_0.entrant_list": "career_f2_2025_for_f1_2026",
+        "ComCareerSetup_0.setup_data": "f1_career_2026"
+      }
+    },
+    {
+      "op": "add-row",
+      "table": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups",
       "from": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList_0",
-      "set": { "_metadata_": "F2_Default" } },
-
-    { "op": "set", "create": true, "type": 0,
+      "set": {
+        "_metadata_": "F2_Default"
+      }
+    },
+    {
+      "op": "set",
+      "create": true,
+      "type": 0,
       "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
-      "field": "_ChampionshipSetup_instancecount_", "value": "1" },
-
-    { "op": "add-row",
-      "table": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
-      "from": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default].ChampionshipSetup_0" },
-
-    { "op": "set",
-      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default].ChampionshipSetup_0",
-      "field": "championship", "value": "F2_2025_career" },
-    { "op": "set",
-      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default].ChampionshipSetup_0",
-      "field": "event_list", "value": "F2_2025_career" },
-
-    { "op": "add-row", "table": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships",
+      "field": "_ChampionshipSetup_instancecount_",
+      "value": "2"
+    },
+    {
+      "op": "set",
+      "create": true,
+      "type": 2,
+      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+      "field": "ChampionshipSetup_0._metadata_",
+      "value": "ChampionshipSetup"
+    },
+    {
+      "op": "set",
+      "create": true,
+      "type": 4,
+      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+      "field": "ChampionshipSetup_0.championship",
+      "value": "F2_2025_career"
+    },
+    {
+      "op": "set",
+      "create": true,
+      "type": 4,
+      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+      "field": "ChampionshipSetup_0.event_list",
+      "value": "F2_2025_career"
+    },
+    {
+      "op": "set",
+      "create": true,
+      "type": 2,
+      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+      "field": "ChampionshipSetup_1._metadata_",
+      "value": "ChampionshipSetup"
+    },
+    {
+      "op": "set",
+      "create": true,
+      "type": 4,
+      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+      "field": "ChampionshipSetup_1.championship",
+      "value": "F1_driver_career_26"
+    },
+    {
+      "op": "set",
+      "create": true,
+      "type": 4,
+      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+      "field": "ChampionshipSetup_1.event_list",
+      "value": "F1_career_26"
+    },
+    {
+      "op": "add-row",
+      "table": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships",
       "from": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships.ChampionshipReference_0",
-      "set": { "Championship": "F2_2025_career" } }
+      "set": {
+        "Championship": "F2_2025_career"
+      }
+    }
   ]
 }

@@ -5,7 +5,7 @@
    "op": "lang.set",
    "language": "*",
    "key": "lng_f2f_a_title",
-   "value": "F2 2025 → F1 2026"
+   "value": "F2 2025 > F1 2026"
   },
   {
    "op": "lang.set",
@@ -17,7 +17,7 @@
    "op": "lang.set",
    "language": "*",
    "key": "lng_f2f_b_title",
-   "value": "F2 2026 → F1 2027"
+   "value": "F2 2026 > F1 2027"
   },
   {
    "op": "lang.set",

@@ -7,7 +7,14 @@
 // The stock wizard skips the Skip to F1 / Start in F2 step when Game_CareerWizard_StartsInF1 answers
 // yes, which it does for 2026-model data groups. Answer no for these two, so the wizard offers Start
 // in F2 and runs the mode's F2_Default setup list.
+//
+// Not inside the career tile router (FeTile_Route_CareerItem): for a career content tile its "no"
+// path reads an object these tiles don't have and crashed on the press (0x143858b90 reading
+// null+0xf08). There the stock answer stands, the router picks the season length route
+// (career_wizard_driver_career_to_f1), and the wizard library turns that into the experience step
+// (career_wizard_driver_career), the route the router takes for a 2025 career.
 #include <swofty/career_content.hpp>
+#include <swofty/career_wizard.hpp>
 #include <swofty/game.hpp>
 #include <swofty/mixin.hpp>
 
@@ -16,6 +23,9 @@
 namespace {
 
 namespace content = swofty::career::content;
+namespace wz = swofty::career::wizard;
+
+thread_local bool g_in_router = false;
 
 struct Career {
     const char *id, *title, *description, *group, *suffix, *mode;
@@ -47,17 +57,28 @@ bool register_tiles()
                                           .mode = c.mode,
                                           .model = content::Model::f1_2026,
                                           .careers = content::Career::driver});
-        swofty::log("[f2-feeder] tile %s (%s): %s", c.id, c.group, swofty::career::name(r));
+        wz::Result w = wz::tile_route(c.group, "career_wizard_driver_career");
+        swofty::log("[f2-feeder] tile %s (%s): %s; experience step route %s", c.id, c.group,
+                    swofty::career::name(r), wz::name(w));
     }
     return true;
 }
 
 } // namespace
 
+SWOFTY_WRAP(FeTile_Route_CareerItem, swofty::game::Action *, swofty::game::HomeItem *item,
+            swofty::game::Action *out)
+{
+    g_in_router = true;
+    swofty::game::Action *r = orig(item, out);
+    g_in_router = false;
+    return r;
+}
+
 SWOFTY_WRAP(Game_CareerWizard_StartsInF1, bool, void *entrants, void *wizard_data, const char *group)
 {
     bool stock = orig(entrants, wizard_data, group);
-    if (stock && ours(group)) {
+    if (stock && !g_in_router && ours(group)) {
         swofty::log("[f2-feeder] %s: Start in F2 offered", group);
         return false;
     }

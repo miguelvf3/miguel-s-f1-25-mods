@@ -42,7 +42,7 @@ CAREERS = [
         "f1_champ": "F1_driver_career_f2_25", "f1_events": "F1_career_26", "f1_year": None,
         "f2_champ": "F2_career_23", "f2_events": "F2_career_23", "f2_year": 2025, "f2_grid": "f2_2025",
         "f2_choose": None,  # keeps F2CAREER_26's career_f2_2025_for_f1_2026
-        "title": "F2 2025 → F1 2026",
+        "title": "F2 2025 > F1 2026",
         "description": "Start in the 2025 Formula 2 season with its real grid and calendar, then move up to the 2026 Formula 1 season.",
     },
     {
@@ -51,7 +51,7 @@ CAREERS = [
         "f1_champ": "F1_driver_career_f2_26", "f1_events": "F1_career_26", "f1_year": None,
         "f2_champ": "F1_career_23", "f2_events": "F2_career_21", "f2_year": 2026, "f2_grid": "f2_2026",
         "f2_choose": "f2_2026",
-        "title": "F2 2026 → F1 2027",
+        "title": "F2 2026 > F1 2027",
         "description": "Start in the 2026 Formula 2 season with its real grid and calendar, then move up to Formula 1 on the 2026 cars and line-ups.",
     },
 ]

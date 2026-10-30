@@ -83,6 +83,30 @@
       "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
       "field": "ChampionshipSetup_1.event_list",
       "value": "F1_career_26"
+    },
+    {
+      "op": "set",
+      "create": true,
+      "type": 2,
+      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships",
+      "field": "ChampionshipReference_1._metadata_",
+      "value": "ChampionshipReference"
+    },
+    {
+      "op": "set",
+      "create": true,
+      "type": 4,
+      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships",
+      "field": "ChampionshipReference_1.Championship",
+      "value": "F2_2025_career"
+    },
+    {
+      "op": "set",
+      "create": true,
+      "type": 0,
+      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships",
+      "field": "_ChampionshipReference_instancecount_",
+      "value": "2"
     }
   ]
 }

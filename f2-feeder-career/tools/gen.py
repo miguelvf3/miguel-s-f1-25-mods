@@ -205,7 +205,13 @@ for c in CAREERS:
     career(c)
 calendars()
 
-db = {"schema_version": 1, "fields": {OFFICIAL: ["_metadata_", "entrant_list", "name"]}, "ops": ops}
+# Key names of the copied rows the launcher's key catalogue lacks (championship_setups and the like).
+# Taken from Progressive Career's db/career.json (Swofty, AGPL-3.0-or-later), which copies the same
+# stock rows: the f1_career_2026 data groups, F1_career_26, shared_driver_career_26_components,
+# F1_driver_career_26 and driver_career_26.
+fields = json.loads((ROOT / "tools" / "fields.json").read_text(encoding="utf-8"))
+fields[OFFICIAL] = ["_metadata_", "entrant_list", "name"]
+db = {"schema_version": 1, "fields": fields, "ops": ops}
 (ROOT / "db" / "career.json").write_text(json.dumps(db, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
 
 lang = []

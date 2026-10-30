@@ -5,7 +5,7 @@ Addon do Swofty Launcher (F1 25 com a temporada 2026) com duas Driver Careers qu
 | Tile | F2 | Depois | Situação |
 |---|---|---|---|
 | F2 2025 → F1 2026 | F2 2025 (grid `f2_2025`, calendário 2025) | F1 2026 | na 0.2.3, testado até a 1ª etapa |
-| F2 2026 → F1 2027 | F2 2026 (grid `f2_2026`, calendário 2026 com Madri) | F1 2027 com os carros de 2026 | novo na 0.3.0 |
+| F2 2026 → F1 2027 | F2 2026 (grid `f2_2026`, calendário 2026 com Madri) | F1 com os carros de 2026 (ainda datada 2026) | novo na 0.3.x |
 
 `db/career.json` e `lang/career.json` são gerados por `tools/gen.py`. Mude o gerador, não os arquivos.
 
@@ -23,7 +23,7 @@ Addon do Swofty Launcher (F1 25 com a temporada 2026) com duas Driver Careers qu
 - A: `F2_career_23`, com o grid `f2_2025` e o calendário com ano 2025;
 - B: `F1_career_23` transformado em F2 (`game_setup_modes f2`), com o grid `f2_2026` e o calendário `F2_career_21` reformatado igual ao de F2 2024, com ano 2026.
 
-**Calendários:** o jogo escolhe as pistas e a ordem pelo ano da temporada (as datas do calendário do campeonato). Para `season_2025` e `season_2026` há linhas de duração (Long/Medium/Short) e `track_selections` de F2, além das listas curtas `F2_202x_8` e `F2_202x_3`. As linhas da F2 2024 ficam só para 2023 e 2024. A F1 2027 da carreira B tem o ano 2027, e `season_2027` é acrescentado às linhas da F1 2026.
+**Calendários:** o jogo escolhe as pistas e a ordem pelo ano da temporada (as datas do calendário do campeonato). Para `season_2025` e `season_2026` há linhas de duração (Long/Medium/Short) e `track_selections` de F2, além das listas curtas `F2_202x_8` e `F2_202x_3`. As linhas da F2 2024 ficam só para 2023 e 2024. A F1 da carreira B ainda é datada de 2026: `season_2027` não existe em `game_setup.seasons` e crashou o boot (0x142a0ddb0).
 
 **Saves:** cada carreira tem seu próprio container de save. Sem o addon, o launcher guarda esses containers e os escreve de volta sem mudança, então dá para deixar o Steam Cloud ligado.
 

@@ -5,7 +5,9 @@ Two careers, each its own Addons tile, game mode, data group and save container,
 Progressive Career's (copies of the stock 2026 driver career's rows):
 
   A  F2 2025 -> F1 2026   F2 on F2_career_23 (F1 23/24 career championship F1 25 doesn't offer)
-  B  F2 2026 -> F1 2027   F2 on F1_career_23 (same), turned into an F2 championship
+  B  F2 2026 -> F1 2027   F2 on F1_career_23 (same), turned into an F2 championship. Its F1 seasons
+                          are dated 2026: the season lists only take game_setup.seasons rows, and
+                          season_2027 crashed the boot (0x142a0ddb0 builds their masks unchecked).
 
 Copies of an F2 championship crashed the game at boot (Game_ModeChampionship_Build), so each F2
 season takes over an unused stock championship instead. The stock 2026 career is left as it is.
@@ -46,11 +48,11 @@ CAREERS = [
     {
         "key": "b", "group": "f1_career_f2_26", "mode": "driver_career_f2_26", "suffix": "FB27",
         "mode_stat": 84, "champ_stat": 39,
-        "f1_champ": "F1_driver_career_f2_26", "f1_events": "F1_career_f2_27", "f1_year": 2027,
+        "f1_champ": "F1_driver_career_f2_26", "f1_events": "F1_career_26", "f1_year": None,
         "f2_champ": "F1_career_23", "f2_events": "F2_career_21", "f2_year": 2026, "f2_grid": "f2_2026",
         "f2_choose": "f2_2026",
         "title": "F2 2026 → F1 2027",
-        "description": "Start in the 2026 Formula 2 season with its real grid and calendar, then move up to Formula 1 in 2027 on the 2026 cars and line-ups.",
+        "description": "Start in the 2026 Formula 2 season with its real grid and calendar, then move up to Formula 1 on the 2026 cars and line-ups.",
     },
 ]
 
@@ -193,12 +195,6 @@ def calendars():
     add(TS, f"{TS}.tracks_selection[_metadata_=F1_2026]",
         **{"_metadata_": "F2_2024", "game_setup_modes": "f2", "seasons": "season_2023,season_2024",
            "default": "F2_2024_full", "season_0.track_event_list": "F2_2024_full"})
-    # F1 2027 (career B) races the 2026 calendars.
-    for kind in ("Long", "Medium", "Short"):
-        ops.append({"op": "list-append", "select": f"{DY}.custom_dynamic_available_track_list_data[_metadata_=F1_2026_{kind}]",
-                    "field": "seasons", "value": "season_2027"})
-    ops.append({"op": "list-append", "select": f"{TS}.tracks_selection[_metadata_=F1_2026]", "field": "seasons",
-                "value": "season_2027"})
 
 
 for c in CAREERS:

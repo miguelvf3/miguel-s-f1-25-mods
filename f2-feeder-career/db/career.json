@@ -8608,141 +8608,13 @@
   },
   {
    "op": "add-row",
-   "table": "schedule.event_lists",
-   "from": "schedule.event_lists.event_list[_metadata_=F1_career_26]",
-   "set": {
-    "_metadata_": "F1_career_f2_27"
-   }
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_0.date_time_0",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_0.date_time_1",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_1.date_time_0",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_1.date_time_1",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_2.date_time_0",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_2.date_time_1",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_3.date_time_0",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_3.date_time_1",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_4.date_time_0",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_4.date_time_1",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_5.date_time_0",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_5.date_time_1",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_6.date_time_0",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_6.date_time_1",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_7.date_time_0",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_7.date_time_1",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_8.date_time_0",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_8.date_time_1",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_9.date_time_0",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_9.date_time_1",
-   "field": "year",
-   "value": "2027"
-  },
-  {
-   "op": "add-row",
    "table": "championships.shared_components",
    "from": "championships.shared_components.SharedComponents[_metadata_=shared_driver_career_26_components]",
    "set": {
     "_metadata_": "shared_driver_career_b_f2f_components",
     "ComAccolades_0.data_group": "f1_career_f2_26",
     "ComResourcePoints_0.data_group": "f1_career_f2_26",
-    "ComSchedule_0.event_list": "F1_career_f2_27"
+    "ComSchedule_0.event_list": "F1_career_26"
    }
   },
   {
@@ -8752,7 +8624,7 @@
    "set": {
     "_metadata_": "F1_driver_career_f2_26",
     "statId": "39",
-    "event_list": "F1_career_f2_27",
+    "event_list": "F1_career_26",
     "ComCareerSetup_0.entrant_list": "f1_career_f2_26",
     "ComCareerSetup_0.setup_data": "f1_career_f2_26",
     "ComInfluence_0.data_group": "f1_career_f2_26",
@@ -8877,9 +8749,9 @@
     "_metadata_": "driver_career_f2_26",
     "statId": "84",
     "save_data.name": "driver_career_f2_26",
-    "event_list": "F1_career_f2_27",
+    "event_list": "F1_career_26",
     "championship_setups.ChampionshipSetupList_0.ChampionshipSetup_0.championship": "F1_driver_career_f2_26",
-    "championship_setups.ChampionshipSetupList_0.ChampionshipSetup_0.event_list": "F1_career_f2_27",
+    "championship_setups.ChampionshipSetupList_0.ChampionshipSetup_0.event_list": "F1_career_26",
     "championships.ChampionshipReference_0.Championship": "F1_driver_career_f2_26"
    }
   },
@@ -8943,7 +8815,7 @@
    "op": "set",
    "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
    "field": "ChampionshipSetup_1.event_list",
-   "value": "F1_career_f2_27",
+   "value": "F1_career_26",
    "create": true,
    "type": 4
   },
@@ -9492,30 +9364,6 @@
     "default": "F2_2024_full",
     "season_0.track_event_list": "F2_2024_full"
    }
-  },
-  {
-   "op": "list-append",
-   "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F1_2026_Long]",
-   "field": "seasons",
-   "value": "season_2027"
-  },
-  {
-   "op": "list-append",
-   "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F1_2026_Medium]",
-   "field": "seasons",
-   "value": "season_2027"
-  },
-  {
-   "op": "list-append",
-   "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F1_2026_Short]",
-   "field": "seasons",
-   "value": "season_2027"
-  },
-  {
-   "op": "list-append",
-   "select": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections.tracks_selection[_metadata_=F1_2026]",
-   "field": "seasons",
-   "value": "season_2027"
   }
  ]
 }

@@ -362,6 +362,30 @@
       "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Short]",
       "field": "seasons",
       "value": "season_2023,season_2024"
+    },
+    {
+      "op": "add-row",
+      "table": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections",
+      "from": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections.tracks_selection[_metadata_=F1_2026]",
+      "set": {
+        "_metadata_": "F2_2024",
+        "game_setup_modes": "f2",
+        "seasons": "season_2023,season_2024",
+        "default": "F2_2024_full",
+        "season_0.track_event_list": "F2_2024_full"
+      }
+    },
+    {
+      "op": "add-row",
+      "table": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections",
+      "from": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections.tracks_selection[_metadata_=F1_2026]",
+      "set": {
+        "_metadata_": "F2_2025",
+        "game_setup_modes": "f2",
+        "seasons": "season_2025",
+        "default": "F2_2025_full",
+        "season_0.track_event_list": "F2_2025_full"
+      }
     }
   ]
 }

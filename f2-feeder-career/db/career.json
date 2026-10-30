@@ -321,7 +321,7 @@
       "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Long]",
       "set": {
         "_metadata_": "F2_2025_Long",
-        "seasons": "season_2026",
+        "seasons": "season_2025",
         "track_list_name": "F2_2025_full"
       }
     },
@@ -331,7 +331,7 @@
       "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Medium]",
       "set": {
         "_metadata_": "F2_2025_Medium",
-        "seasons": "season_2026",
+        "seasons": "season_2025",
         "track_list_name": "F2_2025_8"
       }
     },
@@ -341,9 +341,27 @@
       "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Short]",
       "set": {
         "_metadata_": "F2_2025_Short",
-        "seasons": "season_2026",
+        "seasons": "season_2025",
         "track_list_name": "F2_2025_3"
       }
+    },
+    {
+      "op": "set",
+      "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Long]",
+      "field": "seasons",
+      "value": "season_2023,season_2024"
+    },
+    {
+      "op": "set",
+      "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Medium]",
+      "field": "seasons",
+      "value": "season_2023,season_2024"
+    },
+    {
+      "op": "set",
+      "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Short]",
+      "field": "seasons",
+      "value": "season_2023,season_2024"
     }
   ]
 }

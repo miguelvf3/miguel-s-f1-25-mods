@@ -50,4 +50,21 @@ for ($i = 0; $i -lt 40; $i++) {
     if ($LASTEXITCODE -ne 0) { break }
     if (($head -join "`n") -match $trackListMatch) { Dump $p 0 } else { "### $p (skipped)" | Add-Content $Out; $head | Add-Content $Out }
 }
+# Every championship (labels, entrant lists) and which mode references which.
+for ($i = 0; $i -lt 40; $i++) {
+    $p = "championships.Championship_$i"
+    $head = & $Swofty db get $p 2>&1 | ForEach-Object { "$_" }
+    if ($LASTEXITCODE -ne 0) { break }
+    "### $p" | Add-Content $Out; $head | Add-Content $Out
+    $cs = & $Swofty db get "$p.ComCareerSetup_0" 2>&1 | ForEach-Object { "$_" }
+    "### $p.ComCareerSetup_0" | Add-Content $Out; $cs | Add-Content $Out
+}
+for ($i = 0; $i -lt 40; $i++) {
+    $p = "game_modes.ModeChampionship_$i"
+    $head = & $Swofty db get $p 2>&1 | ForEach-Object { "$_" }
+    if ($LASTEXITCODE -ne 0) { break }
+    "### $p" | Add-Content $Out; $head | Add-Content $Out
+    Dump "$p.championships" 4
+    Dump "$p.championship_setups" 3
+}
 Write-Host "wrote $Out"

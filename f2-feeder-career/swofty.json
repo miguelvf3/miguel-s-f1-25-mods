@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "community.f2-feeder-career",
+  "name": "F2 Feeder Career 2026",
+  "version": "0.0.1",
+  "author": "community",
+  "description": "DRAFT, untested. Brings back Start in F2 for the 2026 Driver Career: an F2 2025 season, then F1 2026.",
+  "license": "AGPL-3.0-or-later",
+  "category": "career",
+  "kind": ["database", "native"],
+  "compat": { "game": "f1_25", "game_builds": [">=25251167"], "seasons": ["f1_2026"], "launcher": ">=1.5.27" },
+  "requires": [{ "id": "swofty.core", "version": ">=0.2.13" }],
+  "saves": { "affects": true, "message": "Careers started in F2 with this addon won't load without it." },
+  "operations": {
+    "database": ["db/career.json"],
+    "native": [{ "dll": "native/f2_feeder.dll" }]
+  }
+}

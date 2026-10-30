@@ -8432,6 +8432,12 @@
    "value": "driver_career_f2_25"
   },
   {
+   "op": "list-append",
+   "select": "content_sets.content_set[_metadata_=2026].available_entrant_lists_0",
+   "field": "entrant_lists",
+   "value": "f1_career_f2_25,f2_2025"
+  },
+  {
    "op": "add-row",
    "table": "content_sets.content_set[_metadata_=2026]",
    "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=F1CAREER_26]",
@@ -8850,6 +8856,12 @@
    "select": "content_sets.content_set[_metadata_=2026]",
    "field": "available_game_modes_0.game_mode_championships",
    "value": "driver_career_f2_26"
+  },
+  {
+   "op": "list-append",
+   "select": "content_sets.content_set[_metadata_=2026].available_entrant_lists_0",
+   "field": "entrant_lists",
+   "value": "f1_career_f2_26,f2_2026"
   },
   {
    "op": "add-row",

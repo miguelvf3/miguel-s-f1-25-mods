@@ -156,6 +156,11 @@ def career(c):
 
     ops.append({"op": "list-append", "select": CS, "field": "available_game_modes_0.game_mode_championships",
                 "value": m})
+    # The game loads an entrant list only when the content set's whitelist (row 0 of
+    # available_entrant_lists, the only row read) names it or a loaded list references it; without it
+    # the data group's registry slot stays empty and the tile press crashed in the router.
+    ops.append({"op": "list-append", "select": f"{CS}.available_entrant_lists_0", "field": "entrant_lists",
+                "value": f"{g},{c['f2_grid']}"})
     base = c["suffix"][:2]
     for name in (base, c["suffix"]):
         add(CS, f"{OFFICIAL}[name=F1CAREER_26]", name=f"F1CAREER_{name}", entrant_list="f1_2026")

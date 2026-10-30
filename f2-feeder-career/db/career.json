@@ -14,9 +14,7 @@
       "table": "championships",
       "from": "championships.Championship[_metadata_=F2_2024_career]",
       "set": {
-        "_metadata_": "F2_2025_career",
-        "event_list": "F2_2025_career",
-        "ComCareerSetup_0.entrant_list": "f2_2025"
+        "_metadata_": "F2_2025_career"
       }
     },
     {
@@ -57,7 +55,7 @@
       "type": 4,
       "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
       "field": "ChampionshipSetup_0.event_list",
-      "value": "F2_2025_career"
+      "value": "F2_2024_career"
     },
     {
       "op": "set",

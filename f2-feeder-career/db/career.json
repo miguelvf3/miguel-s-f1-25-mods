@@ -123,7 +123,7 @@
       "op": "set",
       "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
       "field": "car_1_spec",
-      "value": "invicta_25_generic"
+      "value": "invicta_25 - driver_01"
     },
     {
       "op": "set",
@@ -141,7 +141,7 @@
       "op": "set",
       "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
       "field": "car_2_spec",
-      "value": "mpmotorsport_25_generic"
+      "value": "mpmotorsport_25 - driver_02"
     },
     {
       "op": "set",
@@ -159,13 +159,191 @@
       "op": "set",
       "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
       "field": "car_3_spec",
-      "value": "campos_25_generic"
+      "value": "campos_25 - driver_01"
     },
     {
       "op": "set",
       "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
       "field": "driver_3",
       "value": "arvid_lindblad"
+    },
+    {
+      "op": "add-row",
+      "table": "schedule.track_lists",
+      "from": "schedule.track_lists.track_event_list[_metadata_=F2_2024_8]",
+      "set": {
+        "_metadata_": "F2_2025_8"
+      }
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_0",
+      "field": "_metadata_",
+      "value": "fixed_event_reference_rw_melbourne"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_0",
+      "field": "event_name",
+      "value": "rw_melbourne"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_1",
+      "field": "_metadata_",
+      "value": "fixed_event_reference_rw_bahrain"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_1",
+      "field": "event_name",
+      "value": "rw_bahrain"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_2",
+      "field": "_metadata_",
+      "value": "fixed_event_reference_rw_austria"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_2",
+      "field": "event_name",
+      "value": "rw_austria"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_3",
+      "field": "_metadata_",
+      "value": "fixed_event_reference_rw_silverstone"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_3",
+      "field": "event_name",
+      "value": "rw_silverstone"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_4",
+      "field": "_metadata_",
+      "value": "fixed_event_reference_rw_spa_francorchamps"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_4",
+      "field": "event_name",
+      "value": "rw_spa_francorchamps"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_5",
+      "field": "_metadata_",
+      "value": "fixed_event_reference_rw_monza"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_5",
+      "field": "event_name",
+      "value": "rw_monza"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_6",
+      "field": "_metadata_",
+      "value": "fixed_event_reference_rw_losail"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_6",
+      "field": "event_name",
+      "value": "rw_losail"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_7",
+      "field": "_metadata_",
+      "value": "fixed_event_reference_rw_abu_dhabi"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_7",
+      "field": "event_name",
+      "value": "rw_abu_dhabi"
+    },
+    {
+      "op": "add-row",
+      "table": "schedule.track_lists",
+      "from": "schedule.track_lists.track_event_list[_metadata_=F2_2024_3]",
+      "set": {
+        "_metadata_": "F2_2025_3"
+      }
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_0",
+      "field": "_metadata_",
+      "value": "fixed_event_reference_rw_melbourne"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_0",
+      "field": "event_name",
+      "value": "rw_melbourne"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_1",
+      "field": "_metadata_",
+      "value": "fixed_event_reference_rw_silverstone"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_1",
+      "field": "event_name",
+      "value": "rw_silverstone"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_2",
+      "field": "_metadata_",
+      "value": "fixed_event_reference_rw_abu_dhabi"
+    },
+    {
+      "op": "set",
+      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_2",
+      "field": "event_name",
+      "value": "rw_abu_dhabi"
+    },
+    {
+      "op": "add-row",
+      "table": "schedule.dynamic_event_data.default_ui_track_list_data",
+      "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Long]",
+      "set": {
+        "_metadata_": "F2_2025_Long",
+        "seasons": "season_2026",
+        "track_list_name": "F2_2025_full"
+      }
+    },
+    {
+      "op": "add-row",
+      "table": "schedule.dynamic_event_data.default_ui_track_list_data",
+      "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Medium]",
+      "set": {
+        "_metadata_": "F2_2025_Medium",
+        "seasons": "season_2026",
+        "track_list_name": "F2_2025_8"
+      }
+    },
+    {
+      "op": "add-row",
+      "table": "schedule.dynamic_event_data.default_ui_track_list_data",
+      "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Short]",
+      "set": {
+        "_metadata_": "F2_2025_Short",
+        "seasons": "season_2026",
+        "track_list_name": "F2_2025_3"
+      }
     }
   ]
 }

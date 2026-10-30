@@ -2,17 +2,47 @@
   "schema_version": 1,
   "id": "community.f2-feeder-career",
   "name": "F2 Feeder Career 2026",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "author": "community",
-  "description": "DRAFT, untested. Brings back Start in F2 for the 2026 Driver Career: an F2 2025 season, then F1 2026.",
+  "description": "Two Driver Careers that start in Formula 2: F2 2025 then F1 2026, and F2 2026 then F1 2027. Each has its own tile and save slots; the stock 2026 career is unchanged.",
   "license": "AGPL-3.0-or-later",
   "category": "career",
-  "kind": ["database", "native"],
-  "compat": { "game": "f1_25", "game_builds": [">=25251167"], "seasons": ["f1_2026"], "launcher": ">=1.5.27" },
-  "requires": [{ "id": "swofty.core", "version": ">=0.2.13" }],
-  "saves": { "affects": true, "message": "Careers started in F2 with this addon won't load without it." },
+  "kind": [
+    "database",
+    "native",
+    "text"
+  ],
+  "compat": {
+    "game": "f1_25",
+    "game_builds": [
+      ">=25251167"
+    ],
+    "seasons": [
+      "f1_2026"
+    ],
+    "launcher": ">=1.5.27"
+  },
+  "requires": [
+    {
+      "id": "swofty.core",
+      "version": ">=0.2.12"
+    }
+  ],
+  "saves": {
+    "affects": true,
+    "message": "F2 Feeder careers won't load without it; the launcher keeps them in the save until it is back on."
+  },
   "operations": {
-    "database": ["db/career.json"],
-    "native": [{ "dll": "native/f2_feeder.dll" }]
+    "database": [
+      "db/career.json"
+    ],
+    "assets": [
+      "lang/career.json"
+    ],
+    "native": [
+      {
+        "dll": "native/f2_feeder.dll"
+      }
+    ]
   }
 }

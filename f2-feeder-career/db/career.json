@@ -1,391 +1,1330 @@
 {
-  "schema_version": 1,
-  "ops": [
-    {
-      "op": "set",
-      "select": "championships.Championship[_metadata_=F2_career_23].ComCareerSetup_0",
-      "field": "entrant_list",
-      "value": "f2_2025"
-    },
-    {
-      "op": "set",
-      "select": "championships.Championship[_metadata_=F2_career_23].ComCareerSetup_0",
-      "field": "setup_data",
-      "value": "f1_career_2026"
-    },
-    {
-      "op": "set",
-      "select": "schedule.event_lists.event_list[_metadata_=F2_career_23].season_0.date_time_0",
-      "field": "year",
-      "value": "2025"
-    },
-    {
-      "op": "set",
-      "select": "schedule.event_lists.event_list[_metadata_=F2_career_23].season_0.date_time_1",
-      "field": "year",
-      "value": "2025"
-    },
-    {
-      "op": "add-row",
-      "table": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups",
-      "from": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList_0",
-      "set": {
-        "_metadata_": "F2_Default"
-      }
-    },
-    {
-      "op": "set",
-      "create": true,
-      "type": 0,
-      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
-      "field": "_ChampionshipSetup_instancecount_",
-      "value": "2"
-    },
-    {
-      "op": "set",
-      "create": true,
-      "type": 2,
-      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
-      "field": "ChampionshipSetup_0._metadata_",
-      "value": "ChampionshipSetup"
-    },
-    {
-      "op": "set",
-      "create": true,
-      "type": 4,
-      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
-      "field": "ChampionshipSetup_0.championship",
-      "value": "F2_career_23"
-    },
-    {
-      "op": "set",
-      "create": true,
-      "type": 4,
-      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
-      "field": "ChampionshipSetup_0.event_list",
-      "value": "F2_career_23"
-    },
-    {
-      "op": "set",
-      "create": true,
-      "type": 2,
-      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
-      "field": "ChampionshipSetup_1._metadata_",
-      "value": "ChampionshipSetup"
-    },
-    {
-      "op": "set",
-      "create": true,
-      "type": 4,
-      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
-      "field": "ChampionshipSetup_1.championship",
-      "value": "F1_driver_career_26"
-    },
-    {
-      "op": "set",
-      "create": true,
-      "type": 4,
-      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
-      "field": "ChampionshipSetup_1.event_list",
-      "value": "F1_career_26"
-    },
-    {
-      "op": "set",
-      "create": true,
-      "type": 2,
-      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships",
-      "field": "ChampionshipReference_1._metadata_",
-      "value": "ChampionshipReference"
-    },
-    {
-      "op": "set",
-      "create": true,
-      "type": 4,
-      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships",
-      "field": "ChampionshipReference_1.Championship",
-      "value": "F2_career_23"
-    },
-    {
-      "op": "set",
-      "create": true,
-      "type": 0,
-      "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships",
-      "field": "_ChampionshipReference_instancecount_",
-      "value": "2"
-    },
-    {
-      "op": "set",
-      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
-      "field": "car_1",
-      "value": "f2_car_25"
-    },
-    {
-      "op": "set",
-      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
-      "field": "car_1_spec",
-      "value": "invicta_25 - driver_01"
-    },
-    {
-      "op": "set",
-      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
-      "field": "driver_1",
-      "value": "leonardo_fornaroli"
-    },
-    {
-      "op": "set",
-      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
-      "field": "car_2",
-      "value": "f2_car_25"
-    },
-    {
-      "op": "set",
-      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
-      "field": "car_2_spec",
-      "value": "mpmotorsport_25 - driver_02"
-    },
-    {
-      "op": "set",
-      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
-      "field": "driver_2",
-      "value": "richard_verschoor"
-    },
-    {
-      "op": "set",
-      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
-      "field": "car_3",
-      "value": "f2_car_25"
-    },
-    {
-      "op": "set",
-      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
-      "field": "car_3_spec",
-      "value": "campos_25 - driver_01"
-    },
-    {
-      "op": "set",
-      "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026].SpawnedF2_0",
-      "field": "driver_3",
-      "value": "arvid_lindblad"
-    },
-    {
-      "op": "add-row",
-      "table": "schedule.track_lists",
-      "from": "schedule.track_lists.track_event_list[_metadata_=F2_2024_8]",
-      "set": {
-        "_metadata_": "F2_2025_8"
-      }
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_0",
-      "field": "_metadata_",
-      "value": "fixed_event_reference_rw_melbourne"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_0",
-      "field": "event_name",
-      "value": "rw_melbourne"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_1",
-      "field": "_metadata_",
-      "value": "fixed_event_reference_rw_bahrain"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_1",
-      "field": "event_name",
-      "value": "rw_bahrain"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_2",
-      "field": "_metadata_",
-      "value": "fixed_event_reference_rw_austria"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_2",
-      "field": "event_name",
-      "value": "rw_austria"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_3",
-      "field": "_metadata_",
-      "value": "fixed_event_reference_rw_silverstone"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_3",
-      "field": "event_name",
-      "value": "rw_silverstone"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_4",
-      "field": "_metadata_",
-      "value": "fixed_event_reference_rw_spa_francorchamps"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_4",
-      "field": "event_name",
-      "value": "rw_spa_francorchamps"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_5",
-      "field": "_metadata_",
-      "value": "fixed_event_reference_rw_monza"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_5",
-      "field": "event_name",
-      "value": "rw_monza"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_6",
-      "field": "_metadata_",
-      "value": "fixed_event_reference_rw_losail"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_6",
-      "field": "event_name",
-      "value": "rw_losail"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_7",
-      "field": "_metadata_",
-      "value": "fixed_event_reference_rw_abu_dhabi"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_7",
-      "field": "event_name",
-      "value": "rw_abu_dhabi"
-    },
-    {
-      "op": "add-row",
-      "table": "schedule.track_lists",
-      "from": "schedule.track_lists.track_event_list[_metadata_=F2_2024_3]",
-      "set": {
-        "_metadata_": "F2_2025_3"
-      }
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_0",
-      "field": "_metadata_",
-      "value": "fixed_event_reference_rw_melbourne"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_0",
-      "field": "event_name",
-      "value": "rw_melbourne"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_1",
-      "field": "_metadata_",
-      "value": "fixed_event_reference_rw_silverstone"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_1",
-      "field": "event_name",
-      "value": "rw_silverstone"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_2",
-      "field": "_metadata_",
-      "value": "fixed_event_reference_rw_abu_dhabi"
-    },
-    {
-      "op": "set",
-      "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_2",
-      "field": "event_name",
-      "value": "rw_abu_dhabi"
-    },
-    {
-      "op": "add-row",
-      "table": "schedule.dynamic_event_data.default_ui_track_list_data",
-      "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Long]",
-      "set": {
-        "_metadata_": "F2_2025_Long",
-        "seasons": "season_2025",
-        "track_list_name": "F2_2025_full"
-      }
-    },
-    {
-      "op": "add-row",
-      "table": "schedule.dynamic_event_data.default_ui_track_list_data",
-      "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Medium]",
-      "set": {
-        "_metadata_": "F2_2025_Medium",
-        "seasons": "season_2025",
-        "track_list_name": "F2_2025_8"
-      }
-    },
-    {
-      "op": "add-row",
-      "table": "schedule.dynamic_event_data.default_ui_track_list_data",
-      "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Short]",
-      "set": {
-        "_metadata_": "F2_2025_Short",
-        "seasons": "season_2025",
-        "track_list_name": "F2_2025_3"
-      }
-    },
-    {
-      "op": "set",
-      "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Long]",
-      "field": "seasons",
-      "value": "season_2023,season_2024"
-    },
-    {
-      "op": "set",
-      "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Medium]",
-      "field": "seasons",
-      "value": "season_2023,season_2024"
-    },
-    {
-      "op": "set",
-      "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Short]",
-      "field": "seasons",
-      "value": "season_2023,season_2024"
-    },
-    {
-      "op": "add-row",
-      "table": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections",
-      "from": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections.tracks_selection[_metadata_=F1_2026]",
-      "set": {
-        "_metadata_": "F2_2024",
-        "game_setup_modes": "f2",
-        "seasons": "season_2023,season_2024",
-        "default": "F2_2024_full",
-        "season_0.track_event_list": "F2_2024_full"
-      }
-    },
-    {
-      "op": "add-row",
-      "table": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections",
-      "from": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections.tracks_selection[_metadata_=F1_2026]",
-      "set": {
-        "_metadata_": "F2_2025",
-        "game_setup_modes": "f2",
-        "seasons": "season_2025",
-        "default": "F2_2025_full",
-        "season_0.track_event_list": "F2_2025_full"
-      }
-    }
+ "schema_version": 1,
+ "fields": {
+  "content_sets.content_set[_metadata_=2026].official_entrant_list": [
+   "_metadata_",
+   "entrant_list",
+   "name"
   ]
+ },
+ "ops": [
+  {
+   "op": "add-row",
+   "table": "career.career_setup",
+   "from": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_25"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "accolades",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_25"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "career.leverage",
+   "from": "career.leverage.LeverageDataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_25"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "career.my_team_renown_and_form",
+   "from": "career.my_team_renown_and_form.MyTeamRenownAndFormDataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_25"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "career.my_team_sponsors",
+   "from": "career.my_team_sponsors.MyTeamSponsorsDataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_25"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "recognition",
+   "from": "recognition.RecognitionDataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_25"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "resource_points",
+   "from": "resource_points.data_group[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_25"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "specialist_manager",
+   "from": "specialist_manager.dataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_25"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "entrants.entrant_lists",
+   "from": "entrants.entrant_lists.entrant_list[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_25"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "championships.shared_components",
+   "from": "championships.shared_components.SharedComponents[_metadata_=shared_driver_career_26_components]",
+   "set": {
+    "_metadata_": "shared_driver_career_a_f2f_components",
+    "ComAccolades_0.data_group": "f1_career_f2_25",
+    "ComResourcePoints_0.data_group": "f1_career_f2_25",
+    "ComSchedule_0.event_list": "F1_career_26"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "championships",
+   "from": "championships.Championship[_metadata_=F1_driver_career_26]",
+   "set": {
+    "_metadata_": "F1_driver_career_f2_25",
+    "statId": "38",
+    "event_list": "F1_career_26",
+    "ComCareerSetup_0.entrant_list": "f1_career_f2_25",
+    "ComCareerSetup_0.setup_data": "f1_career_f2_25",
+    "ComInfluence_0.data_group": "f1_career_f2_25",
+    "ComSpecialists_0.specialist_data": "f1_career_f2_25",
+    "shared_components": "shared_driver_career_components,shared_driver_career_offline_components,shared_driver_career_a_f2f_components"
+   }
+  },
+  {
+   "op": "set",
+   "select": "championships.Championship[_metadata_=F2_career_23].ComCareerSetup_0",
+   "field": "entrant_list",
+   "value": "f2_2025"
+  },
+  {
+   "op": "set",
+   "select": "championships.Championship[_metadata_=F2_career_23].ComCareerSetup_0",
+   "field": "setup_data",
+   "value": "f1_career_f2_25"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_23].season_0.date_time_0",
+   "field": "year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_23].season_0.date_time_1",
+   "field": "year",
+   "value": "2025"
+  },
+  {
+   "op": "add-row",
+   "table": "game_modes",
+   "from": "game_modes.ModeChampionship[_metadata_=driver_career_26]",
+   "set": {
+    "allowedComponentSaveGroups": "18446744073709551615",
+    "_metadata_": "driver_career_f2_25",
+    "statId": "83",
+    "save_data.name": "driver_career_f2_25",
+    "event_list": "F1_career_26",
+    "championship_setups.ChampionshipSetupList_0.ChampionshipSetup_0.championship": "F1_driver_career_f2_25",
+    "championship_setups.ChampionshipSetupList_0.ChampionshipSetup_0.event_list": "F1_career_26",
+    "championships.ChampionshipReference_0.Championship": "F1_driver_career_f2_25"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "game_modes.ModeChampionship[_metadata_=driver_career_f2_25].championship_setups",
+   "from": "game_modes.ModeChampionship[_metadata_=driver_career_f2_25].championship_setups.ChampionshipSetupList_0",
+   "set": {
+    "_metadata_": "F2_Default"
+   }
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_25].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "_ChampionshipSetup_instancecount_",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_25].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "ChampionshipSetup_0._metadata_",
+   "value": "ChampionshipSetup",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_25].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "ChampionshipSetup_0.championship",
+   "value": "F2_career_23",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_25].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "ChampionshipSetup_0.event_list",
+   "value": "F2_career_23",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_25].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "ChampionshipSetup_1._metadata_",
+   "value": "ChampionshipSetup",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_25].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "ChampionshipSetup_1.championship",
+   "value": "F1_driver_career_f2_25",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_25].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "ChampionshipSetup_1.event_list",
+   "value": "F1_career_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_25].championships",
+   "field": "ChampionshipReference_1._metadata_",
+   "value": "ChampionshipReference",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_25].championships",
+   "field": "ChampionshipReference_1.Championship",
+   "value": "F2_career_23",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_25].championships",
+   "field": "_ChampionshipReference_instancecount_",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "list-append",
+   "select": "content_sets.content_set[_metadata_=2026]",
+   "field": "available_game_modes_0.game_mode_championships",
+   "value": "driver_career_f2_25"
+  },
+  {
+   "op": "add-row",
+   "table": "content_sets.content_set[_metadata_=2026]",
+   "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=F1CAREER_26]",
+   "set": {
+    "name": "F1CAREER_FA",
+    "entrant_list": "f1_2026"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "content_sets.content_set[_metadata_=2026]",
+   "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=F2CAREER_26]",
+   "set": {
+    "name": "F2CAREER_FA"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "content_sets.content_set[_metadata_=2026]",
+   "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=ICONS_26]",
+   "set": {
+    "name": "ICONS_FA"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "content_sets.content_set[_metadata_=2026]",
+   "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=F1CAREER_26]",
+   "set": {
+    "name": "F1CAREER_FA26",
+    "entrant_list": "f1_2026"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "content_sets.content_set[_metadata_=2026]",
+   "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=F2CAREER_26]",
+   "set": {
+    "name": "F2CAREER_FA26"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "content_sets.content_set[_metadata_=2026]",
+   "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=ICONS_26]",
+   "set": {
+    "name": "ICONS_FA26"
+   }
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
+   "field": "car_1",
+   "value": "f2_car_25"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
+   "field": "car_1_spec",
+   "value": "invicta_25 - driver_01"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
+   "field": "driver_1",
+   "value": "leonardo_fornaroli"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
+   "field": "car_2",
+   "value": "f2_car_25"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
+   "field": "car_2_spec",
+   "value": "mpmotorsport_25 - driver_02"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
+   "field": "driver_2",
+   "value": "richard_verschoor"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
+   "field": "car_3",
+   "value": "f2_car_25"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
+   "field": "car_3_spec",
+   "value": "campos_25 - driver_01"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
+   "field": "driver_3",
+   "value": "arvid_lindblad"
+  },
+  {
+   "op": "add-row",
+   "table": "career.career_setup",
+   "from": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_26"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "accolades",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_26"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "career.leverage",
+   "from": "career.leverage.LeverageDataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_26"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "career.my_team_renown_and_form",
+   "from": "career.my_team_renown_and_form.MyTeamRenownAndFormDataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_26"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "career.my_team_sponsors",
+   "from": "career.my_team_sponsors.MyTeamSponsorsDataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_26"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "recognition",
+   "from": "recognition.RecognitionDataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_26"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "resource_points",
+   "from": "resource_points.data_group[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_26"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "specialist_manager",
+   "from": "specialist_manager.dataGroup[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_26"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "entrants.entrant_lists",
+   "from": "entrants.entrant_lists.entrant_list[_metadata_=f1_career_2026]",
+   "set": {
+    "_metadata_": "f1_career_f2_26"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.event_lists",
+   "from": "schedule.event_lists.event_list[_metadata_=F1_career_26]",
+   "set": {
+    "_metadata_": "F1_career_f2_27"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_0.date_time_0",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_0.date_time_1",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_1.date_time_0",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_1.date_time_1",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_2.date_time_0",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_2.date_time_1",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_3.date_time_0",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_3.date_time_1",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_4.date_time_0",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_4.date_time_1",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_5.date_time_0",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_5.date_time_1",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_6.date_time_0",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_6.date_time_1",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_7.date_time_0",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_7.date_time_1",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_8.date_time_0",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_8.date_time_1",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_9.date_time_0",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F1_career_f2_27].season_9.date_time_1",
+   "field": "year",
+   "value": "2027"
+  },
+  {
+   "op": "add-row",
+   "table": "championships.shared_components",
+   "from": "championships.shared_components.SharedComponents[_metadata_=shared_driver_career_26_components]",
+   "set": {
+    "_metadata_": "shared_driver_career_b_f2f_components",
+    "ComAccolades_0.data_group": "f1_career_f2_26",
+    "ComResourcePoints_0.data_group": "f1_career_f2_26",
+    "ComSchedule_0.event_list": "F1_career_f2_27"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "championships",
+   "from": "championships.Championship[_metadata_=F1_driver_career_26]",
+   "set": {
+    "_metadata_": "F1_driver_career_f2_26",
+    "statId": "39",
+    "event_list": "F1_career_f2_27",
+    "ComCareerSetup_0.entrant_list": "f1_career_f2_26",
+    "ComCareerSetup_0.setup_data": "f1_career_f2_26",
+    "ComInfluence_0.data_group": "f1_career_f2_26",
+    "ComSpecialists_0.specialist_data": "f1_career_f2_26",
+    "shared_components": "shared_driver_career_components,shared_driver_career_offline_components,shared_driver_career_b_f2f_components"
+   }
+  },
+  {
+   "op": "set",
+   "select": "championships.Championship[_metadata_=F1_career_23]",
+   "field": "game_setup_modes",
+   "value": "f2"
+  },
+  {
+   "op": "set",
+   "select": "championships.Championship[_metadata_=F1_career_23]",
+   "field": "event_list",
+   "value": "F2_career_21"
+  },
+  {
+   "op": "set",
+   "select": "championships.Championship[_metadata_=F1_career_23]",
+   "field": "_OptionsSystemConfiguration_instancecount_",
+   "value": "0"
+  },
+  {
+   "op": "set",
+   "select": "championships.Championship[_metadata_=F1_career_23].ComCareerSetup_0",
+   "field": "entrant_list",
+   "value": "f2_2026"
+  },
+  {
+   "op": "set",
+   "select": "championships.Championship[_metadata_=F1_career_23].ComCareerSetup_0",
+   "field": "setup_data",
+   "value": "f1_career_f2_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21]",
+   "field": "_season_instancecount_",
+   "value": "1"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0",
+   "field": "track_event_list",
+   "value": ""
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0",
+   "field": "_fixed_event_reference_instancecount_",
+   "value": "2"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0.fixed_event_reference_0",
+   "field": "_metadata_",
+   "value": "f2_start_season_ref"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0.fixed_event_reference_0",
+   "field": "event_name",
+   "value": "f2_start_season"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0.fixed_event_reference_1",
+   "field": "_metadata_",
+   "value": "f2_end_season_ref"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0.fixed_event_reference_1",
+   "field": "event_name",
+   "value": "f2_end_season"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0.date_time_0",
+   "field": "day",
+   "value": "1"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0.date_time_0",
+   "field": "month",
+   "value": "February"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0.date_time_1",
+   "field": "day",
+   "value": "25"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0.date_time_1",
+   "field": "month",
+   "value": "December"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0.date_time_0",
+   "field": "year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0.date_time_1",
+   "field": "year",
+   "value": "2026"
+  },
+  {
+   "op": "add-row",
+   "table": "game_modes",
+   "from": "game_modes.ModeChampionship[_metadata_=driver_career_26]",
+   "set": {
+    "allowedComponentSaveGroups": "18446744073709551615",
+    "_metadata_": "driver_career_f2_26",
+    "statId": "84",
+    "save_data.name": "driver_career_f2_26",
+    "event_list": "F1_career_f2_27",
+    "championship_setups.ChampionshipSetupList_0.ChampionshipSetup_0.championship": "F1_driver_career_f2_26",
+    "championship_setups.ChampionshipSetupList_0.ChampionshipSetup_0.event_list": "F1_career_f2_27",
+    "championships.ChampionshipReference_0.Championship": "F1_driver_career_f2_26"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championship_setups",
+   "from": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championship_setups.ChampionshipSetupList_0",
+   "set": {
+    "_metadata_": "F2_Default"
+   }
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "_ChampionshipSetup_instancecount_",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "ChampionshipSetup_0._metadata_",
+   "value": "ChampionshipSetup",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "ChampionshipSetup_0.championship",
+   "value": "F1_career_23",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "ChampionshipSetup_0.event_list",
+   "value": "F2_career_21",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "ChampionshipSetup_1._metadata_",
+   "value": "ChampionshipSetup",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "ChampionshipSetup_1.championship",
+   "value": "F1_driver_career_f2_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
+   "field": "ChampionshipSetup_1.event_list",
+   "value": "F1_career_f2_27",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championships",
+   "field": "ChampionshipReference_1._metadata_",
+   "value": "ChampionshipReference",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championships",
+   "field": "ChampionshipReference_1.Championship",
+   "value": "F1_career_23",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championships",
+   "field": "_ChampionshipReference_instancecount_",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "list-append",
+   "select": "content_sets.content_set[_metadata_=2026]",
+   "field": "available_game_modes_0.game_mode_championships",
+   "value": "driver_career_f2_26"
+  },
+  {
+   "op": "add-row",
+   "table": "content_sets.content_set[_metadata_=2026]",
+   "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=F1CAREER_26]",
+   "set": {
+    "name": "F1CAREER_FB",
+    "entrant_list": "f1_2026"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "content_sets.content_set[_metadata_=2026]",
+   "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=F2CAREER_26]",
+   "set": {
+    "name": "F2CAREER_FB",
+    "entrant_list": "f2_2026"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "content_sets.content_set[_metadata_=2026]",
+   "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=ICONS_26]",
+   "set": {
+    "name": "ICONS_FB"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "content_sets.content_set[_metadata_=2026]",
+   "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=F1CAREER_26]",
+   "set": {
+    "name": "F1CAREER_FB27",
+    "entrant_list": "f1_2026"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "content_sets.content_set[_metadata_=2026]",
+   "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=F2CAREER_26]",
+   "set": {
+    "name": "F2CAREER_FB27",
+    "entrant_list": "f2_2026"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "content_sets.content_set[_metadata_=2026]",
+   "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=ICONS_26]",
+   "set": {
+    "name": "ICONS_FB27"
+   }
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
+   "field": "car_1",
+   "value": "f2_car_25"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
+   "field": "car_1_spec",
+   "value": "invicta_25 - driver_01"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
+   "field": "driver_1",
+   "value": "leonardo_fornaroli"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
+   "field": "car_2",
+   "value": "f2_car_25"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
+   "field": "car_2_spec",
+   "value": "mpmotorsport_25 - driver_02"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
+   "field": "driver_2",
+   "value": "richard_verschoor"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
+   "field": "car_3",
+   "value": "f2_car_25"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
+   "field": "car_3_spec",
+   "value": "campos_25 - driver_01"
+  },
+  {
+   "op": "set",
+   "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
+   "field": "driver_3",
+   "value": "arvid_lindblad"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.track_lists",
+   "from": "schedule.track_lists.track_event_list[_metadata_=F2_2024_8]",
+   "set": {
+    "_metadata_": "F2_2025_8"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_0",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_melbourne"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_0",
+   "field": "event_name",
+   "value": "rw_melbourne"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_1",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_bahrain"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_1",
+   "field": "event_name",
+   "value": "rw_bahrain"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_2",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_austria"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_2",
+   "field": "event_name",
+   "value": "rw_austria"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_3",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_silverstone"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_3",
+   "field": "event_name",
+   "value": "rw_silverstone"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_4",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_spa_francorchamps"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_4",
+   "field": "event_name",
+   "value": "rw_spa_francorchamps"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_5",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_monza"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_5",
+   "field": "event_name",
+   "value": "rw_monza"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_6",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_losail"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_6",
+   "field": "event_name",
+   "value": "rw_losail"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_7",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_abu_dhabi"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_8].fixed_event_reference_7",
+   "field": "event_name",
+   "value": "rw_abu_dhabi"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.track_lists",
+   "from": "schedule.track_lists.track_event_list[_metadata_=F2_2024_3]",
+   "set": {
+    "_metadata_": "F2_2025_3"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_0",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_melbourne"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_0",
+   "field": "event_name",
+   "value": "rw_melbourne"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_1",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_silverstone"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_1",
+   "field": "event_name",
+   "value": "rw_silverstone"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_2",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_abu_dhabi"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2025_3].fixed_event_reference_2",
+   "field": "event_name",
+   "value": "rw_abu_dhabi"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.dynamic_event_data.default_ui_track_list_data",
+   "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Long]",
+   "set": {
+    "_metadata_": "F2_2025_Long",
+    "seasons": "season_2025",
+    "track_list_name": "F2_2025_full"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.dynamic_event_data.default_ui_track_list_data",
+   "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Medium]",
+   "set": {
+    "_metadata_": "F2_2025_Medium",
+    "seasons": "season_2025",
+    "track_list_name": "F2_2025_8"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.dynamic_event_data.default_ui_track_list_data",
+   "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Short]",
+   "set": {
+    "_metadata_": "F2_2025_Short",
+    "seasons": "season_2025",
+    "track_list_name": "F2_2025_3"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections",
+   "from": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections.tracks_selection[_metadata_=F1_2026]",
+   "set": {
+    "_metadata_": "F2_2025",
+    "game_setup_modes": "f2",
+    "seasons": "season_2025",
+    "default": "F2_2025_full",
+    "season_0.track_event_list": "F2_2025_full"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.track_lists",
+   "from": "schedule.track_lists.track_event_list[_metadata_=F2_2024_8]",
+   "set": {
+    "_metadata_": "F2_2026_8"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_0",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_melbourne"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_0",
+   "field": "event_name",
+   "value": "rw_melbourne"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_1",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_bahrain"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_1",
+   "field": "event_name",
+   "value": "rw_bahrain"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_2",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_austria"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_2",
+   "field": "event_name",
+   "value": "rw_austria"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_3",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_silverstone"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_3",
+   "field": "event_name",
+   "value": "rw_silverstone"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_4",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_spa_francorchamps"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_4",
+   "field": "event_name",
+   "value": "rw_spa_francorchamps"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_5",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_monza"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_5",
+   "field": "event_name",
+   "value": "rw_monza"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_6",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_losail"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_6",
+   "field": "event_name",
+   "value": "rw_losail"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_7",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_abu_dhabi"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_7",
+   "field": "event_name",
+   "value": "rw_abu_dhabi"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.track_lists",
+   "from": "schedule.track_lists.track_event_list[_metadata_=F2_2024_3]",
+   "set": {
+    "_metadata_": "F2_2026_3"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_3].fixed_event_reference_0",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_melbourne"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_3].fixed_event_reference_0",
+   "field": "event_name",
+   "value": "rw_melbourne"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_3].fixed_event_reference_1",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_silverstone"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_3].fixed_event_reference_1",
+   "field": "event_name",
+   "value": "rw_silverstone"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_3].fixed_event_reference_2",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_abu_dhabi"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_3].fixed_event_reference_2",
+   "field": "event_name",
+   "value": "rw_abu_dhabi"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.dynamic_event_data.default_ui_track_list_data",
+   "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Long]",
+   "set": {
+    "_metadata_": "F2_2026_Long",
+    "seasons": "season_2026",
+    "track_list_name": "F2_2026_full"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.dynamic_event_data.default_ui_track_list_data",
+   "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Medium]",
+   "set": {
+    "_metadata_": "F2_2026_Medium",
+    "seasons": "season_2026",
+    "track_list_name": "F2_2026_8"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.dynamic_event_data.default_ui_track_list_data",
+   "from": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Short]",
+   "set": {
+    "_metadata_": "F2_2026_Short",
+    "seasons": "season_2026",
+    "track_list_name": "F2_2026_3"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections",
+   "from": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections.tracks_selection[_metadata_=F1_2026]",
+   "set": {
+    "_metadata_": "F2_2026",
+    "game_setup_modes": "f2",
+    "seasons": "season_2026",
+    "default": "F2_2026_full",
+    "season_0.track_event_list": "F2_2026_full"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Long]",
+   "field": "seasons",
+   "value": "season_2023,season_2024"
+  },
+  {
+   "op": "set",
+   "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Medium]",
+   "field": "seasons",
+   "value": "season_2023,season_2024"
+  },
+  {
+   "op": "set",
+   "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F2_2024_Short]",
+   "field": "seasons",
+   "value": "season_2023,season_2024"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections",
+   "from": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections.tracks_selection[_metadata_=F1_2026]",
+   "set": {
+    "_metadata_": "F2_2024",
+    "game_setup_modes": "f2",
+    "seasons": "season_2023,season_2024",
+    "default": "F2_2024_full",
+    "season_0.track_event_list": "F2_2024_full"
+   }
+  },
+  {
+   "op": "list-append",
+   "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F1_2026_Long]",
+   "field": "seasons",
+   "value": "season_2027"
+  },
+  {
+   "op": "list-append",
+   "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F1_2026_Medium]",
+   "field": "seasons",
+   "value": "season_2027"
+  },
+  {
+   "op": "list-append",
+   "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F1_2026_Short]",
+   "field": "seasons",
+   "value": "season_2027"
+  },
+  {
+   "op": "list-append",
+   "select": "schedule.dynamic_event_data.default_ui_track_list_data.track_selections.tracks_selection[_metadata_=F1_2026]",
+   "field": "seasons",
+   "value": "season_2027"
+  }
+ ]
 }

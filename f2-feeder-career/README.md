@@ -1,28 +1,31 @@
 # F2 Feeder Career 2026
 
-Addon do Swofty Launcher (F1 25 com a temporada 2026) que traz de volta o **Start in F2** na Driver Career 2026: uma temporada de F2 2025 e depois a F1 2026. A carreira 2025 fica como no jogo original (F2 2024, depois F1 2025).
+Addon do Swofty Launcher (F1 25 com a temporada 2026) com duas Driver Careers que começam na Fórmula 2. Cada uma tem seu próprio tile na linha **Addons** da escolha de carreira, seu modo de jogo e seus saves. A carreira 2026 do jogo não é alterada.
 
-| Modo | F2 | Depois | Situação |
+| Tile | F2 | Depois | Situação |
 |---|---|---|---|
-| Carreira 2026 | F2 2025 (grid `f2_2025`, calendário 2025) | F1 2026 | testado até a classificação da 1ª etapa; falta testar a passagem para a F1 |
-| F2 2026 → F1 2027 | F2 2026 (`f2_2026`) | F1 "2027" | ainda não feito |
+| F2 2025 → F1 2026 | F2 2025 (grid `f2_2025`, calendário 2025) | F1 2026 | na 0.2.3, testado até a 1ª etapa |
+| F2 2026 → F1 2027 | F2 2026 (grid `f2_2026`, calendário 2026 com Madri) | F1 2027 com os carros de 2026 | novo na 0.3.0 |
 
-## O que o addon muda
+`db/career.json` e `lang/career.json` são gerados por `tools/gen.py`. Mude o gerador, não os arquivos.
 
-**Wizard** (`native/src/f2_feeder.cpp`): `Game_CareerWizard_StartsInF1` responde "não" para o grupo `f1_career_2026`, e o wizard volta a mostrar Skip to F1 / Start in F2.
+## Como funciona
 
-**Campeonato** (`db/career.json`): a F2 da carreira 2026 usa o `F2_career_23`, um campeonato de F2 que só os modos de carreira do F1 23 e do F1 24 usam e que o F1 25 não oferece mais. Ele recebe:
-- o grid `f2_2025` e o `setup_data` `f1_career_2026`;
-- o calendário `F2_career_23` com o ano 2025, e por isso a temporada de F2 é `season_2025`.
+**Tiles** (`native/src/f2_feeder.cpp`): dois *career contents* do core (`swofty/career_content.hpp`), com os grupos `f1_career_f2_25` (sufixo `FA26`) e `f1_career_f2_26` (sufixo `FB27`). `Game_CareerWizard_StartsInF1` responde "não" para esses dois grupos, e o wizard mostra Skip to F1 / Start in F2.
 
-`driver_career_26` ganha a lista `F2_Default` (`F2_career_23`, depois `F1_driver_career_26`) e o `F2_career_23` como segunda referência de campeonato, igual ao `driver_career_25` com o `F2_2024_career`.
+**Cada carreira** é montada como a do Progressive Career, com cópias das linhas da carreira 2026 do jogo:
+- linhas dos 8 grupos de dados e a entrant list do grupo;
+- `shared_components`, o campeonato de F1 (`F1_driver_career_f2_25`/`_26`, statId 38/39) e o modo (`driver_career_f2_25`/`_26`, statId 83/84), cada um com seu `save_data.name`;
+- a lista `F2_Default` (a F2, depois a F1) e o campeonato de F2 como segunda referência, igual ao `driver_career_25`;
+- listas `F1CAREER_`, `F2CAREER_` e `ICONS_` no content set 2026.
 
-**Calendário:**
-- Listas novas `F2_2025_8` e `F2_2025_3`: as listas curtas de 2024 na ordem de 2025, com Melbourne primeiro. A completa, `F2_2025_full`, já existe no jogo.
-- Linhas de duração de temporada `F2_2025_Long/Medium/Short` para `season_2025`. As de 2024 ficam só para `season_2023` e `season_2024`.
-- Linhas `track_selections` de F2 (`F2_2024` e `F2_2025`). A ordem das rodadas vem daqui: sem uma linha de F2, o jogo usava a ordem da `F2_2024_full`.
+**A F2 de cada carreira usa um campeonato do jogo que nenhum modo do F1 25 usa** (cópias de campeonato de F2 crasharam):
+- A: `F2_career_23`, com o grid `f2_2025` e o calendário com ano 2025;
+- B: `F1_career_23` transformado em F2 (`game_setup_modes f2`), com o grid `f2_2026` e o calendário `F2_career_21` reformatado igual ao de F2 2024, com ano 2026.
 
-**Cena do Start in F2** (`SpawnedF2` do grupo `f1_career_2026`): carros `f2_car_25` com Fornaroli (Invicta), Verschoor (MP) e Lindblad (Campos).
+**Calendários:** o jogo escolhe as pistas e a ordem pelo ano da temporada (as datas do calendário do campeonato). Para `season_2025` e `season_2026` há linhas de duração (Long/Medium/Short) e `track_selections` de F2, além das listas curtas `F2_202x_8` e `F2_202x_3`. As linhas da F2 2024 ficam só para 2023 e 2024. A F1 2027 da carreira B tem o ano 2027, e `season_2027` é acrescentado às linhas da F1 2026.
+
+**Saves:** cada carreira tem seu próprio container de save. Sem o addon, o launcher guarda esses containers e os escreve de volta sem mudança, então dá para deixar o Steam Cloud ligado.
 
 ## O que aprendemos (para quem continuar)
 

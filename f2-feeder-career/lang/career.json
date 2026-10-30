@@ -1,0 +1,29 @@
+{
+ "schema_version": 1,
+ "ops": [
+  {
+   "op": "lang.set",
+   "language": "*",
+   "key": "lng_f2f_a_title",
+   "value": "F2 2025 → F1 2026"
+  },
+  {
+   "op": "lang.set",
+   "language": "*",
+   "key": "lng_f2f_a_description",
+   "value": "Start in the 2025 Formula 2 season with its real grid and calendar, then move up to the 2026 Formula 1 season."
+  },
+  {
+   "op": "lang.set",
+   "language": "*",
+   "key": "lng_f2f_b_title",
+   "value": "F2 2026 → F1 2027"
+  },
+  {
+   "op": "lang.set",
+   "language": "*",
+   "key": "lng_f2f_b_description",
+   "value": "Start in the 2026 Formula 2 season with its real grid and calendar, then move up to Formula 1 in 2027 on the 2026 cars and line-ups."
+  }
+ ]
+}

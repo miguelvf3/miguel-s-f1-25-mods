@@ -3,9 +3,27 @@
   "ops": [
     {
       "op": "set",
-      "select": "championships.Championship[_metadata_=F2_2024_career].ComCareerSetup_0",
+      "select": "championships.Championship[_metadata_=F2_career_23].ComCareerSetup_0",
       "field": "entrant_list",
       "value": "f2_2025"
+    },
+    {
+      "op": "set",
+      "select": "championships.Championship[_metadata_=F2_career_23].ComCareerSetup_0",
+      "field": "setup_data",
+      "value": "f1_career_2026"
+    },
+    {
+      "op": "set",
+      "select": "schedule.event_lists.event_list[_metadata_=F2_career_23].season_0.date_time_0",
+      "field": "year",
+      "value": "2025"
+    },
+    {
+      "op": "set",
+      "select": "schedule.event_lists.event_list[_metadata_=F2_career_23].season_0.date_time_1",
+      "field": "year",
+      "value": "2025"
     },
     {
       "op": "add-row",
@@ -37,7 +55,7 @@
       "type": 4,
       "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
       "field": "ChampionshipSetup_0.championship",
-      "value": "F2_2024_career"
+      "value": "F2_career_23"
     },
     {
       "op": "set",
@@ -45,7 +63,7 @@
       "type": 4,
       "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
       "field": "ChampionshipSetup_0.event_list",
-      "value": "F2_2024_career"
+      "value": "F2_career_23"
     },
     {
       "op": "set",
@@ -85,7 +103,7 @@
       "type": 4,
       "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships",
       "field": "ChampionshipReference_1.Championship",
-      "value": "F2_2024_career"
+      "value": "F2_career_23"
     },
     {
       "op": "set",

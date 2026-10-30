@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "community.f2-feeder-career",
   "name": "F2 Feeder Career 2026",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "author": "community",
   "description": "DRAFT, untested. Brings back Start in F2 for the 2026 Driver Career: an F2 2025 season, then F1 2026.",
   "license": "AGPL-3.0-or-later",

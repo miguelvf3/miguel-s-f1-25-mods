@@ -43,7 +43,7 @@
       "type": 4,
       "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
       "field": "ChampionshipSetup_0.championship",
-      "value": "F2_2025_career"
+      "value": "F2_2024_career"
     },
     {
       "op": "set",
@@ -91,7 +91,7 @@
       "type": 4,
       "select": "game_modes.ModeChampionship[_metadata_=driver_career_26].championships",
       "field": "ChampionshipReference_1.Championship",
-      "value": "F2_2025_career"
+      "value": "F2_2024_career"
     },
     {
       "op": "set",

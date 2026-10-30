@@ -38,7 +38,7 @@ F1_SEASONS = 10
 CAREERS = [
     {
         "key": "a", "group": "f1_career_f2_25", "mode": "driver_career_f2_25", "suffix": "FA26",
-        "mode_stat": 83, "champ_stat": 38,
+        "mode_stat": 83, "champ_stat": 38, "list_stat": 53,
         "f1_champ": "F1_driver_career_f2_25", "f1_events": "F1_career_26", "f1_year": None,
         "f2_champ": "F2_career_23", "f2_events": "F2_career_23", "f2_year": 2025, "f2_grid": "f2_2025",
         "f2_choose": None,  # keeps F2CAREER_26's career_f2_2025_for_f1_2026
@@ -47,7 +47,7 @@ CAREERS = [
     },
     {
         "key": "b", "group": "f1_career_f2_26", "mode": "driver_career_f2_26", "suffix": "FB27",
-        "mode_stat": 84, "champ_stat": 39,
+        "mode_stat": 84, "champ_stat": 39, "list_stat": 68,
         "f1_champ": "F1_driver_career_f2_26", "f1_events": "F1_career_26", "f1_year": None,
         "f2_champ": "F1_career_23", "f2_events": "F2_career_21", "f2_year": 2026, "f2_grid": "f2_2026",
         "f2_choose": "f2_2026",
@@ -87,7 +87,11 @@ def career(c):
     g, m = c["group"], c["mode"]
     for table, word in DATA_GROUP_TABLES:
         add(table, f"{table}.{word}[_metadata_=f1_career_2026]", _metadata_=g)
-    add("entrants.entrant_lists", "entrants.entrant_lists.entrant_list[_metadata_=f1_career_2026]", _metadata_=g)
+    # The entrant list stat_id indexes the game's entrant list registry, which ends at the stock lists'
+    # highest id (104): a list above it is not found and pressing the tile crashed in the router.
+    # 53 and 68 are unused stock ids below it.
+    add("entrants.entrant_lists", "entrants.entrant_lists.entrant_list[_metadata_=f1_career_2026]",
+        _metadata_=g, stat_id=c["list_stat"])
 
     if c["f1_year"]:
         add("schedule.event_lists", "schedule.event_lists.event_list[_metadata_=F1_career_26]",

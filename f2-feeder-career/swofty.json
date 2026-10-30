@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "community.f2-feeder-career",
   "name": "F2 Feeder Career 2026",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "author": "community",
   "description": "Two Driver Careers that start in Formula 2: F2 2025 then F1 2026, and F2 2026 then F1 2027. Each has its own tile and save slots; the stock 2026 career is unchanged.",
   "license": "AGPL-3.0-or-later",

@@ -8268,7 +8268,8 @@
    "table": "entrants.entrant_lists",
    "from": "entrants.entrant_lists.entrant_list[_metadata_=f1_career_2026]",
    "set": {
-    "_metadata_": "f1_career_f2_25"
+    "_metadata_": "f1_career_f2_25",
+    "stat_id": "53"
    }
   },
   {
@@ -8603,7 +8604,8 @@
    "table": "entrants.entrant_lists",
    "from": "entrants.entrant_lists.entrant_list[_metadata_=f1_career_2026]",
    "set": {
-    "_metadata_": "f1_career_f2_26"
+    "_metadata_": "f1_career_f2_26",
+    "stat_id": "68"
    }
   },
   {

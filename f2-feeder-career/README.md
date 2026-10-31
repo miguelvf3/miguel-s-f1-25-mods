@@ -4,8 +4,8 @@ Addon do Swofty Launcher (F1 25 com a temporada 2026) com duas Driver Careers qu
 
 | Tile | F2 | Depois | Situação |
 |---|---|---|---|
-| F2 2025 > F1 2026 | F2 com o grid `f2_2026` e o calendário 2025 | F1 2026 | abre na 0.4.0 |
-| F2 2026 > F1 2027 | F2 com o grid `f2_2026` e o calendário 2026 com Madri | F1 com os carros de 2026 (ainda datada 2026) | abre na 0.4.0 |
+| F2 2025 > F1 2026 | F2 com o grid `f2_2026` e o calendário 2025 | F1 2026 | abre na 0.4.0; calendário da 0.4.9 não testado |
+| F2 2026 > F1 2027 | F2 com o grid `f2_2026` e o calendário 2026 com Madri | F1 com os carros de 2026 (ainda datada 2026) | Melbourne 1/14 na 0.4.9 |
 
 `db/career.json` e `lang/career.json` são gerados por `tools/gen.py`. Mude o gerador, não os arquivos.
 
@@ -25,7 +25,9 @@ Addon do Swofty Launcher (F1 25 com a temporada 2026) com duas Driver Careers qu
 
 A cena do Start in F2 e a tela Official Driver usam pilotos de 2026 (Câmara, Herta, Montoya). O visual dos pilotos é buscado pelo ano da carreira, e pilotos que só correram em 2025 não aparecem.
 
-**Calendários:** o jogo escolhe as pistas e a ordem pelo ano da temporada (as datas do calendário do campeonato). Para `season_2025` e `season_2026` há linhas de duração (Long/Medium/Short) e `track_selections` de F2, além das listas curtas `F2_202x_8` e `F2_202x_3`. As linhas da F2 2024 ficam só para 2023 e 2024. A F1 da carreira B ainda é datada de 2026: `season_2027` não existe em `game_setup.seasons` e crashou o boot (0x142a0ddb0).
+**Calendários:** o `season_0.track_event_list` do event list de cada carreira nomeia a lista da temporada (`F2_2025_full`, `F2_2026_full`). Para `season_2025` e `season_2026` há linhas de duração (Long/Medium/Short) e `track_selections` de F2, além das listas curtas `F2_202x_8` e `F2_202x_3`. As linhas da F2 2024 ficam só para 2023 e 2024.
+- As datas das rodadas vêm das race weekends (`schedule.all_track_events`): `rw_<pista>` tem data de 2025 e `rw_<pista>_26` de 2026. A F2 2026 tem as suas próprias, `rw_f2_<pista>_26` (stat_id 137–150), cópias das de 2026.
+- Antes do primeiro carregamento de pista, o jogo refaz as etapas da temporada (`0x140bc9360`). Ele mantém só os eventos do calendário cujo `stat_id` está na lista `ComTrackList_0.default_track_list` do campeonato, na ordem dessa lista. No `F2_career_23` ela era a `F2_2024_full`: a temporada corria na ordem de 2024 (Bahrein primeiro, sem Madri, 13 rodadas), e com os eventos de 2026 ficava sem etapas e crashava. O addon aponta esse campo para `F2_feeder_order`, com os eventos de 2025 e de 2026. Cada calendário só tem os do seu ano. A F1 da carreira B ainda é datada de 2026: `season_2027` não existe em `game_setup.seasons` e crashou o boot (0x142a0ddb0).
 
 **Saves:** cada carreira tem seu próprio container de save. Sem o addon, o launcher guarda esses containers e os escreve de volta sem mudança, então dá para deixar o Steam Cloud ligado.
 

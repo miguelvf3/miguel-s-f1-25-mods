@@ -8323,6 +8323,12 @@
    "value": "2025"
   },
   {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_23].season_0",
+   "field": "track_event_list",
+   "value": "F2_2025_full"
+  },
+  {
    "op": "add-row",
    "table": "game_modes",
    "from": "game_modes.ModeChampionship[_metadata_=driver_career_26]",
@@ -8651,12 +8657,6 @@
   {
    "op": "set",
    "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0",
-   "field": "track_event_list",
-   "value": ""
-  },
-  {
-   "op": "set",
-   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0",
    "field": "_fixed_event_reference_instancecount_",
    "value": "2"
   },
@@ -8719,6 +8719,12 @@
    "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0.date_time_1",
    "field": "year",
    "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "schedule.event_lists.event_list[_metadata_=F2_career_21].season_0",
+   "field": "track_event_list",
+   "value": "F2_2026_full"
   },
   {
    "op": "add-row",
@@ -8943,6 +8949,1556 @@
   },
   {
    "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_melbourne_26]",
+   "set": {
+    "_metadata_": "rw_f2_melbourne_26",
+    "stat_id": "137"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_melbourne_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_melbourne_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_melbourne_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_melbourne_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_melbourne_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_melbourne_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_melbourne_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_melbourne_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_melbourne_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_melbourne_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_melbourne_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_melbourne_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_melbourne_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_melbourne_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_bahrain_26]",
+   "set": {
+    "_metadata_": "rw_f2_bahrain_26",
+    "stat_id": "138"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_bahrain_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_bahrain_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_bahrain_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_bahrain_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_bahrain_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_bahrain_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_bahrain_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_bahrain_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_bahrain_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_bahrain_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_bahrain_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_bahrain_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_bahrain_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_bahrain_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_jeddah_26]",
+   "set": {
+    "_metadata_": "rw_f2_jeddah_26",
+    "stat_id": "139"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_jeddah_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_jeddah_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_jeddah_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_jeddah_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_jeddah_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_jeddah_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_jeddah_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_jeddah_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_jeddah_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_jeddah_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_jeddah_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_jeddah_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_jeddah_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_jeddah_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_monaco_26]",
+   "set": {
+    "_metadata_": "rw_f2_monaco_26",
+    "stat_id": "140"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monaco_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monaco_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monaco_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monaco_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monaco_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monaco_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monaco_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monaco_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monaco_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monaco_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monaco_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monaco_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monaco_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monaco_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_catalunya_26]",
+   "set": {
+    "_metadata_": "rw_f2_catalunya_26",
+    "stat_id": "141"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_catalunya_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_catalunya_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_catalunya_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_catalunya_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_catalunya_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_catalunya_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_catalunya_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_catalunya_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_catalunya_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_catalunya_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_catalunya_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_catalunya_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_catalunya_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_catalunya_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_austria_26]",
+   "set": {
+    "_metadata_": "rw_f2_austria_26",
+    "stat_id": "142"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_austria_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_austria_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_austria_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_austria_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_austria_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_austria_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_austria_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_austria_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_austria_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_austria_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_austria_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_austria_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_austria_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_austria_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_silverstone_26]",
+   "set": {
+    "_metadata_": "rw_f2_silverstone_26",
+    "stat_id": "143"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_silverstone_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_silverstone_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_silverstone_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_silverstone_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_silverstone_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_silverstone_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_silverstone_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_silverstone_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_silverstone_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_silverstone_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_silverstone_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_silverstone_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_silverstone_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_silverstone_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26]",
+   "set": {
+    "_metadata_": "rw_f2_spa_francorchamps_26",
+    "stat_id": "144"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_spa_francorchamps_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_spa_francorchamps_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_spa_francorchamps_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_spa_francorchamps_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_spa_francorchamps_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_spa_francorchamps_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_spa_francorchamps_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_hungaroring_26]",
+   "set": {
+    "_metadata_": "rw_f2_hungaroring_26",
+    "stat_id": "145"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_hungaroring_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_hungaroring_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_hungaroring_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_hungaroring_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_hungaroring_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_hungaroring_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_hungaroring_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_hungaroring_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_hungaroring_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_hungaroring_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_hungaroring_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_hungaroring_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_hungaroring_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_hungaroring_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_monza_26]",
+   "set": {
+    "_metadata_": "rw_f2_monza_26",
+    "stat_id": "146"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monza_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monza_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monza_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monza_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monza_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monza_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monza_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monza_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monza_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monza_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monza_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monza_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_monza_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_monza_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_madrid_26]",
+   "set": {
+    "_metadata_": "rw_f2_madrid_26",
+    "stat_id": "147"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_madrid_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_madrid_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_madrid_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_madrid_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_madrid_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_madrid_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_madrid_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_madrid_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_madrid_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_madrid_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_madrid_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_madrid_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_madrid_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_madrid_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_baku_26]",
+   "set": {
+    "_metadata_": "rw_f2_baku_26",
+    "stat_id": "148"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_baku_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_baku_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_baku_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_baku_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_baku_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_baku_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_baku_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_baku_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_baku_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_baku_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_baku_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_baku_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_baku_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_baku_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_losail_26]",
+   "set": {
+    "_metadata_": "rw_f2_losail_26",
+    "stat_id": "149"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_losail_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_losail_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_losail_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_losail_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_losail_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_losail_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_losail_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_losail_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_losail_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_losail_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_losail_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_losail_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_losail_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_losail_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_abu_dhabi_26]",
+   "set": {
+    "_metadata_": "rw_f2_abu_dhabi_26",
+    "stat_id": "150"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_abu_dhabi_26]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_abu_dhabi_26].date_time.year"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_abu_dhabi_26]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_abu_dhabi_26].date_time.month"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_abu_dhabi_26]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_abu_dhabi_26].date_time.day"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_abu_dhabi_26]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_abu_dhabi_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_abu_dhabi_26]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_abu_dhabi_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_abu_dhabi_26]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_abu_dhabi_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f2_abu_dhabi_26]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_abu_dhabi_26].date_time.daylight_saving"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_0",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_melbourne_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_0",
+   "field": "event_name",
+   "value": "rw_f2_melbourne_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_1",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_bahrain_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_1",
+   "field": "event_name",
+   "value": "rw_f2_bahrain_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_2",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_jeddah_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_2",
+   "field": "event_name",
+   "value": "rw_f2_jeddah_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_3",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_monaco_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_3",
+   "field": "event_name",
+   "value": "rw_f2_monaco_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_4",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_catalunya_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_4",
+   "field": "event_name",
+   "value": "rw_f2_catalunya_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_5",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_austria_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_5",
+   "field": "event_name",
+   "value": "rw_f2_austria_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_6",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_silverstone_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_6",
+   "field": "event_name",
+   "value": "rw_f2_silverstone_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_7",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_spa_francorchamps_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_7",
+   "field": "event_name",
+   "value": "rw_f2_spa_francorchamps_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_8",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_hungaroring_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_8",
+   "field": "event_name",
+   "value": "rw_f2_hungaroring_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_9",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_monza_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_9",
+   "field": "event_name",
+   "value": "rw_f2_monza_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_10",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_madrid_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_10",
+   "field": "event_name",
+   "value": "rw_f2_madrid_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_11",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_baku_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_11",
+   "field": "event_name",
+   "value": "rw_f2_baku_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_12",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_losail_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_12",
+   "field": "event_name",
+   "value": "rw_f2_losail_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_13",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_abu_dhabi_26"
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_full].fixed_event_reference_13",
+   "field": "event_name",
+   "value": "rw_f2_abu_dhabi_26"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.track_lists",
+   "from": "schedule.track_lists.track_event_list[_metadata_=F2_2024_full]",
+   "set": {
+    "_metadata_": "F2_feeder_order"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order]",
+   "field": "_fixed_event_reference_instancecount_",
+   "value": "28",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_0",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_melbourne",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_0",
+   "field": "event_name",
+   "value": "rw_melbourne",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_1",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_bahrain",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_1",
+   "field": "event_name",
+   "value": "rw_bahrain",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_2",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_jeddah",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_2",
+   "field": "event_name",
+   "value": "rw_jeddah",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_3",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_imola",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_3",
+   "field": "event_name",
+   "value": "rw_imola",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_4",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_monaco",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_4",
+   "field": "event_name",
+   "value": "rw_monaco",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_5",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_catalunya",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_5",
+   "field": "event_name",
+   "value": "rw_catalunya",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_6",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_austria",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_6",
+   "field": "event_name",
+   "value": "rw_austria",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_7",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_silverstone",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_7",
+   "field": "event_name",
+   "value": "rw_silverstone",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_8",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_spa_francorchamps",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_8",
+   "field": "event_name",
+   "value": "rw_spa_francorchamps",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_9",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_hungaroring",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_9",
+   "field": "event_name",
+   "value": "rw_hungaroring",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_10",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_monza",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_10",
+   "field": "event_name",
+   "value": "rw_monza",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_11",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_baku",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_11",
+   "field": "event_name",
+   "value": "rw_baku",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_12",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_losail",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_12",
+   "field": "event_name",
+   "value": "rw_losail",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_13",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_abu_dhabi",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_13",
+   "field": "event_name",
+   "value": "rw_abu_dhabi",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_14",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_melbourne_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_14",
+   "field": "event_name",
+   "value": "rw_f2_melbourne_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_15",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_bahrain_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_15",
+   "field": "event_name",
+   "value": "rw_f2_bahrain_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_16",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_jeddah_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_16",
+   "field": "event_name",
+   "value": "rw_f2_jeddah_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_17",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_monaco_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_17",
+   "field": "event_name",
+   "value": "rw_f2_monaco_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_18",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_catalunya_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_18",
+   "field": "event_name",
+   "value": "rw_f2_catalunya_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_19",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_austria_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_19",
+   "field": "event_name",
+   "value": "rw_f2_austria_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_20",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_silverstone_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_20",
+   "field": "event_name",
+   "value": "rw_f2_silverstone_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_21",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_spa_francorchamps_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_21",
+   "field": "event_name",
+   "value": "rw_f2_spa_francorchamps_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_22",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_hungaroring_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_22",
+   "field": "event_name",
+   "value": "rw_f2_hungaroring_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_23",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_monza_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_23",
+   "field": "event_name",
+   "value": "rw_f2_monza_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_24",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_madrid_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_24",
+   "field": "event_name",
+   "value": "rw_f2_madrid_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_25",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_baku_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_25",
+   "field": "event_name",
+   "value": "rw_f2_baku_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_26",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_losail_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_26",
+   "field": "event_name",
+   "value": "rw_f2_losail_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_27",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f2_abu_dhabi_26",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F2_feeder_order].fixed_event_reference_27",
+   "field": "event_name",
+   "value": "rw_f2_abu_dhabi_26",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "championships.Championship[_metadata_=F2_career_23].ComTrackList_0",
+   "field": "default_track_list",
+   "value": "F2_feeder_order",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "add-row",
    "table": "schedule.track_lists",
    "from": "schedule.track_lists.track_event_list[_metadata_=F2_2024_8]",
    "set": {
@@ -9143,97 +10699,97 @@
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_0",
    "field": "_metadata_",
-   "value": "fixed_event_reference_rw_melbourne"
+   "value": "fixed_event_reference_rw_f2_melbourne_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_0",
    "field": "event_name",
-   "value": "rw_melbourne"
+   "value": "rw_f2_melbourne_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_1",
    "field": "_metadata_",
-   "value": "fixed_event_reference_rw_bahrain"
+   "value": "fixed_event_reference_rw_f2_bahrain_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_1",
    "field": "event_name",
-   "value": "rw_bahrain"
+   "value": "rw_f2_bahrain_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_2",
    "field": "_metadata_",
-   "value": "fixed_event_reference_rw_austria"
+   "value": "fixed_event_reference_rw_f2_austria_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_2",
    "field": "event_name",
-   "value": "rw_austria"
+   "value": "rw_f2_austria_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_3",
    "field": "_metadata_",
-   "value": "fixed_event_reference_rw_silverstone"
+   "value": "fixed_event_reference_rw_f2_silverstone_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_3",
    "field": "event_name",
-   "value": "rw_silverstone"
+   "value": "rw_f2_silverstone_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_4",
    "field": "_metadata_",
-   "value": "fixed_event_reference_rw_spa_francorchamps"
+   "value": "fixed_event_reference_rw_f2_spa_francorchamps_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_4",
    "field": "event_name",
-   "value": "rw_spa_francorchamps"
+   "value": "rw_f2_spa_francorchamps_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_5",
    "field": "_metadata_",
-   "value": "fixed_event_reference_rw_monza"
+   "value": "fixed_event_reference_rw_f2_monza_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_5",
    "field": "event_name",
-   "value": "rw_monza"
+   "value": "rw_f2_monza_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_6",
    "field": "_metadata_",
-   "value": "fixed_event_reference_rw_losail"
+   "value": "fixed_event_reference_rw_f2_losail_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_6",
    "field": "event_name",
-   "value": "rw_losail"
+   "value": "rw_f2_losail_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_7",
    "field": "_metadata_",
-   "value": "fixed_event_reference_rw_abu_dhabi"
+   "value": "fixed_event_reference_rw_f2_abu_dhabi_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_8].fixed_event_reference_7",
    "field": "event_name",
-   "value": "rw_abu_dhabi"
+   "value": "rw_f2_abu_dhabi_26"
   },
   {
    "op": "add-row",
@@ -9247,37 +10803,37 @@
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_3].fixed_event_reference_0",
    "field": "_metadata_",
-   "value": "fixed_event_reference_rw_melbourne"
+   "value": "fixed_event_reference_rw_f2_melbourne_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_3].fixed_event_reference_0",
    "field": "event_name",
-   "value": "rw_melbourne"
+   "value": "rw_f2_melbourne_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_3].fixed_event_reference_1",
    "field": "_metadata_",
-   "value": "fixed_event_reference_rw_silverstone"
+   "value": "fixed_event_reference_rw_f2_silverstone_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_3].fixed_event_reference_1",
    "field": "event_name",
-   "value": "rw_silverstone"
+   "value": "rw_f2_silverstone_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_3].fixed_event_reference_2",
    "field": "_metadata_",
-   "value": "fixed_event_reference_rw_abu_dhabi"
+   "value": "fixed_event_reference_rw_f2_abu_dhabi_26"
   },
   {
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F2_2026_3].fixed_event_reference_2",
    "field": "event_name",
-   "value": "rw_abu_dhabi"
+   "value": "rw_f2_abu_dhabi_26"
   },
   {
    "op": "add-row",
@@ -9320,6 +10876,1014 @@
     "default": "F2_2026_full",
     "season_0.track_event_list": "F2_2026_full"
    }
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=melbourne].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=melbourne].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "3"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=melbourne].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "16"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=melbourne].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=melbourne].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "3"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=melbourne].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "16"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=bahrain].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=bahrain].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "4"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=bahrain].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "13"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=bahrain].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=bahrain].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "4"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=bahrain].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "13"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=jeddah].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=jeddah].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "4"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=jeddah].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "20"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=jeddah].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=jeddah].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "4"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=jeddah].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "20"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=imola].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=imola].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "5"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=imola].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "18"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=imola].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=imola].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "5"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=imola].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "18"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=monaco].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=monaco].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "5"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=monaco].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "25"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=monaco].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=monaco].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "5"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=monaco].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "25"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=catalunya].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=catalunya].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=catalunya].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "1"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=catalunya].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=catalunya].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=catalunya].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "1"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=austria].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=austria].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=austria].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "29"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=austria].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=austria].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=austria].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "29"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=silverstone].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=silverstone].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=silverstone].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=silverstone].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=silverstone].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=silverstone].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=spa_francorchamps].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=spa_francorchamps].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=spa_francorchamps].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "27"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=spa_francorchamps].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=spa_francorchamps].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=spa_francorchamps].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "27"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=hungaroring].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=hungaroring].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "8"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=hungaroring].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "3"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=hungaroring].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=hungaroring].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "8"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=hungaroring].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "3"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=monza].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=monza].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "9"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=monza].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=monza].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=monza].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "9"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=monza].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=baku].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=baku].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "9"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=baku].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "21"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=baku].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=baku].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "9"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=baku].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "21"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=losail].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=losail].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "11"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=losail].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "30"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=losail].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=losail].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "11"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=losail].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "30"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=abu_dhabi].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=abu_dhabi].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "12"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025].TrackData[_metadata_=abu_dhabi].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=abu_dhabi].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2025"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=abu_dhabi].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "12"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2025_sprint].TrackData[_metadata_=abu_dhabi].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=melbourne].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=melbourne].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "3"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=melbourne].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "8"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=melbourne].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=melbourne].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "3"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=melbourne].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "8"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=bahrain].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=bahrain].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "4"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=bahrain].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "12"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=bahrain].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=bahrain].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "4"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=bahrain].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "12"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=jeddah].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=jeddah].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "4"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=jeddah].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "19"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=jeddah].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=jeddah].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "4"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=jeddah].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "19"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=monaco].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=monaco].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=monaco].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=monaco].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=monaco].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=monaco].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=catalunya].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=catalunya].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=catalunya].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "14"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=catalunya].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=catalunya].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=catalunya].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "14"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=austria].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=austria].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=austria].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "28"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=austria].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=austria].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=austria].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "28"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=silverstone].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=silverstone].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=silverstone].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "5"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=silverstone].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=silverstone].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=silverstone].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "5"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=spa_francorchamps].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=spa_francorchamps].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=spa_francorchamps].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "19"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=spa_francorchamps].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=spa_francorchamps].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=spa_francorchamps].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "19"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=hungaroring].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=hungaroring].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=hungaroring].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "26"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=hungaroring].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=hungaroring].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "7"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=hungaroring].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "26"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=monza].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=monza].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "9"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=monza].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=monza].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=monza].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "9"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=monza].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=madrid].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=madrid].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "9"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=madrid].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "13"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=madrid].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=madrid].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "9"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=madrid].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "13"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=baku].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=baku].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "9"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=baku].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "26"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=baku].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=baku].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "9"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=baku].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "26"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=losail].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=losail].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "11"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=losail].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "29"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=losail].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=losail].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "11"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=losail].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "29"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=abu_dhabi].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=abu_dhabi].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "12"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026].TrackData[_metadata_=abu_dhabi].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "6"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=abu_dhabi].TrackGeneralData_0",
+   "field": "weekend_year",
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=abu_dhabi].TrackGeneralData_0",
+   "field": "weekend_month",
+   "value": "12"
+  },
+  {
+   "op": "set",
+   "select": "track_data.game_setup.TrackDataSet[_metadata_=f2_2026_sprint].TrackData[_metadata_=abu_dhabi].TrackGeneralData_0",
+   "field": "weekend_day",
+   "value": "6"
   },
   {
    "op": "set",

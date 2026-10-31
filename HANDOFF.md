@@ -10,9 +10,11 @@ Addon do [Swofty Launcher](https://github.com/Swofty-Developments/SwoftyLauncher
 
 A carreira 2026 do jogo não traz o Start in F2. A carreira 2025 do jogo traz (F2 2024, depois F1 2025).
 
-## Estado atual: 0.4.0
+## Estado atual: 0.4.9
 
-Os dois tiles aparecem na linha **Addons** e abrem com Skip to F1 / Start in F2. Na 0.4.0 o Start in F2 mostra os carros de 2026, e a tela Official Driver mostra Herta, Câmara e Montoya. As duas carreiras dividem o campeonato de F2 `F2_career_23` e o grid `f2_2026`; cada uma tem o próprio calendário.
+Os dois tiles aparecem na linha **Addons** e abrem com Skip to F1 / Start in F2. Desde a 0.4.0 o Start in F2 mostra os carros de 2026, e a tela Official Driver mostra Herta, Câmara e Montoya. As duas carreiras dividem o campeonato de F2 `F2_career_23` e o grid `f2_2026`; cada uma tem o próprio calendário.
+
+Na 0.4.9 a carreira B (14 corridas) começa em Melbourne, ROUND 1/14, com as 14 etapas da F2 2026 na ordem real (rastreamento Frida conferido). O calendário da carreira A e as temporadas de 8 e 3 corridas usam o mesmo mecanismo, mas ainda não foram testados no jogo.
 
 Já funcionou no jogo, na 0.2.3, quando o mod ainda alterava a carreira 2026 do jogo:
 - Start in F2 aparecia na carreira 2026.
@@ -46,9 +48,10 @@ Ainda não testado:
 - **`add-row` só copia campos que o catálogo do launcher conhece.**
   - Para o modo, o campeonato e os grupos, use o mapa `fields` (`tools/fields.json`, tirado do Progressive).
   - Em listas aninhadas sem `_instancecount_`, como a `championship_setups` do `driver_career_26`, crie os campos com `set` + `create` + `type`.
-- **Calendário da F2:**
-  - O jogo escolhe a lista de pistas e a ordem pelo **ano das datas** do event list do campeonato (`season_2025`, `season_2026`), usando as linhas de `schedule.dynamic_event_data.default_ui_track_list_data`.
-  - A ordem das rodadas vem de `track_selections`. Sem uma linha de F2 para o ano, o jogo usa a ordem da `F2_2024_full`.
+- **Calendário da F2** (descoberto com Frida, não por tentativa):
+  - O calendário é montado com a lista do `season_0.track_event_list` do event list. Cada entrada leva a data da race weekend (`date_time` em `schedule.all_track_events`): `rw_<pista>` é 2025, `rw_<pista>_26` é 2026. Mudar datas nos `TrackDataSet` não muda nada.
+  - Antes do primeiro carregamento de pista, `0x140bc9360` refaz `Season.weekends`. Ele mantém só as entradas cujo `stat_id` de evento está na lista `ComTrackList_0.default_track_list` do campeonato, **na ordem dessa lista**. Essa chave não está no catálogo; o nome saiu de um fnv1a64 por força bruta. No `F2_career_23` era a `F2_2024_full`, e daí vinham o Bahrein 1/13 e, com eventos de 2026, a temporada vazia que crashava em `Sess_WeekendManager_PrepareTrackLoad`.
+  - Race weekends novas precisam dos 7 campos de `date_time` (`add-row` não copia nenhum): sem eles o boot crasha em `Trk_TrackData_LoadTrackListNodes`.
   - `season_2027` não existe em `game_setup.seasons`, e colocar esse valor numa lista `seasons` crasha o boot (`0x142a0ddb0`). Por isso a F1 da carreira B ainda é datada 2026.
 - **Start in F2:**
   - `Game_CareerWizard_StartsInF1` responde "sim" para a carreira 2026. O mod responde "não" para os grupos dele, mas **não dentro de `FeTile_Route_CareerItem`**: lá o caminho "não" lê um objeto que os tiles de addon não têm. No router o mod mantém a resposta original e troca a rota com `wz::tile_route(group, "career_wizard_driver_career")`.
@@ -62,7 +65,7 @@ Ainda não testado:
 
 ## Próximos passos
 
-1. Conferir na carreira B que o calendário de F2 é o de 2026 (com Madri), e não o `F2_career_23` do campeonato.
+1. Testar o calendário da carreira A (Melbourne 1/14, com Ímola) e as temporadas de 8 e 3 corridas nas duas carreiras.
 2. Testar a passagem F2 > F1 com a temporada de 3 corridas.
 3. Ajustar o título e a descrição da carreira A, que agora tem o grid de 2026.
 4. O ano 2027 na F1 da carreira B precisa de outra solução, como uma linha em `game_setup.seasons` (risco: um statId acima de 31 trava o boot) ou troca de textos no código nativo, como faz o Progressive.

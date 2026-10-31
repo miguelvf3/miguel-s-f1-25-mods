@@ -4,8 +4,8 @@ Addon do Swofty Launcher (F1 25 com a temporada 2026) com duas Driver Careers qu
 
 | Tile | F2 | Depois | Situação |
 |---|---|---|---|
-| F2 2025 → F1 2026 | F2 2025 (grid `f2_2025`, calendário 2025) | F1 2026 | na 0.2.3, testado até a 1ª etapa |
-| F2 2026 → F1 2027 | F2 2026 (grid `f2_2026`, calendário 2026 com Madri) | F1 com os carros de 2026 (ainda datada 2026) | novo na 0.3.x |
+| F2 2025 > F1 2026 | F2 com o grid `f2_2026` e o calendário 2025 | F1 2026 | abre na 0.4.0 |
+| F2 2026 > F1 2027 | F2 com o grid `f2_2026` e o calendário 2026 com Madri | F1 com os carros de 2026 (ainda datada 2026) | abre na 0.4.0 |
 
 `db/career.json` e `lang/career.json` são gerados por `tools/gen.py`. Mude o gerador, não os arquivos.
 
@@ -19,9 +19,11 @@ Addon do Swofty Launcher (F1 25 com a temporada 2026) com duas Driver Careers qu
 - a lista `F2_Default` (a F2, depois a F1) e o campeonato de F2 como segunda referência, igual ao `driver_career_25`;
 - listas `F1CAREER_`, `F2CAREER_` e `ICONS_` no content set 2026.
 
-**A F2 de cada carreira usa um campeonato do jogo que nenhum modo do F1 25 usa** (cópias de campeonato de F2 crasharam):
-- A: `F2_career_23`, com o grid `f2_2025` e o calendário com ano 2025;
-- B: `F1_career_23` transformado em F2 (`game_setup_modes f2`), com o grid `f2_2026` e o calendário `F2_career_21` reformatado igual ao de F2 2024, com ano 2026.
+**As duas carreiras correm a F2 no `F2_career_23`**, o único campeonato de F2 que nenhum modo do F1 25 usa (cópias de campeonato de F2 crasharam). O grid fica no campeonato, então as duas usam o `f2_2026`. O calendário fica no setup `F2_Default` de cada modo:
+- A: `F2_career_23`, com ano 2025;
+- B: `F2_career_21`, reformatado igual ao de F2 2024, com ano 2026.
+
+A cena do Start in F2 e a tela Official Driver usam pilotos de 2026 (Câmara, Herta, Montoya). O visual dos pilotos é buscado pelo ano da carreira, e pilotos que só correram em 2025 não aparecem.
 
 **Calendários:** o jogo escolhe as pistas e a ordem pelo ano da temporada (as datas do calendário do campeonato). Para `season_2025` e `season_2026` há linhas de duração (Long/Medium/Short) e `track_selections` de F2, além das listas curtas `F2_202x_8` e `F2_202x_3`. As linhas da F2 2024 ficam só para 2023 e 2024. A F1 da carreira B ainda é datada de 2026: `season_2027` não existe em `game_setup.seasons` e crashou o boot (0x142a0ddb0).
 
@@ -30,6 +32,7 @@ Addon do Swofty Launcher (F1 25 com a temporada 2026) com duas Driver Careers qu
 ## O que aprendemos (para quem continuar)
 
 - **Uma cópia de `championships.Championship` derruba o jogo no boot**, em `Game_ModeChampionship_Build`, mesmo quando só o nome muda. Use um campeonato que já existe e não é usado.
+- **Um campeonato de F1 não vira F2 pelo banco.** O `F1_career_23` com `game_setup_modes f2` crasha ao entrar no modo (`0xcb7330`, sob `Game_Game_SetCurrentGameMode`). O jogo ainda cria para ele o componente de P&D `development_events`, e na F2 nada liga esse componente. Não resolveu limpar `save_data`, tirar o `OptionsSystemConfiguration`, trocar o `statId`, nem pôr o campeonato na lista de campeonatos de F2 (chave `0xbb1488669c224074`), separado ou tudo junto.
 - **Lista de pilotos da tela Choose Driver:** a aba F2 mostra só quem está ao mesmo tempo na lista `career_f2_*_for_f1_*` e no grid do campeonato. A `career_f2_*` é a lista de escolha, não o grid de corrida.
 - **Saves:** mudar quais campeonatos a carreira usa quebra os saves de carreiras criadas antes da mudança. O crash acontece em `Game_SaveData_DeserialiseContainer`, ao carregar o perfil. O Steam Cloud traz o save antigo de volta se estiver ligado.
 

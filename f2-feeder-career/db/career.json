@@ -8302,7 +8302,7 @@
    "op": "set",
    "select": "championships.Championship[_metadata_=F2_career_23].ComCareerSetup_0",
    "field": "entrant_list",
-   "value": "f2_2025"
+   "value": "f2_2026"
   },
   {
    "op": "set",
@@ -8435,7 +8435,7 @@
    "op": "list-append",
    "select": "content_sets.content_set[_metadata_=2026].available_entrant_lists_0",
    "field": "entrant_lists",
-   "value": "f1_career_f2_25,f2_2025"
+   "value": "f1_career_f2_25"
   },
   {
    "op": "add-row",
@@ -8451,7 +8451,8 @@
    "table": "content_sets.content_set[_metadata_=2026]",
    "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=F2CAREER_26]",
    "set": {
-    "name": "F2CAREER_FA"
+    "name": "F2CAREER_FA",
+    "entrant_list": "f2_2026"
    }
   },
   {
@@ -8476,7 +8477,8 @@
    "table": "content_sets.content_set[_metadata_=2026]",
    "from": "content_sets.content_set[_metadata_=2026].official_entrant_list[name=F2CAREER_26]",
    "set": {
-    "name": "F2CAREER_FA26"
+    "name": "F2CAREER_FA26",
+    "entrant_list": "f2_2026"
    }
   },
   {
@@ -8491,55 +8493,55 @@
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
    "field": "car_1",
-   "value": "f2_car_25"
+   "value": "f2_car_26"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
    "field": "car_1_spec",
-   "value": "invicta_25 - driver_01"
+   "value": "invicta_26 - driver_01"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
    "field": "driver_1",
-   "value": "leonardo_fornaroli"
+   "value": "rafael_camara"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
    "field": "car_2",
-   "value": "f2_car_25"
+   "value": "f2_car_26"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
    "field": "car_2_spec",
-   "value": "mpmotorsport_25 - driver_02"
+   "value": "hitech_26 - driver_02"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
    "field": "driver_2",
-   "value": "richard_verschoor"
+   "value": "colton_herta"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
    "field": "car_3",
-   "value": "f2_car_25"
+   "value": "f2_car_26"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
    "field": "car_3_spec",
-   "value": "campos_25 - driver_01"
+   "value": "prema_26 - driver_01"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_25].SpawnedF2_0",
    "field": "driver_3",
-   "value": "arvid_lindblad"
+   "value": "sebastian_montoya"
   },
   {
    "op": "add-row",
@@ -8639,36 +8641,6 @@
     "ComSpecialists_0.specialist_data": "f1_career_f2_26",
     "shared_components": "shared_driver_career_components,shared_driver_career_offline_components,shared_driver_career_b_f2f_components"
    }
-  },
-  {
-   "op": "set",
-   "select": "championships.Championship[_metadata_=F1_career_23]",
-   "field": "game_setup_modes",
-   "value": "f2"
-  },
-  {
-   "op": "set",
-   "select": "championships.Championship[_metadata_=F1_career_23]",
-   "field": "event_list",
-   "value": "F2_career_21"
-  },
-  {
-   "op": "set",
-   "select": "championships.Championship[_metadata_=F1_career_23]",
-   "field": "_OptionsSystemConfiguration_instancecount_",
-   "value": "0"
-  },
-  {
-   "op": "set",
-   "select": "championships.Championship[_metadata_=F1_career_23].ComCareerSetup_0",
-   "field": "entrant_list",
-   "value": "f2_2026"
-  },
-  {
-   "op": "set",
-   "select": "championships.Championship[_metadata_=F1_career_23].ComCareerSetup_0",
-   "field": "setup_data",
-   "value": "f1_career_f2_26"
   },
   {
    "op": "set",
@@ -8791,7 +8763,7 @@
    "op": "set",
    "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championship_setups.ChampionshipSetupList[_metadata_=F2_Default]",
    "field": "ChampionshipSetup_0.championship",
-   "value": "F1_career_23",
+   "value": "F2_career_23",
    "create": true,
    "type": 4
   },
@@ -8839,7 +8811,7 @@
    "op": "set",
    "select": "game_modes.ModeChampionship[_metadata_=driver_career_f2_26].championships",
    "field": "ChampionshipReference_1.Championship",
-   "value": "F1_career_23",
+   "value": "F2_career_23",
    "create": true,
    "type": 4
   },
@@ -8861,7 +8833,7 @@
    "op": "list-append",
    "select": "content_sets.content_set[_metadata_=2026].available_entrant_lists_0",
    "field": "entrant_lists",
-   "value": "f1_career_f2_26,f2_2026"
+   "value": "f1_career_f2_26"
   },
   {
    "op": "add-row",
@@ -8919,55 +8891,55 @@
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
    "field": "car_1",
-   "value": "f2_car_25"
+   "value": "f2_car_26"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
    "field": "car_1_spec",
-   "value": "invicta_25 - driver_01"
+   "value": "invicta_26 - driver_01"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
    "field": "driver_1",
-   "value": "leonardo_fornaroli"
+   "value": "rafael_camara"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
    "field": "car_2",
-   "value": "f2_car_25"
+   "value": "f2_car_26"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
    "field": "car_2_spec",
-   "value": "mpmotorsport_25 - driver_02"
+   "value": "hitech_26 - driver_02"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
    "field": "driver_2",
-   "value": "richard_verschoor"
+   "value": "colton_herta"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
    "field": "car_3",
-   "value": "f2_car_25"
+   "value": "f2_car_26"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
    "field": "car_3_spec",
-   "value": "campos_25 - driver_01"
+   "value": "prema_26 - driver_01"
   },
   {
    "op": "set",
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
    "field": "driver_3",
-   "value": "arvid_lindblad"
+   "value": "sebastian_montoya"
   },
   {
    "op": "add-row",

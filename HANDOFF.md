@@ -10,9 +10,9 @@ Addon do [Swofty Launcher](https://github.com/Swofty-Developments/SwoftyLauncher
 
 A carreira 2026 do jogo não traz o Start in F2. A carreira 2025 do jogo traz (F2 2024, depois F1 2025).
 
-## Estado atual: 0.3.5 (ainda sem teste)
+## Estado atual: 0.4.0
 
-Os dois tiles aparecem na linha **Addons** da escolha de Driver Career. Abrir um deles crashava até a 0.3.4. A 0.3.5 coloca as entrant lists dos tiles na whitelist do content set; falta ver se o tile abre.
+Os dois tiles aparecem na linha **Addons** e abrem com Skip to F1 / Start in F2. Na 0.4.0 o Start in F2 mostra os carros de 2026, e a tela Official Driver mostra Herta, Câmara e Montoya. As duas carreiras dividem o campeonato de F2 `F2_career_23` e o grid `f2_2026`; cada uma tem o próprio calendário.
 
 Já funcionou no jogo, na 0.2.3, quando o mod ainda alterava a carreira 2026 do jogo:
 - Start in F2 aparecia na carreira 2026.
@@ -32,7 +32,7 @@ Ainda não testado:
 1. Ligue o addon `f2-feeder-career/` no perfil `test` do launcher.
 2. Limpe o cache: `Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Swofty\cache\overlay\test"`
 3. Inicie pelo launcher.
-4. Logs: `swofty\loader.log` e `swofty\crash-*.txt` na pasta do jogo (`D:\SteamLibrary\steamapps\common\F1 25`), e `%LOCALAPPDATA%\Swofty\state\wrapper-run.log` para o build.
+4. Logs: `swofty\loader.log` e `swofty\crash-*.txt` na pasta do jogo (hoje `C:\Program Files (x86)\Steam\steamapps\common\F1 25`), também copiados em `%LOCALAPPDATA%\Swofty\sessions\<data>\game-logs`, e `%LOCALAPPDATA%\Swofty\state\wrapper-run.log` para o build.
 5. Banco do jogo: `swofty.exe db get "<caminho>"` e `swofty.exe db search <texto>`, na pasta `bin` do launcher. `swofty.exe build --profile test --side-data` só lista os achados depois de apagar o cache.
 
 ## O que aprendemos (não repita)
@@ -58,17 +58,16 @@ Ainda não testado:
   - O Steam Cloud traz o save antigo de volta. Para limpar: desligue a nuvem, apague `Steam\userdata\1013098445\3059520\remote\*`, crie um save novo e religue escolhendo a cópia local.
   - Com tiles próprios, cada carreira tem seu container (`gm_driver_career_f2_25`/`_26`). O launcher guarda esses containers quando o addon está desligado.
 - **A fonte do jogo não tem "→"**; use ">".
+- **Não converta campeonato de F1 em F2** (0.3.5 a 0.3.12, todas crasharam em `0xcb7330`). O objeto vazio era o componente `development_events` do campeonato. O crash report em `swofty\crash-*.txt` guarda a memória em volta dos registradores, e foi ali que o nome apareceu: o dump completo (`SWOFTY_CRASH_DUMP=full` em `launch.env` no `config.json`) precisa de dezenas de GB livres.
 
 ## Próximos passos
 
-1. Testar a 0.3.5: os tiles abrem, aparece Start in F2, a tela Custom Season e o grid.
+1. Conferir na carreira B que o calendário de F2 é o de 2026 (com Madri), e não o `F2_career_23` do campeonato.
 2. Testar a passagem F2 > F1 com a temporada de 3 corridas.
-3. Carreira B:
-   - conferir o grid `f2_2026` e o calendário com Madri;
-   - a cena `SpawnedF2` ainda usa carros e pilotos de 2025;
-   - o ano 2027 na F1 precisa de outra solução, como uma linha em `game_setup.seasons` (risco: um statId acima de 31 trava o boot) ou troca de textos no código nativo, como faz o Progressive.
-4. Sepang no lugar do Bahrein: o usuário já baixou um mod de pista.
-5. Escrever uma nota no knowledge base do universal-modder (`um kb new`). Abrir PR só com o OK do usuário.
+3. Ajustar o título e a descrição da carreira A, que agora tem o grid de 2026.
+4. O ano 2027 na F1 da carreira B precisa de outra solução, como uma linha em `game_setup.seasons` (risco: um statId acima de 31 trava o boot) ou troca de textos no código nativo, como faz o Progressive.
+5. Sepang no lugar do Bahrein: o usuário já baixou um mod de pista.
+6. Escrever uma nota no knowledge base do universal-modder (`um kb new`). Abrir PR só com o OK do usuário.
 
 ## Ferramentas
 

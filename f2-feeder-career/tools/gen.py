@@ -34,14 +34,22 @@ TL = "schedule.track_lists"
 DY = "schedule.dynamic_event_data.default_ui_track_list_data"
 TS = f"{DY}.track_selections"
 F1_SEASONS = 10
+# Both careers race their F2 season in F2_career_23, the only F2 championship no F1 25 mode uses
+# (copies of an F2 championship crash the boot). The grid lives in the championship, so they share
+# it; each mode's F2_Default setup names its own calendar.
+F2_CHAMP, F2_GRID = "F2_career_23", "f2_2026"
 
 CAREERS = [
     {
         "key": "a", "group": "f1_career_f2_25", "mode": "driver_career_f2_25", "suffix": "FA26",
         "mode_stat": 83, "champ_stat": 38, "list_stat": 53,
         "f1_champ": "F1_driver_career_f2_25", "f1_events": "F1_career_26", "f1_year": None,
-        "f2_champ": "F2_career_23", "f2_events": "F2_career_23", "f2_year": 2025, "f2_grid": "f2_2025",
-        "f2_choose": None,  # keeps F2CAREER_26's career_f2_2025_for_f1_2026
+        "f2_events": "F2_career_23", "f2_year": 2025,
+        # The Start in F2 scene's three cars (SpawnedF2): car spec and driver. Drivers need a look for
+        # the career's 2026 season, which 2025-only F2 drivers lack.
+        "scene_car": "f2_car_26",
+        "scene": [("invicta_26 - driver_01", "rafael_camara"), ("hitech_26 - driver_02", "colton_herta"),
+                  ("prema_26 - driver_01", "sebastian_montoya")],
         "title": "F2 2025 > F1 2026",
         "description": "Start in the 2025 Formula 2 season with its real grid and calendar, then move up to the 2026 Formula 1 season.",
     },
@@ -49,8 +57,10 @@ CAREERS = [
         "key": "b", "group": "f1_career_f2_26", "mode": "driver_career_f2_26", "suffix": "FB27",
         "mode_stat": 84, "champ_stat": 39, "list_stat": 68,
         "f1_champ": "F1_driver_career_f2_26", "f1_events": "F1_career_26", "f1_year": None,
-        "f2_champ": "F1_career_23", "f2_events": "F2_career_21", "f2_year": 2026, "f2_grid": "f2_2026",
-        "f2_choose": "f2_2026",
+        "f2_events": "F2_career_21", "f2_year": 2026,
+        "scene_car": "f2_car_26",
+        "scene": [("invicta_26 - driver_01", "rafael_camara"), ("hitech_26 - driver_02", "colton_herta"),
+                  ("prema_26 - driver_01", "sebastian_montoya")],
         "title": "F2 2026 > F1 2027",
         "description": "Start in the 2026 Formula 2 season with its real grid and calendar, then move up to Formula 1 on the 2026 cars and line-ups.",
     },
@@ -111,14 +121,14 @@ def career(c):
            "ComInfluence_0.data_group": g, "ComSpecialists_0.specialist_data": g,
            "shared_components": f"shared_driver_career_components,shared_driver_career_offline_components,{shared}"})
 
-    # The F2 season: a stock championship no F1 25 mode uses.
-    f2 = f"championships.Championship[_metadata_={c['f2_champ']}]"
-    if c["f2_champ"] != "F2_career_23":  # an F1 23 championship turned into an F2 one, like F2_career_23
-        put(f2, "game_setup_modes", "f2")
-        put(f2, "event_list", c["f2_events"])
-        put(f2, "_OptionsSystemConfiguration_instancecount_", 0)
-    put(f"{f2}.ComCareerSetup_0", "entrant_list", c["f2_grid"])
-    put(f"{f2}.ComCareerSetup_0", "setup_data", g)
+    # The F2 season (F2_CHAMP, shared): set up once. F1_career_23 turned into an F2 championship
+    # crashed on entering the mode: the game still gave it the F1 R&D component (development_events)
+    # and nothing wired it up. Clearing its save_data, OptionsSystemConfiguration and statId, and
+    # adding it to the game's F2 championship list, did not stop that.
+    if c is CAREERS[0]:
+        f2 = f"championships.Championship[_metadata_={F2_CHAMP}]"
+        put(f"{f2}.ComCareerSetup_0", "entrant_list", F2_GRID)
+        put(f"{f2}.ComCareerSetup_0", "setup_data", g)
     ev = f"schedule.event_lists.event_list[_metadata_={c['f2_events']}]"
     if c["f2_events"] != "F2_career_23":  # shape it like F2_2024_career: one season, F2 start and end
         put(ev, "_season_instancecount_", 1)
@@ -145,36 +155,32 @@ def career(c):
     add(setups, f"{setups}.ChampionshipSetupList_0", _metadata_="F2_Default")
     lst = f"{setups}.ChampionshipSetupList[_metadata_=F2_Default]"
     put(lst, "_ChampionshipSetup_instancecount_", 2, 0)
-    for i, (ch, evl) in enumerate(((c["f2_champ"], c["f2_events"]), (c["f1_champ"], c["f1_events"]))):
+    for i, (ch, evl) in enumerate(((F2_CHAMP, c["f2_events"]), (c["f1_champ"], c["f1_events"]))):
         put(lst, f"ChampionshipSetup_{i}._metadata_", "ChampionshipSetup", 2)
         put(lst, f"ChampionshipSetup_{i}.championship", ch, 4)
         put(lst, f"ChampionshipSetup_{i}.event_list", evl, 4)
     refs = f"{mode}.championships"
     put(refs, "ChampionshipReference_1._metadata_", "ChampionshipReference", 2)
-    put(refs, "ChampionshipReference_1.Championship", c["f2_champ"], 4)
+    put(refs, "ChampionshipReference_1.Championship", F2_CHAMP, 4)
     put(refs, "_ChampionshipReference_instancecount_", 2, 0)
 
     ops.append({"op": "list-append", "select": CS, "field": "available_game_modes_0.game_mode_championships",
                 "value": m})
     # The game loads an entrant list only when the content set's whitelist (row 0 of
     # available_entrant_lists, the only row read) names it or a loaded list references it; without it
-    # the data group's registry slot stays empty and the tile press crashed in the router.
+    # the data group's registry slot stays empty and the tile press crashed in the router. F2_GRID
+    # (f2_2026) is already in it.
     ops.append({"op": "list-append", "select": f"{CS}.available_entrant_lists_0", "field": "entrant_lists",
-                "value": f"{g},{c['f2_grid']}"})
+                "value": g})
     base = c["suffix"][:2]
     for name in (base, c["suffix"]):
         add(CS, f"{OFFICIAL}[name=F1CAREER_26]", name=f"F1CAREER_{name}", entrant_list="f1_2026")
-        f2row = {"name": f"F2CAREER_{name}"}
-        if c["f2_choose"]:
-            f2row["entrant_list"] = c["f2_choose"]
-        add(CS, f"{OFFICIAL}[name=F2CAREER_26]", **f2row)
+        add(CS, f"{OFFICIAL}[name=F2CAREER_26]", name=f"F2CAREER_{name}", entrant_list=F2_GRID)
         add(CS, f"{OFFICIAL}[name=ICONS_26]", name=f"ICONS_{name}")
 
     spawned = f"career.career_setup.CareerSetupDataGroup[_metadata_={g}].SpawnedF2_0"
-    for n, (spec, driver) in enumerate((("invicta_25 - driver_01", "leonardo_fornaroli"),
-                                        ("mpmotorsport_25 - driver_02", "richard_verschoor"),
-                                        ("campos_25 - driver_01", "arvid_lindblad")), 1):
-        put(spawned, f"car_{n}", "f2_car_25")
+    for n, (spec, driver) in enumerate(c["scene"], 1):
+        put(spawned, f"car_{n}", c["scene_car"])
         put(spawned, f"car_{n}_spec", spec)
         put(spawned, f"driver_{n}", driver)
 

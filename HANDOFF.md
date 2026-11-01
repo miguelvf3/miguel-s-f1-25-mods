@@ -4,21 +4,23 @@ Contexto para continuar o trabalho numa sessão nova. Leia também `f2-feeder-ca
 
 ## Objetivo
 
-Addon do [Swofty Launcher](https://github.com/Swofty-Developments/SwoftyLauncher) com duas Driver Careers que começam na F2:
-- **F2 2025 > F1 2026**
-- **F2 2026 > F1 2027**
+Addon do [Swofty Launcher](https://github.com/Swofty-Developments/SwoftyLauncher) com uma Driver Career que começa na F2: **F2 2026 > F1 2027**. Até a 0.4.9 havia também a F2 2025 > F1 2026 (carreira A). Ela saiu na 0.5.0, porque o foco agora é a temporada de 2026.
 
 A carreira 2026 do jogo não traz o Start in F2. A carreira 2025 do jogo traz (F2 2024, depois F1 2025).
 
-## Estado atual: 0.4.9
+## Estado atual: 0.5.0
 
-Os dois tiles aparecem na linha **Addons** e abrem com Skip to F1 / Start in F2. Desde a 0.4.0 o Start in F2 mostra os carros de 2026, e a tela Official Driver mostra Herta, Câmara e Montoya. As duas carreiras dividem o campeonato de F2 `F2_career_23` e o grid `f2_2026`; cada uma tem o próprio calendário.
+Testada em 01/11: o perfil `test` abre e os saves da carreira B continuam lá. O do Tsolov, já na F1, retoma em Austrália, Round 1, e o do Câmara também aparece.
+
+A 0.5.0 tira a carreira A: o tile, o modo, o campeonato de F1, os grupos de dados e as listas de 2025. Ela também recompila a DLL com o zig 0.17 (instalado pelo winget). O `setup_data` do `F2_career_23` agora aponta para o grupo da carreira B. As linhas da carreira B mudaram de índice nas tabelas (por exemplo, `ModeChampionship_29` em vez de `_30`), e os saves continuaram carregando.
+
+O tile aparece na linha **Addons** e abre com Skip to F1 / Start in F2. Desde a 0.4.0 o Start in F2 mostra os carros de 2026, e a tela Official Driver mostra Herta, Câmara e Montoya. A F2 corre no campeonato `F2_career_23`, com o grid `f2_2026`.
 
 Na 0.4.9 a carreira B (14 corridas) começa em Melbourne, ROUND 1/14, com as 14 etapas da F2 2026 na ordem real (rastreamento Frida conferido). A temporada de 3 corridas também abre em Melbourne (ROUND 1/3).
 
 A passagem F2 > F1 funciona na carreira B (0.4.9, temporada custom de 3 corridas, testada em 01/11). Depois de Abu Dhabi, o jogo abre o menu de temporada custom da F1, com as 24 corridas de 2026. Depois vem o Team Select dos times de 2026 (com Audi e Cadillac), não propostas de contrato. Escolher a Racing Bulls deu o Lawson de companheiro, e a cena de abertura da carreira tocou.
 
-O calendário da carreira A e a temporada de 8 corridas usam o mesmo mecanismo, mas ainda não foram testados no jogo.
+A temporada de 8 corridas usa o mesmo mecanismo, mas ainda não foi testada no jogo.
 
 Já funcionou no jogo, na 0.2.3, quando o mod ainda alterava a carreira 2026 do jogo:
 - Start in F2 aparecia na carreira 2026.
@@ -30,7 +32,7 @@ Já funcionou no jogo, na 0.2.3, quando o mod ainda alterava a carreira 2026 do 
 Na 0.3.x tudo isso foi levado para tiles próprios, para não tocar mais nos saves da carreira 2026 do jogo.
 
 Ainda não testado:
-- a passagem F2 > F1 na carreira A;
+- na 0.5.0, uma carreira nova (Melbourne 1/14);
 - uma temporada inteira de 14 corridas.
 
 ## Como testar uma versão
@@ -63,23 +65,31 @@ Ainda não testado:
 - **Saves:**
   - Mudar quais campeonatos um modo usa quebra as carreiras salvas antes. O crash acontece em `Game_SaveData_DeserialiseContainer`, ao carregar o perfil.
   - O Steam Cloud traz o save antigo de volta. Para limpar: desligue a nuvem, apague `Steam\userdata\1013098445\3059520\remote\*`, crie um save novo e religue escolhendo a cópia local.
-  - Com tiles próprios, cada carreira tem seu container (`gm_driver_career_f2_25`/`_26`). O launcher guarda esses containers quando o addon está desligado.
+  - Com tiles próprios, cada carreira tem seu container (`gm_driver_career_f2_26`; o `_25` era da carreira A). O launcher guarda esses containers quando o addon está desligado.
 - **A fonte do jogo não tem "→"**; use ">".
 - **Não converta campeonato de F1 em F2** (0.3.5 a 0.3.12, todas crasharam em `0xcb7330`). O objeto vazio era o componente `development_events` do campeonato. O crash report em `swofty\crash-*.txt` guarda a memória em volta dos registradores, e foi ali que o nome apareceu: o dump completo (`SWOFTY_CRASH_DUMP=full` em `launch.env` no `config.json`) precisa de dezenas de GB livres.
 
 ## Próximos passos
 
-1. Testar o calendário da carreira A (Melbourne 1/14, com Ímola), a temporada de 8 corridas e a passagem F2 > F1 da carreira A.
-2. Na passagem F2 > F1 o jogo mostra Team Select em vez de propostas. Ver se a carreira 2025 do jogo (Start in F2) faz igual antes de tentar mudar.
-3. Ajustar o título e a descrição da carreira A, que agora tem o grid de 2026.
-4. O ano 2027 na F1 da carreira B precisa de outra solução, como uma linha em `game_setup.seasons` (risco: um statId acima de 31 trava o boot) ou troca de textos no código nativo, como faz o Progressive.
-5. Sepang no lugar do Bahrein: o usuário já baixou um mod de pista.
+1. Na 0.5.0, ver se uma carreira nova ainda começa em Melbourne 1/14.
+2. Na passagem F2 > F1 o jogo mostra Team Select em vez de propostas. O jogo base faz igual, e só um piloto criado escolhe academia e tem contratos. Mudar isso fica para o revamp da F2 (abaixo).
+3. O ano 2027 na F1 da carreira B. O que já se sabe:
+   - `game_setup.seasons` só tem `season_2023` a `season_2026` (statId 5 a 8). A doc do Swofty aceita `add-row` de temporada com statId até 31. Na 0.3.x o crash veio de citar `season_2027` em listas sem a linha da temporada existir.
+   - O `F1_career_26` do jogo data as 10 temporadas como 2026.
+   - O ano do event list vira a temporada (`season_<ano>`) na busca de dados de pista. Uma F1 datada de 2027 precisa de `season_2027` ao lado de `season_2026` em uns 40 campos: `TrackDataSet f1_2026`, `track_layers`, listas de calendário, `driver_statistics`, branding, `entrant_lists.season` e `team_customisation_for_year.f1_season` (os uniformes).
+   - Falta ver onde o jogo mostra o ano.
+4. Sepang no lugar do Bahrein: o usuário já baixou um mod de pista.
+5. Mais tarde, um revamp da F2:
+   - um hub para a temporada da F2;
+   - academias reais para pilotos existentes (Câmara na Ferrari, Tsolov na Red Bull);
+   - propostas ou uma vaga ligada à academia no lugar do Team Select livre;
+   - pilotos da F2 controlados pela IA que forem bem na temporada também sobem para a F1.
 6. Escrever uma nota no knowledge base do universal-modder (`um kb new`). Abrir PR só com o OK do usuário.
 
 ## Ferramentas
 
 - `f2-feeder-career/tools/gen.py`: gera `db/career.json` e `lang/career.json`. Edite o gerador, não os JSON.
-- `f2-feeder-career/native/build.sh`: compila o `f2_feeder.dll`. Precisa de zig e de um clone do SwoftyLauncher; o caminho vai em `SWOFTY_REPO`.
+- `f2-feeder-career/native/build.sh`: compila o `f2_feeder.dll`. Precisa de zig (instalado com `winget install zig.zig`) e de um clone do SwoftyLauncher; o caminho vai em `SWOFTY_REPO`.
 - `tools/dump-career-db.ps1`: despeja calendários, campeonatos e modos do banco do jogo com `swofty db get`. É lento: cerca de 500 chamadas.
 - No SwoftyLauncher, as referências mais úteis:
   - `addons/progressive` (carreira como tile de addon);

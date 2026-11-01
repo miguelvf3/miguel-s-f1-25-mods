@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 //
-// F2 Feeder Career: two careers in the Addons row of the Driver Career content select, each with its
-// own mode, data group and save container (db/career.json, written by tools/gen.py):
-//   f1_career_f2_25  F2 2025 -> F1 2026
+// F2 Feeder Career: a career in the Addons row of the Driver Career content select, with its own
+// mode, data group and save container (db/career.json, written by tools/gen.py):
 //   f1_career_f2_26  F2 2026 -> F1 2027
 // The stock wizard skips the Skip to F1 / Start in F2 step when Game_CareerWizard_StartsInF1 answers
-// yes, which it does for 2026-model data groups. Answer no for these two, so the wizard offers Start
+// yes, which it does for 2026-model data groups. Answer no for this one, so the wizard offers Start
 // in F2 and runs the mode's F2_Default setup list.
 //
 // Not inside the career tile router (FeTile_Route_CareerItem): for a career content tile its "no"
@@ -32,7 +31,6 @@ struct Career {
 };
 
 constexpr Career kCareers[] = {
-    {"f2-2025", "lng_f2f_a_title", "lng_f2f_a_description", "f1_career_f2_25", "FA26", "driver_career_f2_25"},
     {"f2-2026", "lng_f2f_b_title", "lng_f2f_b_description", "f1_career_f2_26", "FB27", "driver_career_f2_26"},
 };
 

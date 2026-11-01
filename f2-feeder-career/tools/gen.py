@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 """Writes db/career.json and lang/career.json for F2 Feeder Career.
 
-Two careers, each its own Addons tile, game mode, data group and save container, built like
-Progressive Career's (copies of the stock 2026 driver career's rows):
+One career, F2 2026 -> F1 2027, with its own Addons tile, game mode, data group and save container,
+built like Progressive Career's (copies of the stock 2026 driver career's rows). Its F2 season races
+in F2_career_23, the F1 23/24 career championship F1 25 doesn't offer: copies of an F2 championship
+crashed the game at boot (Game_ModeChampionship_Build). Its F1 seasons are dated 2026: the season
+lists only take game_setup.seasons rows, and season_2027 crashed the boot (0x142a0ddb0 builds their
+masks unchecked). The stock 2026 career is left as it is.
 
-  A  F2 2025 -> F1 2026   F2 on F2_career_23 (F1 23/24 career championship F1 25 doesn't offer)
-  B  F2 2026 -> F1 2027   F2 on F1_career_23 (same), turned into an F2 championship. Its F1 seasons
-                          are dated 2026: the season lists only take game_setup.seasons rows, and
-                          season_2027 crashed the boot (0x142a0ddb0 builds their masks unchecked).
-
-Copies of an F2 championship crashed the game at boot (Game_ModeChampionship_Build), so each F2
-season takes over an unused stock championship instead. The stock 2026 career is left as it is.
+Up to 0.4.9 there was a second career, F2 2025 -> F1 2026 (group f1_career_f2_25); 0.5.0 dropped it.
 """
 import json
 from pathlib import Path
@@ -34,30 +32,19 @@ TL = "schedule.track_lists"
 DY = "schedule.dynamic_event_data.default_ui_track_list_data"
 TS = f"{DY}.track_selections"
 F1_SEASONS = 10
-# Both careers race their F2 season in F2_career_23, the only F2 championship no F1 25 mode uses
-# (copies of an F2 championship crash the boot). The grid lives in the championship, so they share
-# it; each mode's F2_Default setup names its own calendar.
+# The career races its F2 season in F2_career_23, the only F2 championship no F1 25 mode uses (copies
+# of an F2 championship crash the boot). The grid lives in the championship; the mode's F2_Default
+# setup names the calendar.
 F2_CHAMP, F2_GRID = "F2_career_23", "f2_2026"
 
 CAREERS = [
     {
-        "key": "a", "group": "f1_career_f2_25", "mode": "driver_career_f2_25", "suffix": "FA26",
-        "mode_stat": 83, "champ_stat": 38, "list_stat": 53,
-        "f1_champ": "F1_driver_career_f2_25", "f1_events": "F1_career_26", "f1_year": None,
-        "f2_events": "F2_career_23", "f2_year": 2025,
-        # The Start in F2 scene's three cars (SpawnedF2): car spec and driver. Drivers need a look for
-        # the career's 2026 season, which 2025-only F2 drivers lack.
-        "scene_car": "f2_car_26",
-        "scene": [("invicta_26 - driver_01", "rafael_camara"), ("hitech_26 - driver_02", "colton_herta"),
-                  ("prema_26 - driver_01", "sebastian_montoya")],
-        "title": "F2 2025 > F1 2026",
-        "description": "Start in the 2025 Formula 2 season with its real grid and calendar, then move up to the 2026 Formula 1 season.",
-    },
-    {
+        # key "b" and the FB27 suffix kept from 0.4.x, so its strings and saves stay as they were.
         "key": "b", "group": "f1_career_f2_26", "mode": "driver_career_f2_26", "suffix": "FB27",
         "mode_stat": 84, "champ_stat": 39, "list_stat": 68,
         "f1_champ": "F1_driver_career_f2_26", "f1_events": "F1_career_26", "f1_year": None,
         "f2_events": "F2_career_21", "f2_year": 2026,
+        # The Start in F2 scene's three cars (SpawnedF2): car spec and driver.
         "scene_car": "f2_car_26",
         "scene": [("invicta_26 - driver_01", "rafael_camara"), ("hitech_26 - driver_02", "colton_herta"),
                   ("prema_26 - driver_01", "sebastian_montoya")],
@@ -68,9 +55,6 @@ CAREERS = [
 
 # Season length lists per F2 year: (label, events). The full lists ship with the game.
 F2_SHORT = {
-    2025: [("F2_2025_8", ["rw_melbourne", "rw_bahrain", "rw_austria", "rw_silverstone", "rw_spa_francorchamps",
-                          "rw_monza", "rw_losail", "rw_abu_dhabi"]),
-           ("F2_2025_3", ["rw_melbourne", "rw_silverstone", "rw_abu_dhabi"])],
     2026: [("F2_2026_8", ["rw_f2_melbourne_26", "rw_f2_bahrain_26", "rw_f2_austria_26", "rw_f2_silverstone_26",
                           "rw_f2_spa_francorchamps_26", "rw_f2_monza_26", "rw_f2_losail_26", "rw_f2_abu_dhabi_26"]),
            ("F2_2026_3", ["rw_f2_melbourne_26", "rw_f2_silverstone_26", "rw_f2_abu_dhabi_26"])],
@@ -84,29 +68,21 @@ F2_SHORT = {
 F2_2026_TRACKS = ["melbourne", "bahrain", "jeddah", "monaco", "catalunya", "austria", "silverstone",
                   "spa_francorchamps", "hungaroring", "monza", "madrid", "baku", "losail", "abu_dhabi"]
 F2_2026_FULL = [f"rw_f2_{t}_26" for t in F2_2026_TRACKS]
-F2_2025_FULL = ["rw_melbourne", "rw_bahrain", "rw_jeddah", "rw_imola", "rw_monaco", "rw_catalunya", "rw_austria",
-                "rw_silverstone", "rw_spa_francorchamps", "rw_hungaroring", "rw_monza", "rw_baku", "rw_losail",
-                "rw_abu_dhabi"]  # stock F2_2025_full
 
 # Before a season's first track load the game rebuilds its weekends (0x140bc9360): it keeps the calendar
 # entries whose event stat id is in the championship's ComTrackList_0.default_track_list (not in the key
 # catalogue), in that list's order. F2_career_23's is F2_2024_full: the rounds raced in the F2 2024 order
 # (Bahrain first, Madring dropped: 13), and the rw_f2_*_26 weekends matched nothing, which left the
-# season with no weekends and crashed the first track load (Frida trace, 2026-10-31). Both careers share
-# F2_career_23, so its list names both seasons' weekends: each calendar holds only its own year's.
+# season with no weekends and crashed the first track load (Frida trace, 2026-10-31). Its list is the
+# F2 2026 weekends.
 F2_ORDER = "F2_feeder_order"
 EVENT_STAT = 137
 
-# Race dates (month, day) of the F2 rounds, the F1 weekends they support. The game orders a career's
-# rounds by each track's date in the season's track data set, and the stock F2 sets carry 2023 dates:
-# Melbourne (1 April) came after Bahrain and Jeddah, and in f2_2026_sprint Madring shares Catalunya's
-# 3 June, so the 14 rounds raced as 13. An F2 weekend (sprint and feature race) reads the f2_<year>_sprint
-# set; the plain f2_<year> set gets the dates too.
-# 2026 is the game's f1_2026 set; 2025 is the real calendar (f1_2025 has no dates of its own).
+# Race dates (month, day) of the F2 rounds, the F1 weekends they support, from the game's f1_2026 set.
+# The stock F2 track data sets carry 2023 dates (in f2_2026_sprint Madring shares Catalunya's 3 June).
+# They turned out not to order the calendar (the race weekends' dates and F2_ORDER do), but they are
+# what the F2 track data says. An F2 weekend reads the f2_<year>_sprint set; f2_<year> gets them too.
 F2_DATES = {
-    2025: {"melbourne": (3, 16), "bahrain": (4, 13), "jeddah": (4, 20), "imola": (5, 18), "monaco": (5, 25),
-           "catalunya": (6, 1), "austria": (6, 29), "silverstone": (7, 6), "spa_francorchamps": (7, 27),
-           "hungaroring": (8, 3), "monza": (9, 7), "baku": (9, 21), "losail": (11, 30), "abu_dhabi": (12, 7)},
     2026: {"melbourne": (3, 8), "bahrain": (4, 12), "jeddah": (4, 19), "monaco": (6, 7), "catalunya": (6, 14),
            "austria": (6, 28), "silverstone": (7, 5), "spa_francorchamps": (7, 19), "hungaroring": (7, 26),
            "monza": (9, 6), "madrid": (9, 13), "baku": (9, 26), "losail": (11, 29), "abu_dhabi": (12, 6)},
@@ -250,9 +226,8 @@ def calendars():
     set_events("F2_2026_full", F2_2026_FULL)
     add(TL, f"{TL}.track_event_list[_metadata_=F2_2024_full]", _metadata_=F2_ORDER)
     sel = f"{TL}.track_event_list[_metadata_={F2_ORDER}]"
-    order = F2_2025_FULL + F2_2026_FULL
-    put(sel, "_fixed_event_reference_instancecount_", len(order), 0)
-    for i, e in enumerate(order):
+    put(sel, "_fixed_event_reference_instancecount_", len(F2_2026_FULL), 0)
+    for i, e in enumerate(F2_2026_FULL):
         put(f"{sel}.fixed_event_reference_{i}", "_metadata_", f"fixed_event_reference_{e}", 2)
         put(f"{sel}.fixed_event_reference_{i}", "event_name", e, 4)
     put(f"championships.Championship[_metadata_={F2_CHAMP}].ComTrackList_0", "default_track_list", F2_ORDER, 4)
@@ -274,11 +249,9 @@ def calendars():
                 put(sel, "weekend_year", year)
                 put(sel, "weekend_month", month)
                 put(sel, "weekend_day", day)
-    for kind in ("Long", "Medium", "Short"):
-        put(f"{DY}.custom_dynamic_available_track_list_data[_metadata_=F2_2024_{kind}]", "seasons",
-            "season_2023,season_2024")
+    # The stock F2 2024 lines cover season_2023 to season_2025.
     add(TS, f"{TS}.tracks_selection[_metadata_=F1_2026]",
-        **{"_metadata_": "F2_2024", "game_setup_modes": "f2", "seasons": "season_2023,season_2024",
+        **{"_metadata_": "F2_2024", "game_setup_modes": "f2", "seasons": "season_2023,season_2024,season_2025",
            "default": "F2_2024_full", "season_0.track_event_list": "F2_2024_full"})
 
 

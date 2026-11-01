@@ -5,7 +5,7 @@ Addon do Swofty Launcher (F1 25 com a temporada 2026) com duas Driver Careers qu
 | Tile | F2 | Depois | Situação |
 |---|---|---|---|
 | F2 2025 > F1 2026 | F2 com o grid `f2_2026` e o calendário 2025 | F1 2026 | abre na 0.4.0; calendário da 0.4.9 não testado |
-| F2 2026 > F1 2027 | F2 com o grid `f2_2026` e o calendário 2026 com Madri | F1 com os carros de 2026 (ainda datada 2026) | Melbourne 1/14 na 0.4.9 |
+| F2 2026 > F1 2027 | F2 com o grid `f2_2026` e o calendário 2026 com Madri | F1 com os carros de 2026 (ainda datada 2026) | Melbourne 1/14 e passagem F2 > F1 na 0.4.9 |
 
 `db/career.json` e `lang/career.json` são gerados por `tools/gen.py`. Mude o gerador, não os arquivos.
 

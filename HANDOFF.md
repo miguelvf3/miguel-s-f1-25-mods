@@ -14,7 +14,11 @@ A carreira 2026 do jogo não traz o Start in F2. A carreira 2025 do jogo traz (F
 
 Os dois tiles aparecem na linha **Addons** e abrem com Skip to F1 / Start in F2. Desde a 0.4.0 o Start in F2 mostra os carros de 2026, e a tela Official Driver mostra Herta, Câmara e Montoya. As duas carreiras dividem o campeonato de F2 `F2_career_23` e o grid `f2_2026`; cada uma tem o próprio calendário.
 
-Na 0.4.9 a carreira B (14 corridas) começa em Melbourne, ROUND 1/14, com as 14 etapas da F2 2026 na ordem real (rastreamento Frida conferido). O calendário da carreira A e as temporadas de 8 e 3 corridas usam o mesmo mecanismo, mas ainda não foram testados no jogo.
+Na 0.4.9 a carreira B (14 corridas) começa em Melbourne, ROUND 1/14, com as 14 etapas da F2 2026 na ordem real (rastreamento Frida conferido). A temporada de 3 corridas também abre em Melbourne (ROUND 1/3).
+
+A passagem F2 > F1 funciona na carreira B (0.4.9, temporada custom de 3 corridas, testada em 01/11). Depois de Abu Dhabi, o jogo abre o menu de temporada custom da F1, com as 24 corridas de 2026. Depois vem o Team Select dos times de 2026 (com Audi e Cadillac), não propostas de contrato. Escolher a Racing Bulls deu o Lawson de companheiro, e a cena de abertura da carreira tocou.
+
+O calendário da carreira A e a temporada de 8 corridas usam o mesmo mecanismo, mas ainda não foram testados no jogo.
 
 Já funcionou no jogo, na 0.2.3, quando o mod ainda alterava a carreira 2026 do jogo:
 - Start in F2 aparecia na carreira 2026.
@@ -26,8 +30,8 @@ Já funcionou no jogo, na 0.2.3, quando o mod ainda alterava a carreira 2026 do 
 Na 0.3.x tudo isso foi levado para tiles próprios, para não tocar mais nos saves da carreira 2026 do jogo.
 
 Ainda não testado:
-- a passagem da F2 para a F1 no fim da temporada (dá para testar rápido com a temporada de 3 corridas);
-- a carreira B inteira.
+- a passagem F2 > F1 na carreira A;
+- uma temporada inteira de 14 corridas.
 
 ## Como testar uma versão
 
@@ -65,8 +69,8 @@ Ainda não testado:
 
 ## Próximos passos
 
-1. Testar o calendário da carreira A (Melbourne 1/14, com Ímola) e as temporadas de 8 e 3 corridas nas duas carreiras.
-2. Testar a passagem F2 > F1 com a temporada de 3 corridas.
+1. Testar o calendário da carreira A (Melbourne 1/14, com Ímola), a temporada de 8 corridas e a passagem F2 > F1 da carreira A.
+2. Na passagem F2 > F1 o jogo mostra Team Select em vez de propostas. Ver se a carreira 2025 do jogo (Start in F2) faz igual antes de tentar mudar.
 3. Ajustar o título e a descrição da carreira A, que agora tem o grid de 2026.
 4. O ano 2027 na F1 da carreira B precisa de outra solução, como uma linha em `game_setup.seasons` (risco: um statId acima de 31 trava o boot) ou troca de textos no código nativo, como faz o Progressive.
 5. Sepang no lugar do Bahrein: o usuário já baixou um mod de pista.

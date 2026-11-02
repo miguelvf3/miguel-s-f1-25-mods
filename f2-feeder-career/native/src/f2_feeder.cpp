@@ -18,6 +18,12 @@
 // one of a type, so for this career the 2026 one sits out while a preset is applied. While the career
 // is loaded, the F1 race weekend and championship titles read 2027 (titles_2027.inc, from
 // tools/gen.py). The F2 rounds read other keys.
+//
+// Only a created driver picks an academy. A player who takes an existing driver gets that driver's
+// real academy (kDriverAcademies) when the career loads: the academies component keeps a map of
+// driver key -> academy, saved as assignedAcademies {driverStatId, academId}, and the entry goes in
+// the way its save loader puts one in.
+#include <swofty/career.hpp>
 #include <swofty/career_content.hpp>
 #include <swofty/career_wizard.hpp>
 #include <swofty/events.hpp>
@@ -29,6 +35,8 @@
 #include <cstdint>
 #include <cstring>
 #include <string>
+
+#include <windows.h>
 
 namespace {
 
@@ -152,6 +160,106 @@ void show_2026(const char *why)
     }
 }
 
+// Real academies of the F2 2026 drivers, by entrants.drivers stat_id and driver_academy statId (group
+// 2026: 0 Mercedes, 1 Ferrari, 2 Red Bull, 3 Alpine, 4 McLaren, 5 Williams, 6 Audi, 7 Cadillac).
+// Sources: gridandformula.co.uk F1 academies and Formula Scout's 2026 F2 preview (March 2026). The
+// game's academies take in their partner teams (Mercedes: Aston Martin, as forceindia_26; Ferrari: Haas;
+// Red Bull: Racing Bulls), so Mari Boya, Aston Martin's, gets Mercedes'. Herta is Cadillac's test driver.
+struct DriverAcademy {
+    uint16_t driver, academy;
+    const char *name;
+};
+constexpr DriverAcademy kDriverAcademies[] = {
+    {203, 1, "Rafael Camara: Ferrari"},    {189, 1, "Dino Beganovic: Ferrari"},
+    {174, 2, "Nikola Tsolov: Red Bull"},   {192, 3, "Gabriele Mini: Alpine"},
+    {194, 3, "Alexander Dunne: Alpine"},   {153, 3, "Kush Maini: Alpine"},
+    {202, 7, "Colton Herta: Cadillac"},    {204, 0, "Mari Boya: Mercedes (Aston Martin)"},
+};
+
+// The academies component (DriverAcademiesComponent, F1 25 Steam build d873a1c8; found statically,
+// 2026-11-02): descriptor 0x14605c0b8; +0x278 the entity; +0x298..+0x2a0 its academies, 16-byte
+// entries with the academy record at +8 (record +0: u16 statId); +0x2b0 the driver -> academy map,
+// entries at +0x2c8 (16 bytes: u16 driver key, +8 academy record). The save loader (0x140d6ee39)
+// calls 0x140e091e0(map, &slot, &key): status 1 the key was there, 2 or 3 a new slot (write the key),
+// 0 a failure; then it stores the record in the slot.
+constexpr uintptr_t kAcademiesDesc = 0x605c0b8, kAcademyMapFindOrAdd = 0xe091e0;
+constexpr uint8_t kFindOrAddHead[] = {0x41, 0x57, 0x41, 0x56, 0x41, 0x55, 0x41, 0x54, 0x56, 0x57, 0x55, 0x53};
+
+struct MapSlot {
+    uint64_t index;
+    uint32_t status;
+    uint32_t pad;
+};
+using FindOrAdd = void(void *map, MapSlot *slot, const uint16_t *key);
+
+template <class T> T at(const void *p, size_t offset)
+{
+    T v;
+    std::memcpy(&v, static_cast<const char *>(p) + offset, sizeof v);
+    return v;
+}
+
+// The player's driver key (kind << 14 | stat id) from the career entity's entrant rows (0x88 bytes,
+// +0x48 bit 0x10000000 the human, +0x50 driver kind, +0x52 driver stat id).
+bool player_driver(void *entity, uint16_t *key, uint16_t *stat)
+{
+    char *row = at<char *>(entity, 0x2e0), *end = at<char *>(entity, 0x2e8);
+    if (!row || end < row || (end - row) % 0x88 || end - row > 0x88 * 200)
+        return false;
+    for (; row < end; row += 0x88) {
+        if (!(at<uint32_t>(row, 0x48) & 0x10000000))
+            continue;
+        *stat = at<uint16_t>(row, 0x52);
+        *key = static_cast<uint16_t>(at<uint8_t>(row, 0x50) << 14 | *stat);
+        return true;
+    }
+    return false;
+}
+
+void give_real_academy()
+{
+    char *base = reinterpret_cast<char *>(GetModuleHandleW(nullptr));
+    if (std::memcmp(base + kAcademyMapFindOrAdd, kFindOrAddHead, sizeof kFindOrAddHead)) {
+        swofty::log("[f2-feeder] academy: another game build (the map insert isn't where it was); left alone");
+        return;
+    }
+    void *entity = swofty::career::entity();
+    char *comp = static_cast<char *>(swofty::career::component_by_desc(base + kAcademiesDesc));
+    uint16_t key = 0, stat = 0;
+    if (!entity || !comp || at<void *>(comp, 0x278) != entity || !player_driver(entity, &key, &stat))
+        return;
+    const DriverAcademy *real = nullptr;
+    for (const DriverAcademy &d : kDriverAcademies)
+        if (d.driver == stat)
+            real = &d;
+    if (!real)
+        return;
+    char *academy = nullptr;
+    for (char *e = at<char *>(comp, 0x298), *end = at<char *>(comp, 0x2a0); e && e < end; e += 16) {
+        char *record = at<char *>(e, 8);
+        if (record && at<uint16_t>(record, 0) == real->academy)
+            academy = record;
+    }
+    if (!academy) {
+        swofty::log("[f2-feeder] academy: %s not in this career's academies", real->name);
+        return;
+    }
+    MapSlot slot{};
+    reinterpret_cast<FindOrAdd *>(base + kAcademyMapFindOrAdd)(comp + 0x2b0, &slot, &key);
+    if (slot.status == 0) {
+        swofty::log("[f2-feeder] academy: the map refused driver %u", stat);
+        return;
+    }
+    char *entry = at<char *>(comp, 0x2c8) + 16 * slot.index;
+    if (slot.status == 1 && at<void *>(entry, 8))
+        return; // the driver already has one: a created driver's pick, or ours from an earlier load
+    if (slot.status != 1)
+        std::memcpy(entry, &key, sizeof key);
+    std::memcpy(entry + 8, &academy, sizeof academy);
+    swofty::log("[f2-feeder] academy: %s (driver %u, slot %llu, status %u)", real->name, stat,
+                static_cast<unsigned long long>(slot.index), slot.status);
+}
+
 struct Title {
     const char *language, *key, *text;
 };
@@ -182,6 +290,8 @@ void on_career(const SwoftyEvent *, void *)
     set_titles(mine, "career loaded or Team HQ");
     if (!mine)
         show_2026("another career");
+    else
+        give_real_academy();
 }
 
 void on_unloaded(const SwoftyEvent *, void *)

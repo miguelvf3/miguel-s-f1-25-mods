@@ -52,6 +52,8 @@ How F1 25's F2 career works inside, and what each part of the revamp could chang
 
 **F2 drivers as F1 free agents (0.7.3, 2 Nov):** the free agent pool doesn't come from `drivers_available_from_team_setup` but from the career entrant list's references: `f1_2026` (grid), `f1_career_2026_driver_pool` (icons and young drivers), `f1_career_2026_reserve_drivers`, and an F2 grid whose teams `Game_CareerSetup_ValidateEntrantTeams` clears at career creation. The stock 2026 list names `career_f2_2025_for_f1_2026` (F2 2025); ours now names `f2_2026`. Frida at a new career's creation: the 22 F2 2026 drivers (Câmara, Herta, Montoya, Tsolov...) are free agents and the F2 2025 ones (Fornaroli, Browning...) are gone. Tsolov is listed twice (the driver pool has him too). Not yet seen in game: whether the market signs them.
 
+**Real academy for existing drivers (0.7.4, 2 Nov):** no game table ties an existing driver to an academy (only the suit art names it). `DriverAcademiesComponent` keeps a driver key > academy map (saved as `assignedAcademies`), and on career load the DLL adds the player's entry from its own table (Câmara and Beganović Ferrari, Tsolov Red Bull, Minì, Dunne and Maini Alpine, Herta Cadillac, Boya Mercedes). The game's academies already include the partner teams (Mercedes with Aston Martin, Ferrari with Haas, Red Bull with Racing Bulls). In game, Câmara on Skip to F1: the log shows `academy: Rafael Camara: Ferrari (driver 203, slot 7, status 2)`, and the Ferrari contract screen shows 38% recognition against Leclerc with "Inc. 5% Bonus". The Team Select Insights, opened before the hub, still show 36% and "Inc. 1% Bonus".
+
 ## Suggested order
 
 1. **Academy bonus test** (`2026` group on the F2 academies). Done.

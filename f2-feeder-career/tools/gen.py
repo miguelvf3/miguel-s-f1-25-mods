@@ -92,10 +92,7 @@ F2_DATES = {
 # game's 2026 data: new race weekends, copies of the 2026 ones, dated the Thursday of each 2027 weekend
 # but in 2026. A 2027 date would need a season_2027 row (game_setup.seasons stops at 2026) and that
 # season next to season_2026 in some 40 fields; the career's season runs 11 February to 21 December
-# 2026. F1_2026_full sorts its rounds by date (sort_by_date), and so does the copy. Turkey (Istanbul
-# Park) isn't in the game. Portugal is left out too: a copy of rw_portimao made a calendar round but no
-# season weekend (Frida trace of Career_Add_SeasonWeekend, 0.6.0: 22 weekends for 23 rounds), and the
-# Team HQ crashed on the missing one. 22 rounds.
+# 2026. F1_2026_full sorts its rounds by date (sort_by_date), and so does the copy.
 # (track, source race weekend, month, day)
 F1_2027 = [("bahrain", "rw_bahrain_26", "March", 11), ("jeddah", "rw_jeddah_26", "March", 18),
            ("melbourne", "rw_melbourne_26", "April", 1), ("suzuka", "rw_suzuka_26", "April", 8),
@@ -109,6 +106,17 @@ F1_2027 = [("bahrain", "rw_bahrain_26", "March", 11), ("jeddah", "rw_jeddah_26",
            ("mexico", "rw_mexico_26", "October", 28), ("brazil", "rw_brazil_26", "November", 4),
            ("las_vegas", "rw_las_vegas_26", "November", 17), ("losail", "rw_losail_26", "December", 2),
            ("abu_dhabi", "rw_abu_dhabi_26", "December", 9)]
+# Portugal and Turkey race on track addons, which the manifest requires: F1 25 has neither circuit's files.
+# mod.portimao (Pajko) fills the stock portimao slot (its data cloned from Zandvoort; without it a copy of
+# rw_portimao made a calendar round and no season weekend, 0.6.0), and track.istanbul_park (Apoc & RK)
+# adds istanbul_park cloned from Spa, so its race weekend is Spa's with the activity changed. A race
+# weekend's activity names a schedule.activities.activity_race_weekend row (the stock portimao one is
+# there; with no istanbul_park row the season left the round out, 0.7.0: 23 rounds), so this one copies
+# Spa's at a free activity stat_id (they're sparse: Madrid's is 813). Listed last so the other rounds keep
+# their stat_ids. (track, source race weekend, month, day, activity)
+F1_2027_ADDON_TRACKS = [("portimao", "rw_portimao", "June", 17, None),
+                        ("istanbul_park", "rw_spa_francorchamps_26", "September", 30, "istanbul_park")]
+ACTIVITY_STAT = 814
 F1_EVENT_STAT = EVENT_STAT + len(F2_2026_TRACKS)
 # The 16 and 10 race seasons: F1_2026_16 and F1_2026_10's tracks, Monaco for Zandvoort.
 F1_2027_16 = ["melbourne", "shanghai", "suzuka", "bahrain", "miami", "montreal", "austria", "silverstone",
@@ -243,10 +251,11 @@ def set_events(label, events):
         put(f"{sel}.fixed_event_reference_{i}", "event_name", e)
 
 
-def race_weekend(name, src, stat_id, date=None):
-    """A race weekend copied from src, dated like it or (year, month, day)."""
+def race_weekend(name, src, stat_id, date=None, activity=None):
+    """A race weekend copied from src, dated like it or (year, month, day), at its track or activity."""
     ev = "schedule.all_track_events"
-    add(ev, f"{ev}.fixed_event[_metadata_={src}]", _metadata_=name, stat_id=stat_id)
+    add(ev, f"{ev}.fixed_event[_metadata_={src}]", _metadata_=name, stat_id=stat_id,
+        **({"activity": activity} if activity else {}))
     # date_time isn't in the key catalogue, so add-row leaves it out; the boot reads all seven fields
     # of every race weekend (a missing one crashed in Trk_TrackData_LoadTrackListNodes).
     own = dict(zip(("year", "month", "day"), date or ()))
@@ -265,9 +274,13 @@ def calendars():
     for k, t in enumerate(F2_2026_TRACKS):
         race_weekend(f"rw_f2_{t}_26", f"rw_{t}_26", EVENT_STAT + k)
     f1 = []
-    for k, (t, src, month, day) in enumerate(F1_2027):
+    acts = "schedule.activities"
+    for k, (t, src, month, day, *activity) in enumerate(F1_2027 + F1_2027_ADDON_TRACKS):
+        if activity and activity[0]:
+            add(acts, f"{acts}.activity_race_weekend[_metadata_=spa_francorchamps]", _metadata_=activity[0],
+                track=activity[0], stat_id=ACTIVITY_STAT)
         f1.append(f"rw_f1_{t}_27")
-        race_weekend(f1[-1], src, F1_EVENT_STAT + k, (2026, month, day))
+        race_weekend(f1[-1], src, F1_EVENT_STAT + k, (2026, month, day), *activity)
     add(TL, f"{TL}.track_event_list[_metadata_=F1_2026_full]", _metadata_=CAREERS[0]["f1_track_list"])
     sel = f"{TL}.track_event_list[_metadata_={CAREERS[0]['f1_track_list']}]"
     put(sel, "_fixed_event_reference_instancecount_", len(f1), 0)

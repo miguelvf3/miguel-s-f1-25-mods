@@ -8,16 +8,16 @@ Addon do [Swofty Launcher](https://github.com/Swofty-Developments/SwoftyLauncher
 
 A carreira 2026 do jogo não traz o Start in F2. A carreira 2025 do jogo traz (F2 2024, depois F1 2025).
 
-## Estado atual: 0.6.8
+## Estado atual: 0.7.1
 
-A F1 da carreira corre o calendário de 2027 da FIA (22 etapas, sem Turquia e Portugal, que não vêm no F1 25). Testado em 02/11 com Skip to F1 (Sainz, Williams): Full Season e Custom Season de 24, 16 e 10 dão as listas de 2027, e a Team HQ abre sem crash. Os títulos dos GPs e do campeonato aparecem com 2027. Os detalhes estão no README.
+A F1 da carreira corre o calendário de 2027 da FIA (24 etapas; Portugal e Turquia nos addons `mod.portimao` e `track.istanbul_park`, que o manifesto exige). Na 0.7.1 o Custom Season de 24 mostra a Turquia na rodada 17, e Portimão carregou numa corrida. Testado em 02/11 com Skip to F1 (Sainz, Williams): Full Season e Custom Season de 24, 16 e 10 dão as listas de 2027, e a Team HQ abre sem crash. Os títulos dos GPs e do campeonato aparecem com 2027. Os detalhes estão no README.
 
 Falta testar:
 - a passagem F2 > F1 com o calendário de 2027 (ela passa pelo Custom Season);
 - se o save do Tsolov, já na F1 com o calendário de 2026, ainda carrega;
 - da segunda temporada de F1 em diante (a lista escolhida vale para todas as temporadas?).
 
-Portimão e Istanbul Park só entram com mods de pista (há um Istanbul Park no catálogo do Swofty e um Portimão no overtake.gg). Falta ver o que cada um registra.
+Falta também correr em Istanbul Park (a rodada aparece no calendário desde a 0.7.1).
 
 ### 0.6.0 a 0.6.3: o crash da Team HQ
 

@@ -10951,6 +10951,147 @@
   },
   {
    "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_portimao]",
+   "set": {
+    "_metadata_": "rw_f1_portimao_27",
+    "stat_id": "173"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_portimao_27]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_portimao_27]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value": "June"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_portimao_27]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value": "17"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_portimao_27]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_portimao].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_portimao_27]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_portimao].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_portimao_27]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_portimao].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_portimao_27]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_portimao].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.activities",
+   "from": "schedule.activities.activity_race_weekend[_metadata_=spa_francorchamps]",
+   "set": {
+    "_metadata_": "istanbul_park",
+    "track": "istanbul_park",
+    "stat_id": "814"
+   }
+  },
+  {
+   "op": "add-row",
+   "table": "schedule.all_track_events",
+   "from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26]",
+   "set": {
+    "_metadata_": "rw_f1_istanbul_park_27",
+    "stat_id": "174",
+    "activity": "istanbul_park"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_istanbul_park_27]",
+   "field": "date_time.year",
+   "create": true,
+   "type": 0,
+   "value": "2026"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_istanbul_park_27]",
+   "field": "date_time.month",
+   "create": true,
+   "type": 3,
+   "value": "September"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_istanbul_park_27]",
+   "field": "date_time.day",
+   "create": true,
+   "type": 0,
+   "value": "30"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_istanbul_park_27]",
+   "field": "date_time.hour",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.hour"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_istanbul_park_27]",
+   "field": "date_time.minute",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.minute"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_istanbul_park_27]",
+   "field": "date_time.second",
+   "create": true,
+   "type": 0,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.second"
+  },
+  {
+   "op": "set",
+   "select": "schedule.all_track_events.fixed_event[_metadata_=rw_f1_istanbul_park_27]",
+   "field": "date_time.daylight_saving",
+   "create": true,
+   "type": 5,
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.daylight_saving"
+  },
+  {
+   "op": "add-row",
    "table": "schedule.track_lists",
    "from": "schedule.track_lists.track_event_list[_metadata_=F1_2026_full]",
    "set": {
@@ -10961,7 +11102,7 @@
    "op": "set",
    "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full]",
    "field": "_fixed_event_reference_instancecount_",
-   "value": "22",
+   "value": "24",
    "create": true,
    "type": 0
   },
@@ -11318,6 +11459,38 @@
    "type": 4
   },
   {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_22",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f1_portimao_27",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_22",
+   "field": "event_name",
+   "value": "rw_f1_portimao_27",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_23",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f1_istanbul_park_27",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_23",
+   "field": "event_name",
+   "value": "rw_f1_istanbul_park_27",
+   "create": true,
+   "type": 4
+  },
+  {
    "op": "add-row",
    "table": "schedule.track_lists",
    "from": "schedule.track_lists.track_event_list[_metadata_=F1_2026_16]",
@@ -11652,7 +11825,7 @@
    "set": {
     "_metadata_": "F1_2027_Long",
     "track_list_name": "F1_2027_full",
-    "max_num_tracks": "22"
+    "max_num_tracks": "24"
    }
   },
   {

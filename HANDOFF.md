@@ -12,12 +12,10 @@ A carreira 2026 do jogo não traz o Start in F2. A carreira 2025 do jogo traz (F
 
 A F1 da carreira corre o calendário de 2027 da FIA (24 etapas; Portugal e Turquia nos addons `mod.portimao` e `track.istanbul_park`, que o manifesto exige). Na 0.7.1 o Custom Season de 24 mostra a Turquia na rodada 17, e Portimão carregou numa corrida. Testado em 02/11 com Skip to F1 (Sainz, Williams): Full Season e Custom Season de 24, 16 e 10 dão as listas de 2027, e a Team HQ abre sem crash. Os títulos dos GPs e do campeonato aparecem com 2027. Os detalhes estão no README.
 
-Falta testar:
-- a passagem F2 > F1 com o calendário de 2027 (ela passa pelo Custom Season);
-- se o save do Tsolov, já na F1 com o calendário de 2026, ainda carrega;
-- da segunda temporada de F1 em diante (a lista escolhida vale para todas as temporadas?).
-
-Falta também correr em Istanbul Park (a rodada aparece no calendário desde a 0.7.1).
+Também conferido em 02/11:
+- o save do Tsolov, já na F1, carrega e continua no calendário de 2026, com que foi criado;
+- a passagem F2 > F1 passa pela mesma escolha de duração (Custom Season) e é tida como funcionando, sem teste próprio;
+- Istanbul Park corre pelo mesmo caminho de Portimão, que carregou numa corrida.
 
 ### 0.6.0 a 0.6.3: o crash da Team HQ
 
@@ -88,9 +86,9 @@ Ainda não testado:
 
 1. Na 0.5.0, ver se uma carreira nova ainda começa em Melbourne 1/14.
 2. Na passagem F2 > F1 o jogo mostra Team Select em vez de propostas. O jogo base faz igual, e só um piloto criado escolhe academia e tem contratos. Mudar isso fica para o revamp da F2 (abaixo).
-3. O ano 2027 (0.6.0, não testado). A temporada continua `season_2026` no jogo, e o "2027" vem dos títulos e da ordem do calendário.
+3. O ano 2027 (testado em 02/11 na primeira temporada de F1). A temporada continua `season_2026` no jogo, e o "2027" vem dos títulos e da ordem do calendário.
    - Datar a temporada como 2027 de verdade exigiria uma linha `season_2027`. A doc do Swofty aceita `add-row` de temporada com statId até 31. Também exigiria `season_2027` ao lado de `season_2026` em uns 40 campos: `TrackDataSet f1_2026`, `track_layers`, listas de calendário, `driver_statistics`, branding, `entrant_lists.season` e `team_customisation_for_year.f1_season`.
-   - Da segunda temporada de F1 em diante, o calendário volta a ser o de 2026 do jogo, e os títulos continuam mostrando 2027.
+   - Da segunda temporada de F1 em diante a carreira repete o ano, como as carreiras de 2025 e 2026 do jogo, e os títulos continuam mostrando 2027. Decidido em 02/11: não fazer calendários de 2028 em diante (ainda não existem, e seria um por ano).
 4. Sepang no lugar do Bahrein: o usuário já baixou um mod de pista.
 5. Mais tarde, um revamp da F2:
    - um hub para a temporada da F2;

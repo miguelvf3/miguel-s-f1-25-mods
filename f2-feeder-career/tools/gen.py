@@ -42,7 +42,7 @@ CAREERS = [
         # key "b" and the FB27 suffix kept from 0.4.x, so its strings and saves stay as they were.
         "key": "b", "group": "f1_career_f2_26", "mode": "driver_career_f2_26", "suffix": "FB27",
         "mode_stat": 84, "champ_stat": 39, "list_stat": 68,
-        "f1_champ": "F1_driver_career_f2_26", "f1_events": "F1_career_26", "f1_year": None,
+        "f1_champ": "F1_driver_career_f2_26", "f1_events": "F1_career_26", "f1_track_list": "F1_2027_full",
         "f2_events": "F2_career_21", "f2_year": 2026,
         # The Start in F2 scene's three cars (SpawnedF2): car spec and driver.
         "scene_car": "f2_car_26",
@@ -88,6 +88,40 @@ F2_DATES = {
            "monza": (9, 6), "madrid": (9, 13), "baku": (9, 26), "losail": (11, 29), "abu_dhabi": (12, 6)},
 }
 
+# The F1 season after F2 2026 races the 2027 calendar (formula1.com/en/racing/2027, 24 rounds) on the
+# game's 2026 data: new race weekends, copies of the 2026 ones, dated the Thursday of each 2027 weekend
+# but in 2026. A 2027 date would need a season_2027 row (game_setup.seasons stops at 2026) and that
+# season next to season_2026 in some 40 fields; the career's season runs 11 February to 21 December
+# 2026. F1_2026_full sorts its rounds by date (sort_by_date), and so does the copy. Turkey (Istanbul
+# Park) isn't in the game. Portugal is left out too: a copy of rw_portimao made a calendar round but no
+# season weekend (Frida trace of Career_Add_SeasonWeekend, 0.6.0: 22 weekends for 23 rounds), and the
+# Team HQ crashed on the missing one. 22 rounds.
+# (track, source race weekend, month, day)
+F1_2027 = [("bahrain", "rw_bahrain_26", "March", 11), ("jeddah", "rw_jeddah_26", "March", 18),
+           ("melbourne", "rw_melbourne_26", "April", 1), ("suzuka", "rw_suzuka_26", "April", 8),
+           ("shanghai", "rw_shanghai_26", "April", 15), ("miami", "rw_miami_26", "April", 29),
+           ("montreal", "rw_montreal_26", "May", 20), ("monaco", "rw_monaco_26", "June", 3),
+           ("silverstone", "rw_silverstone_26", "July", 1),
+           ("austria", "rw_austria_26", "July", 8), ("spa_francorchamps", "rw_spa_francorchamps_26", "July", 22),
+           ("hungaroring", "rw_hungaroring_26", "July", 29), ("monza", "rw_monza_26", "September", 2),
+           ("madrid", "rw_madrid_26", "September", 9), ("baku", "rw_baku_26", "September", 23),
+           ("singapore", "rw_singapore_26", "October", 7), ("texas", "rw_texas_26", "October", 21),
+           ("mexico", "rw_mexico_26", "October", 28), ("brazil", "rw_brazil_26", "November", 4),
+           ("las_vegas", "rw_las_vegas_26", "November", 17), ("losail", "rw_losail_26", "December", 2),
+           ("abu_dhabi", "rw_abu_dhabi_26", "December", 9)]
+F1_EVENT_STAT = EVENT_STAT + len(F2_2026_TRACKS)
+# The 16 and 10 race seasons: F1_2026_16 and F1_2026_10's tracks, Monaco for Zandvoort.
+F1_2027_16 = ["melbourne", "shanghai", "suzuka", "bahrain", "miami", "montreal", "austria", "silverstone",
+              "spa_francorchamps", "monaco", "monza", "madrid", "brazil", "las_vegas", "losail", "abu_dhabi"]
+F1_2027_10 = ["melbourne", "suzuka", "bahrain", "austria", "silverstone", "spa_francorchamps", "monza", "madrid",
+              "brazil", "las_vegas"]
+
+# In that season the race weekend and championship titles read 2027: f2_feeder.dll overrides these
+# keys while the career is loaded (titles_2027.inc). tools/titles_2026.json is Progressive Career's
+# data/titles.json (Swofty, AGPL-3.0-or-later): every language's stock text of the 2026 titles. The F2
+# rounds read other keys (lng_track_<code>_f2_title).
+TITLE_YEAR = 2027
+
 ops = []
 
 
@@ -115,13 +149,11 @@ def career(c):
     add("entrants.entrant_lists", "entrants.entrant_lists.entrant_list[_metadata_=f1_career_2026]",
         _metadata_=g, stat_id=c["list_stat"])
 
-    if c["f1_year"]:
-        add("schedule.event_lists", "schedule.event_lists.event_list[_metadata_=F1_career_26]",
-            _metadata_=c["f1_events"])
-        sel = f"schedule.event_lists.event_list[_metadata_={c['f1_events']}]"
-        for s in range(F1_SEASONS):
-            for d in (0, 1):
-                put(f"{sel}.season_{s}.date_time_{d}", "year", c["f1_year"])
+    # The F1 seasons are the stock career's (F1_career_26): the Custom Season screen picks the track list,
+    # F1_2027_Long among them (calendars()). A copy naming F1_2027_full in each season (0.6.0-0.6.3) built
+    # the 2027 weekends, but at the first Team HQ visit the game opened contract negotiations, signed the
+    # player's driver to his team and emptied the player's own seat (Career_ContractRenewal_ReplaceOldPosition,
+    # team 0x3fff), and the Team HQ crashed on the missing team (Frida, 2026-11-02).
 
     shared = f"shared_driver_career_{c['key']}_f2f_components"
     add(SHARED, f"{SHARED}.SharedComponents[_metadata_=shared_driver_career_26_components]",
@@ -132,7 +164,6 @@ def career(c):
            "ComCareerSetup_0.entrant_list": g, "ComCareerSetup_0.setup_data": g,
            "ComInfluence_0.data_group": g, "ComSpecialists_0.specialist_data": g,
            "shared_components": f"shared_driver_career_components,shared_driver_career_offline_components,{shared}"})
-
     # The F2 season (F2_CHAMP, shared): set up once. F1_career_23 turned into an F2 championship
     # crashed on entering the mode: the game still gave it the F1 R&D component (development_events)
     # and nothing wired it up. Clearing its save_data, OptionsSystemConfiguration and statId, and
@@ -212,17 +243,53 @@ def set_events(label, events):
         put(f"{sel}.fixed_event_reference_{i}", "event_name", e)
 
 
-def calendars():
+def race_weekend(name, src, stat_id, date=None):
+    """A race weekend copied from src, dated like it or (year, month, day)."""
     ev = "schedule.all_track_events"
+    add(ev, f"{ev}.fixed_event[_metadata_={src}]", _metadata_=name, stat_id=stat_id)
+    # date_time isn't in the key catalogue, so add-row leaves it out; the boot reads all seven fields
+    # of every race weekend (a missing one crashed in Trk_TrackData_LoadTrackListNodes).
+    own = dict(zip(("year", "month", "day"), date or ()))
+    for field, type_ in (("year", 0), ("month", 3), ("day", 0), ("hour", 0), ("minute", 0), ("second", 0),
+                         ("daylight_saving", 5)):
+        op = {"op": "set", "select": f"{ev}.fixed_event[_metadata_={name}]", "field": f"date_time.{field}",
+              "create": True, "type": type_}
+        if field in own:
+            op["value"] = str(own[field])
+        else:
+            op["value_from"] = f"{ev}.fixed_event[_metadata_={src}].date_time.{field}"
+        ops.append(op)
+
+
+def calendars():
     for k, t in enumerate(F2_2026_TRACKS):
-        add(ev, f"{ev}.fixed_event[_metadata_=rw_{t}_26]", _metadata_=f"rw_f2_{t}_26", stat_id=EVENT_STAT + k)
-        # date_time isn't in the key catalogue, so add-row leaves it out; the boot reads all seven fields
-        # of every race weekend (a missing one crashed in Trk_TrackData_LoadTrackListNodes).
-        for field, type_ in (("year", 0), ("month", 3), ("day", 0), ("hour", 0), ("minute", 0), ("second", 0),
-                             ("daylight_saving", 5)):
-            ops.append({"op": "set", "select": f"{ev}.fixed_event[_metadata_=rw_f2_{t}_26]",
-                        "field": f"date_time.{field}", "create": True, "type": type_,
-                        "value_from": f"{ev}.fixed_event[_metadata_=rw_{t}_26].date_time.{field}"})
+        race_weekend(f"rw_f2_{t}_26", f"rw_{t}_26", EVENT_STAT + k)
+    f1 = []
+    for k, (t, src, month, day) in enumerate(F1_2027):
+        f1.append(f"rw_f1_{t}_27")
+        race_weekend(f1[-1], src, F1_EVENT_STAT + k, (2026, month, day))
+    add(TL, f"{TL}.track_event_list[_metadata_=F1_2026_full]", _metadata_=CAREERS[0]["f1_track_list"])
+    sel = f"{TL}.track_event_list[_metadata_={CAREERS[0]['f1_track_list']}]"
+    put(sel, "_fixed_event_reference_instancecount_", len(f1), 0)
+    for i, e in enumerate(f1):
+        put(f"{sel}.fixed_event_reference_{i}", "_metadata_", f"fixed_event_reference_{e}", 2)
+        put(f"{sel}.fixed_event_reference_{i}", "event_name", e, 4)
+    # The shorter seasons: the 2026 ones' rounds in 2027, Zandvoort (gone in 2027) swapped for Monaco.
+    lists = {"Long": (CAREERS[0]["f1_track_list"], len(f1))}
+    for kind, label, tracks in (("Medium", "F1_2027_16", F1_2027_16), ("Short", "F1_2027_10", F1_2027_10)):
+        track_list(f"F1_2026_{label[-2:]}", label, [f"rw_f1_{t}_27" for t in tracks])
+        lists[kind] = (label, len(tracks))
+    # The season lengths the wizard and the Custom Season screen offer (each with its track list, count and
+    # transfer window), copies of the 2026 ones.
+    for kind, (label, count) in lists.items():
+        add(DY, f"{DY}.custom_dynamic_available_track_list_data[_metadata_=F1_2026_{kind}]",
+            _metadata_=f"F1_2027_{kind}", track_list_name=label, max_num_tracks=count)
+    # The Custom Season screen's track pool for it (F1_2026's is F1_2026_full_plus). The game takes the
+    # first preset and pool that fit the mode and season, so f2_feeder.dll sets the 2026 ones aside while
+    # this career is in focus.
+    add(TS, f"{TS}.tracks_selection[_metadata_=F1_2026]",
+        **{"_metadata_": "F1_2027", "default": CAREERS[0]["f1_track_list"],
+           "season_0.track_event_list": CAREERS[0]["f1_track_list"]})
     set_events("F2_2026_full", F2_2026_FULL)
     add(TL, f"{TL}.track_event_list[_metadata_=F2_2024_full]", _metadata_=F2_ORDER)
     sel = f"{TL}.track_event_list[_metadata_={F2_ORDER}]"
@@ -275,4 +342,20 @@ for c in CAREERS:
 (ROOT / "lang").mkdir(exist_ok=True)
 (ROOT / "lang" / "career.json").write_text(
     json.dumps({"schema_version": 1, "ops": lang}, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
-print(f"{len(ops)} database ops, {len(lang)} strings")
+
+
+def c_string(s):
+    return '"' + "".join(chr(b) if 0x20 <= b < 0x7f and chr(b) not in '"\\' else f"\\{b:03o}"
+                         for b in s.encode("utf-8")) + '"'
+
+
+titles = json.loads((ROOT / "tools" / "titles_2026.json").read_text(encoding="utf-8"))
+year_from = titles["year"]
+overrides = [("*", k, v.replace(year_from, str(TITLE_YEAR))) for k, v in titles["all"].items()]
+overrides += [(language, k, v.replace(year_from, str(TITLE_YEAR)))
+              for language, table in titles["per"].items() for k, v in table.items()]
+(ROOT / "native" / "src" / "titles_2027.inc").write_text(
+    "// Written by tools/gen.py from tools/titles_2026.json: {language, key, text}.\n"
+    + "".join(f"{{{c_string(lng)}, {c_string(k)}, {c_string(v)}}},\n" for lng, k, v in overrides),
+    encoding="utf-8")
+print(f"{len(ops)} database ops, {len(lang)} strings, {len(overrides)} title overrides")

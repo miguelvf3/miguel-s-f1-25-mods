@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "community.f2-feeder-career",
   "name": "F2 Feeder Career 2026",
-  "version": "0.5.0",
+  "version": "0.6.8",
   "author": "community",
   "description": "A Driver Career that starts in the 2026 Formula 2 season, then moves up to Formula 1. Its own tile and save slots; the stock 2026 career is unchanged.",
   "license": "AGPL-3.0-or-later",
@@ -25,7 +25,7 @@
   "requires": [
     {
       "id": "swofty.core",
-      "version": ">=0.2.12"
+      "version": ">=0.2.13"
     }
   ],
   "saves": {

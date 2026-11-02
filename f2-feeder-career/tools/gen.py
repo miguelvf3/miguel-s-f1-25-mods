@@ -180,6 +180,10 @@ def career(c):
         f2 = f"championships.Championship[_metadata_={F2_CHAMP}]"
         put(f"{f2}.ComCareerSetup_0", "entrant_list", F2_GRID)
         put(f"{f2}.ComCareerSetup_0", "setup_data", g)
+        # Its academies component names no academy group (F2_2024_career's names 2025, F1_driver_career_26's
+        # 2026). A player's F2 academy is said to lose its recognition bonus in F1 (EA forum); try the group
+        # the F1 season reads.
+        put(f2, "ComDriverAcademies_0.data_group", "2026", 4)
     ev = f"schedule.event_lists.event_list[_metadata_={c['f2_events']}]"
     if c["f2_events"] != "F2_career_23":  # shape it like F2_2024_career: one season, F2 start and end
         put(ev, "_season_instancecount_", 1)

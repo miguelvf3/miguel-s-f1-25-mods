@@ -1,109 +1,68 @@
-# Handoff: F2 Feeder Career (F1 25 + temporada 2026)
+# Handoff: F2 Feeder Career (F1 25 + 2026 season)
 
-Contexto para continuar o trabalho numa sessão nova. Leia também `f2-feeder-career/README.md`.
+Context for picking the work up in a new session. Read `f2-feeder-career/README.md` too (how it works, lessons) and `f2-feeder-career/REVAMP.md` (the F2 revamp research).
 
-## Objetivo
+## Goal
 
-Addon do [Swofty Launcher](https://github.com/Swofty-Developments/SwoftyLauncher) com uma Driver Career que começa na F2: **F2 2026 > F1 2027**. Até a 0.4.9 havia também a F2 2025 > F1 2026 (carreira A). Ela saiu na 0.5.0, porque o foco agora é a temporada de 2026.
+A [Swofty Launcher](https://github.com/Swofty-Developments/SwoftyLauncher) addon with a Driver Career that starts in F2: **F2 2026 > F1 2027**. Up to 0.4.9 there was also an F2 2025 > F1 2026 career; it was dropped in 0.5.0 to focus on the 2026 season.
 
-A carreira 2026 do jogo não traz o Start in F2. A carreira 2025 do jogo traz (F2 2024, depois F1 2025).
+The game's 2026 career has no Start in F2; its 2025 career has one (F2 2024, then F1 2025).
 
-## Estado atual: 0.7.1
+## Current state: 0.7.2
 
-A F1 da carreira corre o calendário de 2027 da FIA (24 etapas; Portugal e Turquia nos addons `mod.portimao` e `track.istanbul_park`, que o manifesto exige). Na 0.7.1 o Custom Season de 24 mostra a Turquia na rodada 17, e Portimão carregou numa corrida. Testado em 02/11 com Skip to F1 (Sainz, Williams): Full Season e Custom Season de 24, 16 e 10 dão as listas de 2027, e a Team HQ abre sem crash. Os títulos dos GPs e do campeonato aparecem com 2027. Os detalhes estão no README.
+- **F1 2027:** the FIA 2027 calendar, 24 rounds, with Portugal and Turkey on the track addons `mod.portimao` and `track.istanbul_park`, which the manifest requires. Tested on 2 Nov 2026 with Skip to F1 (Sainz, Williams): Full Season and Custom Season 24, 16 and 10 give the 2027 lists, Turkey shows as round 17, Portimão raced, and the Team HQ opens with no crash. GP and championship titles read 2027.
+- **F2 > F1:** goes through the same season length choice. Seen on 2 Nov: the Custom Season lists the 2027 rounds but none selected until a tab is picked again; then the free Team Select.
+- **Academies (0.7.2):** the F2 championship's academies component now names the `2026` group. A created driver gets the 2026 academies at Start in F2, and the bonus shows on the F1 contract screen (Mercedes: 29% with academy, 26% without).
+- The Tsolov save (made before 0.6) loads and keeps its 2026 calendar.
+- Later F1 seasons repeat the year, like the game's careers. Decided on 2 Nov: no 2028+ calendars.
+- A frozen copy, `community.f2-feeder-career-stable` (0.7.1), is on in the `default` profile with the two track addons; the dev copy `community.f2-feeder-career` is on in `test`. They conflict, so each profile has one.
 
-Também conferido em 02/11:
-- o save do Tsolov, já na F1, carrega e continua no calendário de 2026, com que foi criado;
-- a passagem F2 > F1 passa pela mesma escolha de duração (Custom Season) e é tida como funcionando, sem teste próprio;
-- Istanbul Park corre pelo mesmo caminho de Portimão, que carregou numa corrida.
+### 0.6.0 to 0.6.3: the Team HQ crash
 
-### 0.6.0 a 0.6.3: o crash da Team HQ
+Up to 0.6.3 the addon used its own F1 event list naming `F1_2027_full` in each season. That opened contract negotiations at the first Team HQ visit, the game left the player with no team, and the Team HQ crashed on B. It wasn't Portimão, as 0.6.1 assumed. 0.6.4 went back to the game's event list, and 0.6.5 to 0.6.8 make the season length choice give the 2027 lists.
 
-Até a 0.6.3 o addon usava um event list próprio que nomeava `F1_2027_full` em cada temporada. Isso abria a negociação de contrato na primeira visita à Team HQ, o jogo deixava o jogador sem equipe, e a Team HQ crashava ao apertar B. A causa não era Portimão, como a 0.6.1 supunha. A 0.6.4 voltou ao event list do jogo, e a 0.6.5 a 0.6.8 fazem a escolha de duração dar as listas de 2027 (veja o README).
+### Earlier milestones
 
-### 0.5.0
+- 0.4.9: the F2 season starts in Melbourne, ROUND 1/14, in the real 2026 order (checked with Frida); the 3-round season too. The F2 > F1 transition works (Custom Season, then Team Select, then the career intro).
+- 0.5.0: career A removed; the DLL rebuilt with zig 0.17. Table indices moved and saves kept loading.
 
-Testada em 01/11: o perfil `test` abre e os saves da carreira B continuam lá. O do Tsolov, já na F1, retoma em Austrália, Round 1, e o do Câmara também aparece.
+## How to test a version
 
-A 0.5.0 tira a carreira A: o tile, o modo, o campeonato de F1, os grupos de dados e as listas de 2025. Ela também recompila a DLL com o zig 0.17 (instalado pelo winget). O `setup_data` do `F2_career_23` agora aponta para o grupo da carreira B. As linhas da carreira B mudaram de índice nas tabelas (por exemplo, `ModeChampionship_29` em vez de `_30`), e os saves continuaram carregando.
+1. Turn the `f2-feeder-career/` addon on in the launcher's `test` profile.
+2. Clear the cache: `Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Swofty\cache\overlay\test"`
+3. Start from the launcher.
+4. Logs: `swofty\loader.log` and `swofty\crash-*.txt` in the game folder (`C:\Program Files (x86)\Steam\steamapps\common\F1 25`), also copied to `%LOCALAPPDATA%\Swofty\sessions\<date>\`; `%LOCALAPPDATA%\Swofty\state\wrapper-run.log` for the build.
+5. Game database: `swofty.exe db get "<path>"` and `swofty.exe db search <text>` in the launcher's `bin` folder. Uncatalogued keys read faster with `gamedb.read` and `gamedb.fnv1a64(path)` from the launcher's `tools/gamedb.py`.
 
-O tile aparece na linha **Addons** e abre com Skip to F1 / Start in F2. Desde a 0.4.0 o Start in F2 mostra os carros de 2026, e a tela Official Driver mostra Herta, Câmara e Montoya. A F2 corre no campeonato `F2_career_23`, com o grid `f2_2026`.
+## Lessons (don't repeat)
 
-Na 0.4.9 a carreira B (14 corridas) começa em Melbourne, ROUND 1/14, com as 14 etapas da F2 2026 na ordem real (rastreamento Frida conferido). A temporada de 3 corridas também abre em Melbourne (ROUND 1/3).
-
-A passagem F2 > F1 funciona na carreira B (0.4.9, temporada custom de 3 corridas, testada em 01/11). Depois de Abu Dhabi, o jogo abre o menu de temporada custom da F1, com as 24 corridas de 2026. Depois vem o Team Select dos times de 2026 (com Audi e Cadillac), não propostas de contrato. Escolher a Racing Bulls deu o Lawson de companheiro, e a cena de abertura da carreira tocou.
-
-A temporada de 8 corridas usa o mesmo mecanismo, mas ainda não foi testada no jogo.
-
-Já funcionou no jogo, na 0.2.3, quando o mod ainda alterava a carreira 2026 do jogo:
-- Start in F2 aparecia na carreira 2026.
-- O grid da F2 2025 tinha os 22 carros certos.
-- O calendário da F2 2025 vinha na ordem real (Austrália primeiro), com as versões de 3, 8 e 14 corridas.
-- A cena do Start in F2 mostrava Fornaroli, Verschoor e Lindblad com carros de 2025.
-- A carreira 2025 continuava com a F2 2024.
-
-Na 0.3.x tudo isso foi levado para tiles próprios, para não tocar mais nos saves da carreira 2026 do jogo.
-
-Ainda não testado:
-- na 0.5.0, uma carreira nova (Melbourne 1/14);
-- uma temporada inteira de 14 corridas.
-
-## Como testar uma versão
-
-1. Ligue o addon `f2-feeder-career/` no perfil `test` do launcher.
-2. Limpe o cache: `Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Swofty\cache\overlay\test"`
-3. Inicie pelo launcher.
-4. Logs: `swofty\loader.log` e `swofty\crash-*.txt` na pasta do jogo (hoje `C:\Program Files (x86)\Steam\steamapps\common\F1 25`), também copiados em `%LOCALAPPDATA%\Swofty\sessions\<data>\game-logs`, e `%LOCALAPPDATA%\Swofty\state\wrapper-run.log` para o build.
-5. Banco do jogo: `swofty.exe db get "<caminho>"` e `swofty.exe db search <texto>`, na pasta `bin` do launcher. `swofty.exe build --profile test --side-data` só lista os achados depois de apagar o cache.
-
-## O que aprendemos (não repita)
-
-- **Copiar um `championships.Championship` de F2 derruba o boot** em `Game_ModeChampionship_Build`, mesmo com só o nome trocado. Cópias do campeonato de F1 (`F1_driver_career_26`) funcionam, como faz o Progressive. Para a F2, reaproveite campeonatos que nenhum modo do F1 25 usa:
-  - `F2_career_23`, usado só pelos modos de F1 23/24;
-  - `F1_career_23`, convertido em F2.
+- **Copying an F2 `championships.Championship` crashes the boot** in `Game_ModeChampionship_Build`, even with only the name changed. Copies of the F1 championship (`F1_driver_career_26`) work, as in Progressive. For F2, reuse championships no F1 25 mode uses (`F2_career_23`).
 - **Entrant lists:**
-  - O `stat_id` indexa um registro que termina no maior id original (104). Ids acima disso não são encontrados. Ids livres abaixo de 105: 2–12, 14, 15, 17–29, 31–37, 39, 53 e 68. A 0.3.x usa 53 e 68.
-  - O jogo só carrega uma lista que esteja em `content_sets.content_set[_metadata_=2026].available_entrant_lists_0.entrant_lists`, ou que seja referenciada por uma lista carregada.
-- **`add-row` só copia campos que o catálogo do launcher conhece.**
-  - Para o modo, o campeonato e os grupos, use o mapa `fields` (`tools/fields.json`, tirado do Progressive).
-  - Em listas aninhadas sem `_instancecount_`, como a `championship_setups` do `driver_career_26`, crie os campos com `set` + `create` + `type`.
-- **Calendário da F2** (descoberto com Frida, não por tentativa):
-  - O calendário é montado com a lista do `season_0.track_event_list` do event list. Cada entrada leva a data da race weekend (`date_time` em `schedule.all_track_events`): `rw_<pista>` é 2025, `rw_<pista>_26` é 2026. Mudar datas nos `TrackDataSet` não muda nada.
-  - Antes do primeiro carregamento de pista, `0x140bc9360` refaz `Season.weekends`. Ele mantém só as entradas cujo `stat_id` de evento está na lista `ComTrackList_0.default_track_list` do campeonato, **na ordem dessa lista**. Essa chave não está no catálogo; o nome saiu de um fnv1a64 por força bruta. No `F2_career_23` era a `F2_2024_full`, e daí vinham o Bahrein 1/13 e, com eventos de 2026, a temporada vazia que crashava em `Sess_WeekendManager_PrepareTrackLoad`.
-  - Race weekends novas precisam dos 7 campos de `date_time` (`add-row` não copia nenhum): sem eles o boot crasha em `Trk_TrackData_LoadTrackListNodes`.
-  - `season_2027` não existe em `game_setup.seasons`, e colocar esse valor numa lista `seasons` crasha o boot (`0x142a0ddb0`). Por isso a F1 da carreira B ainda é datada 2026.
-- **Start in F2:**
-  - `Game_CareerWizard_StartsInF1` responde "sim" para a carreira 2026. O mod responde "não" para os grupos dele, mas **não dentro de `FeTile_Route_CareerItem`**: lá o caminho "não" lê um objeto que os tiles de addon não têm. No router o mod mantém a resposta original e troca a rota com `wz::tile_route(group, "career_wizard_driver_career")`.
-- **Tela Choose Driver:** a aba F2 mostra só quem está ao mesmo tempo na lista `F2CAREER_<sufixo>` (por exemplo `career_f2_2025_for_f1_2026`) e no grid do campeonato. Pilotos que já estão na F1 do ano seguinte não aparecem; é assim no jogo original também.
+  - `stat_id` indexes a registry that ends at the highest stock id (104). Free ids below 105: 2–12, 14, 15, 17–29, 31–37, 39, 53 and 68. The addon uses 68.
+  - The game only loads a list that is in `content_sets.content_set[_metadata_=2026].available_entrant_lists_0.entrant_lists`, or that a loaded list references.
+- **`add-row` only copies keys the launcher's catalogue knows.** For the mode, the championship and the groups, use `tools/fields.json` (from Progressive). In nested lists without `_instancecount_`, create fields with `set` + `create` + `type`.
+- **F2 calendar** (found with Frida, not by trial):
+  - The calendar is built from the event list's `season_0.track_event_list`, each entry dated by its race weekend's `date_time`. Dates in `TrackDataSet` change nothing.
+  - Before the first track load, `0x140bc9360` rebuilds `Season.weekends`, keeping only entries whose event `stat_id` is in `ComTrackList_0.default_track_list`, **in that list's order** (key found by brute-forcing fnv1a64 paths).
+  - New race weekends need all 7 `date_time` fields (`add-row` copies none), or the boot crashes in `Trk_TrackData_LoadTrackListNodes`.
+  - `season_2027` isn't in `game_setup.seasons`, and naming it in a `seasons` list crashes the boot (`0x142a0ddb0`).
+- **F1 calendar:** see the README. The game takes the first season length preset and track pool that fit; a copied event list naming its own list opens contract negotiations and empties the player's seat; a new track needs a race weekend activity row.
+- **Start in F2:** `Game_CareerWizard_StartsInF1` answers yes for the 2026 career. The addon answers no for its group, but **not inside `FeTile_Route_CareerItem`**: there the "no" path reads an object addon tiles don't have. In the router the stock answer stands and `wz::tile_route(group, "career_wizard_driver_career")` changes the route.
 - **Saves:**
-  - Mudar quais campeonatos um modo usa quebra as carreiras salvas antes. O crash acontece em `Game_SaveData_DeserialiseContainer`, ao carregar o perfil.
-  - O Steam Cloud traz o save antigo de volta. Para limpar: desligue a nuvem, apague `Steam\userdata\1013098445\3059520\remote\*`, crie um save novo e religue escolhendo a cópia local.
-  - Com tiles próprios, cada carreira tem seu container (`gm_driver_career_f2_26`; o `_25` era da carreira A). O launcher guarda esses containers quando o addon está desligado.
-- **A fonte do jogo não tem "→"**; use ">".
-- **Não converta campeonato de F1 em F2** (0.3.5 a 0.3.12, todas crasharam em `0xcb7330`). O objeto vazio era o componente `development_events` do campeonato. O crash report em `swofty\crash-*.txt` guarda a memória em volta dos registradores, e foi ali que o nome apareceu: o dump completo (`SWOFTY_CRASH_DUMP=full` em `launch.env` no `config.json`) precisa de dezenas de GB livres.
+  - Changing which championships a mode uses breaks careers saved before (`Game_SaveData_DeserialiseContainer` on profile load).
+  - Steam Cloud brings old saves back. To clear: turn the cloud off, delete `Steam\userdata\1013098445\3059520\remote\*`, make a new save, and turn it back on keeping the local copy.
+- **The game font has no "→"**; use ">".
+- **A crash report** (`swofty\crash-*.txt`) keeps the memory around the registers; that's where the empty `development_events` component showed up. A full dump (`SWOFTY_CRASH_DUMP=full`) needs tens of GB.
 
-## Próximos passos
+## Next steps
 
-1. Na 0.5.0, ver se uma carreira nova ainda começa em Melbourne 1/14.
-2. Na passagem F2 > F1 o jogo mostra Team Select em vez de propostas. O jogo base faz igual, e só um piloto criado escolhe academia e tem contratos. Mudar isso fica para o revamp da F2 (abaixo).
-3. O ano 2027 (testado em 02/11 na primeira temporada de F1). A temporada continua `season_2026` no jogo, e o "2027" vem dos títulos e da ordem do calendário.
-   - Datar a temporada como 2027 de verdade exigiria uma linha `season_2027`. A doc do Swofty aceita `add-row` de temporada com statId até 31. Também exigiria `season_2027` ao lado de `season_2026` em uns 40 campos: `TrackDataSet f1_2026`, `track_layers`, listas de calendário, `driver_statistics`, branding, `entrant_lists.season` e `team_customisation_for_year.f1_season`.
-   - Da segunda temporada de F1 em diante a carreira repete o ano, como as carreiras de 2025 e 2026 do jogo, e os títulos continuam mostrando 2027. Decidido em 02/11: não fazer calendários de 2028 em diante (ainda não existem, e seria um por ano).
-4. Sepang no lugar do Bahrein: o usuário já baixou um mod de pista.
-5. Mais tarde, um revamp da F2:
-   - um hub para a temporada da F2;
-   - academias reais para pilotos existentes (Câmara na Ferrari, Tsolov na Red Bull);
-   - propostas ou uma vaga ligada à academia no lugar do Team Select livre;
-   - pilotos da F2 controlados pela IA que forem bem na temporada também sobem para a F1.
-6. Escrever uma nota no knowledge base do universal-modder (`um kb new`). Abrir PR só com o OK do usuário.
+1. **F2 revamp**, in the order in `REVAMP.md`. Step 1 (academy group) is done in 0.7.2. Next: the F2 2026 grid in the driver market pool, then real academies for existing drivers, promotion by F2 result, contract offers instead of the free Team Select, and an F2 hub.
+2. When the mod is finished: a note in the universal-modder knowledge base (`um kb new`); open the PR only with the owner's OK.
+3. Publishing on Swofty is planned.
 
-## Ferramentas
+## Tools
 
-- `f2-feeder-career/tools/gen.py`: gera `db/career.json` e `lang/career.json`. Edite o gerador, não os JSON.
-- `f2-feeder-career/native/build.sh`: compila o `f2_feeder.dll`. Precisa de zig (instalado com `winget install zig.zig`) e de um clone do SwoftyLauncher; o caminho vai em `SWOFTY_REPO`.
-- `tools/dump-career-db.ps1`: despeja calendários, campeonatos e modos do banco do jogo com `swofty db get`. É lento: cerca de 500 chamadas.
-- No SwoftyLauncher, as referências mais úteis:
-  - `addons/progressive` (carreira como tile de addon);
-  - `re/db/functions.tsv` (funções do exe);
-  - `tools/gamedb/catalog/keys.tsv.gz` (chaves do banco);
-  - `docs/reference/std/career-content.md` e `career-wizard.md`.
+- `f2-feeder-career/tools/gen.py` writes `db/career.json` and `lang/career.json`. Edit the generator, not the JSON.
+- `f2-feeder-career/native/build.sh` builds `f2_feeder.dll`. Needs zig (`winget install zig.zig`) and a SwoftyLauncher clone (`SWOFTY_REPO`).
+- `tools/dump-career-db.ps1` dumps calendars, championships and modes with `swofty db get`. Slow: about 500 calls.
+- In SwoftyLauncher: `addons/progressive` (career as an addon tile), `re/db/functions.tsv` and `re/db/subsystems/*.md` (exe functions), `tools/gamedb/catalog/keys.tsv.gz` (database keys), `docs/std/systems/career.md` and `docs/reference/addons/in-game-ui.md`.

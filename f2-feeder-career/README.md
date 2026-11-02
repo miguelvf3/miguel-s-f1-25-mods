@@ -1,52 +1,78 @@
 # F2 Feeder Career 2026
 
-Addon do Swofty Launcher (F1 25 com a temporada 2026) com uma Driver Career que começa na Fórmula 2 de 2026 e sobe para a F1. Ela tem um tile próprio na linha **Addons** da escolha de carreira, com seu próprio modo de jogo e seus próprios saves. A carreira 2026 do jogo não é alterada.
+A Swofty Launcher addon for F1 25 with the 2026 season: a Driver Career that starts in the 2026 Formula 2 season and moves up to Formula 1 for 2027. It has its own tile in the **Addons** row of the career select, with its own game mode and save slots. The game's own 2026 career is unchanged.
 
-| Tile | F2 | Depois | Situação |
-|---|---|---|---|
-| F2 2026 > F1 2027 | Grid `f2_2026` e calendário de 2026, com Madri | F1 com os carros de 2026, o calendário de 2027 (24 etapas) e os títulos de 2027 | Melbourne 1/14 e a passagem F2 > F1 funcionam (0.4.9). O calendário de 2027 entrou na 0.6.0 e ainda não foi testado |
+| Phase | What you race |
+|---|---|
+| F2 2026 | The `f2_2026` grid (Câmara, Herta, Montoya...) on the real 2026 F2 calendar, Melbourne first, with Madrid. 14, 8 or 3 rounds. |
+| F1 2027 | The 2026 cars on the FIA 2027 calendar: 24 rounds, including Portugal (Portimão) and Turkey (Istanbul Park). Shorter 16 and 10-round seasons. GP and championship titles read 2027. |
 
-Até a 0.4.9 havia uma segunda carreira, F2 2025 > F1 2026 (grupo `f1_career_f2_25`). Ela saiu na 0.5.0.
+Later F1 seasons repeat the year, as in the game's own careers.
 
-`db/career.json` e `lang/career.json` são gerados por `tools/gen.py`. Mude o gerador, não os arquivos.
+## Requirements
 
-## Como funciona
+- Swofty Launcher with `swofty.core` 0.2.13 or later.
+- Two track addons, which the manifest requires because F1 25 has neither circuit:
+  - `mod.portimao` (Portimão, by Pajko);
+  - `track.istanbul_park` (Istanbul Park, by Apoc & RK), in the Swofty addon catalogue.
 
-**Tile** (`native/src/f2_feeder.cpp`): um *career content* do core (`swofty/career_content.hpp`), com o grupo `f1_career_f2_26` (sufixo `FB27`). `Game_CareerWizard_StartsInF1` responde "não" para esse grupo, e o wizard mostra Skip to F1 / Start in F2.
+## Playing it
 
-**A carreira** é montada como a do Progressive Career, com cópias das linhas da carreira 2026 do jogo:
-- linhas dos 8 grupos de dados e a entrant list do grupo;
-- `shared_components`, o campeonato de F1 (`F1_driver_career_f2_26`, statId 39) e o modo (`driver_career_f2_26`, statId 84), com seu `save_data.name`;
-- a lista `F2_Default` (a F2, depois a F1) e o campeonato de F2 como segunda referência, igual ao `driver_career_25`;
-- listas `F1CAREER_`, `F2CAREER_` e `ICONS_` no content set 2026.
+1. Install the folder and turn the addon on in a profile, with the two track addons.
+2. Driver Career > **Addons** row > **F2 Feeder Career 2026**.
+3. Pick a driver. **Start in F2** races the F2 season first; **Skip to F1** goes straight to F1 2027.
+   - A created driver picks an academy (the 2026 ones, with Audi and Cadillac). Its recognition bonus shows on the contract screen.
+   - Existing drivers have no academy (the base game works the same way).
+4. Season length: **Full Season** or **Custom Season** (24, 16 or 10 rounds) give the 2027 calendar.
 
-**A F2 corre no `F2_career_23`**, o único campeonato de F2 que nenhum modo do F1 25 usa (cópias de campeonato de F2 crasharam). O grid fica no campeonato (`f2_2026`). O calendário fica no setup `F2_Default` do modo: o event list `F2_career_21`, reformatado igual ao de F2 2024, com ano 2026.
+After F2 the game shows its free Team Select, as in the base game.
 
-A cena do Start in F2 e a tela Official Driver usam pilotos de 2026 (Câmara, Herta, Montoya). O visual dos pilotos é buscado pelo ano da carreira, e pilotos que só correram em 2025 não aparecem.
+## How it works
 
-**Calendário:** o `season_0.track_event_list` do event list nomeia a lista da temporada (`F2_2026_full`). Para `season_2026` há linhas de duração (Long/Medium/Short) e `track_selections` de F2, além das listas curtas `F2_2026_8` e `F2_2026_3`. As linhas da F2 2024 do jogo cobrem 2023 a 2025.
-- As datas das rodadas vêm das race weekends (`schedule.all_track_events`): `rw_<pista>` tem data de 2025 e `rw_<pista>_26` de 2026. A F2 2026 tem as suas próprias, `rw_f2_<pista>_26` (stat_id 137–150), cópias das de 2026.
-- Antes do primeiro carregamento de pista, o jogo refaz as etapas da temporada (`0x140bc9360`). Ele mantém só os eventos do calendário cujo `stat_id` está na lista `ComTrackList_0.default_track_list` do campeonato, na ordem dessa lista. No `F2_career_23` ela era a `F2_2024_full`: a temporada corria na ordem de 2024 (Bahrein primeiro, sem Madri, 13 rodadas), e com os eventos de 2026 ficava sem etapas e crashava. O addon aponta esse campo para `F2_feeder_order`, com os eventos da F2 2026. 
-**F1 2027:** a primeira temporada de F1 corre o calendário de 2027 da FIA (`F1_2027_full`, 24 etapas) sobre os dados de 2026 do jogo. Portugal e Turquia correm em addons de pista, que o manifesto exige, porque o F1 25 não tem os arquivos desses circuitos: `mod.portimao` (Pajko) preenche a vaga `portimao` do jogo, e `track.istanbul_park` (Apoc & RK) cria a pista `istanbul_park`, copiada de Spa. A race weekend da Turquia é a de Spa com outra atividade, e o addon cria a atividade `istanbul_park` (`schedule.activities.activity_race_weekend`, cópia da de Spa, stat_id 814): sem ela a temporada deixava a rodada de fora (0.7.0, 23 etapas).
-- As race weekends `rw_f1_<pista>_27` (stat_id 151–174; Portugal e Turquia por último, 173 e 174) são cópias das de 2026. Cada uma tem como data a quinta-feira da etapa de 2027, mas com o ano 2026, porque a temporada do jogo vai de 11/02 a 21/12/2026. Datar como 2027 exigiria uma linha `season_2027` (o jogo só tem `season_2023` a `season_2026`) e `season_2027` ao lado de `season_2026` em uns 40 campos.
-- A lista é ordenada por data (`sort_by_date`), igual à `F1_2026_full`. As temporadas curtas `F1_2027_16` e `F1_2027_10` são as de 2026 em 2027, com Mônaco no lugar de Zandvoort.
-- A F1 usa o event list do jogo (`F1_career_26`), e a lista sai da escolha de duração (Full Season ou Custom Season), como numa carreira normal. Há linhas de duração `F1_2027_Long/Medium/Short` e um `track_selections` `F1_2027` (o banco de pistas do Custom Season). O jogo pega a primeira linha que serve para o modo e a temporada, então, enquanto a carreira está em foco (o assistente de criação dela ou ela carregada), a DLL esconde as de 2026 (`Game_SeasonLength_ApplyPreset`; tipo da duração `0xff`, modos do banco de pistas `0`) e as devolve ao sair.
-- Um event list próprio que nomeava `F1_2027_full` em cada temporada (0.6.0–0.6.3) montava as etapas de 2027, mas abria a negociação de contrato na primeira visita à Team HQ. Lá `Career_ContractRenewal_ReplaceOldPosition` deixava o jogador sem equipe (time `0x3fff`), e a Team HQ crashava (rastreamento Frida, comparado com a 0.5.0, que não assina contrato nenhum).
-- Enquanto a carreira está carregada, a DLL troca os títulos dos GPs e o nome do campeonato para 2027, com a API `swofty::lang`. Os textos vêm de `native/src/titles_2027.inc`, gerado de `tools/titles_2026.json`, que é o `data/titles.json` do Progressive Career. As etapas da F2 usam outras chaves de texto (`lng_track_<código>_f2_title`).
+`db/career.json` and `lang/career.json` are written by `tools/gen.py`; change the generator, not the files. The DLL is `native/src/f2_feeder.cpp`.
 
-**Saves:** a carreira tem seu próprio container de save (`driver_career_f2_26`). Sem o addon, o launcher guarda esses containers e os escreve de volta sem mudança, então dá para deixar o Steam Cloud ligado.
+**Tile:** a core *career content* (`swofty/career_content.hpp`) with the data group `f1_career_f2_26` (suffix `FB27`). `Game_CareerWizard_StartsInF1` answers "no" for that group, so the wizard offers Skip to F1 / Start in F2.
 
-## O que aprendemos (para quem continuar)
+**The career** is built like Progressive Career's, from copies of the game's 2026 career rows:
+- the 8 data group rows and the group's entrant list;
+- `shared_components`, the F1 championship (`F1_driver_career_f2_26`, statId 39) and the mode (`driver_career_f2_26`, statId 84), with its own `save_data.name`;
+- the `F2_Default` setup list (F2, then F1) and the F2 championship as a second reference, as in `driver_career_25`;
+- `F1CAREER_`, `F2CAREER_` and `ICONS_` lists in the 2026 content set.
 
-- **Uma cópia de `championships.Championship` derruba o jogo no boot**, em `Game_ModeChampionship_Build`, mesmo quando só o nome muda. Use um campeonato que já existe e não é usado.
-- **Um campeonato de F1 não vira F2 pelo banco.** O `F1_career_23` com `game_setup_modes f2` crasha ao entrar no modo (`0xcb7330`, sob `Game_Game_SetCurrentGameMode`). O jogo ainda cria para ele o componente de P&D `development_events`, e na F2 nada liga esse componente. Não resolveu limpar `save_data`, tirar o `OptionsSystemConfiguration`, trocar o `statId`, nem pôr o campeonato na lista de campeonatos de F2 (chave `0xbb1488669c224074`), separado ou tudo junto.
-- **Lista de pilotos da tela Choose Driver:** a aba F2 mostra só quem está ao mesmo tempo na lista `career_f2_*_for_f1_*` e no grid do campeonato. A `career_f2_*` é a lista de escolha, não o grid de corrida.
-- **Saves:** mudar quais campeonatos a carreira usa quebra os saves de carreiras criadas antes da mudança. O crash acontece em `Game_SaveData_DeserialiseContainer`, ao carregar o perfil. O Steam Cloud traz o save antigo de volta se estiver ligado.
+**F2 runs in `F2_career_23`**, the only F2 championship no F1 25 mode uses (copies of F2 championships crashed). The grid is set on the championship (`f2_2026`), the calendar in the mode's `F2_Default` setup: event list `F2_career_21`, reshaped like F2 2024's, dated 2026. Its academies component names the `2026` academy group (it had none).
 
-## Build e teste
+The Start in F2 scene and the Official Driver screen show 2026 drivers. Driver looks are found by the career's year, so drivers who only raced in 2025 don't appear.
+
+**F2 calendar:** the event list's `season_0.track_event_list` names the season's list (`F2_2026_full`). `season_2026` has F2 season length rows (Long/Medium/Short) and `track_selections`, plus the short lists `F2_2026_8` and `F2_2026_3`.
+- Round dates come from the race weekends (`schedule.all_track_events`): `rw_<track>` is dated 2025, `rw_<track>_26` 2026. F2 2026 has its own, `rw_f2_<track>_26` (stat_id 137–150), copies of the 2026 ones.
+- Before the first track load the game rebuilds the season's weekends (`0x140bc9360`). It keeps only the calendar events whose `stat_id` is in the championship's `ComTrackList_0.default_track_list`, in that list's order. On `F2_career_23` that was `F2_2024_full`, so the season ran in 2024 order (Bahrain first, no Madrid, 13 rounds), and with 2026 events it had no weekends and crashed. The addon points it at `F2_feeder_order`, with the F2 2026 events.
+
+**F1 2027 calendar:** the first F1 season races the FIA 2027 calendar (`F1_2027_full`, 24 rounds) on the game's 2026 data.
+- Race weekends `rw_f1_<track>_27` (stat_id 151–174; Portugal and Turkey last, 173 and 174) are copies of the 2026 ones, each dated the Thursday of its 2027 weekend but in 2026: the game's season runs 11 Feb to 21 Dec 2026. A real 2027 date would need a `season_2027` row (the game only has `season_2023` to `season_2026`) and `season_2027` next to `season_2026` in some 40 fields.
+- The list sorts by date (`sort_by_date`), like `F1_2026_full`. The short seasons `F1_2027_16` and `F1_2027_10` are the 2026 ones moved to 2027, with Monaco for Zandvoort.
+- Portimão fills the game's `portimao` slot, so a copy of `rw_portimao` races there. Istanbul Park is a new track: its race weekend is Spa's with activity `istanbul_park`, and the addon adds that race weekend activity (`schedule.activities.activity_race_weekend`, a copy of Spa's, activity stat_id 814). Without it the season dropped the round.
+- The F1 season keeps the game's event list (`F1_career_26`) and takes its list from the season length choice, as a stock career does. There are season length rows `F1_2027_Long/Medium/Short` and a `track_selections` row `F1_2027` (the Custom Season track pool). The game takes the first row that fits the mode and season, so while this career is in focus (its wizard, or the career loaded) the DLL sets the 2026 ones aside (wrapping `Game_SeasonLength_ApplyPreset`; preset type `0xff`, pool setup modes `0`) and puts them back afterwards.
+- While the career is loaded, the DLL shows the GP titles and the championship name as 2027 with `swofty::lang`. The texts come from `native/src/titles_2027.inc`, generated from `tools/titles_2026.json` (Progressive Career's `data/titles.json`). F2 rounds use other keys (`lng_track_<code>_f2_title`).
+
+**Saves:** the career has its own save container (`driver_career_f2_26`). Without the addon, the launcher keeps those containers and writes them back unchanged, so Steam Cloud can stay on.
+
+## Lessons (for whoever continues)
+
+- **A copied F2 `championships.Championship` crashes the boot** in `Game_ModeChampionship_Build`, even with only the name changed. Copies of the F1 championship work (Progressive does it). For F2, reuse a championship no mode uses.
+- **An F1 championship can't be turned into F2 through the database.** `F1_career_23` with `game_setup_modes f2` crashes on entering the mode (`0xcb7330`): the game still gives it the F1 R&D component (`development_events`) and nothing in F2 wires it up.
+- **A copied F1 event list that names its own track list per season** builds the weekends, but opens contract negotiations at the first Team HQ visit: `Career_ContractRenewal_ReplaceOldPosition` leaves the player with no team (`0x3fff`) and the Team HQ crashes. Take the list from the season length choice instead (0.6.4).
+- **A race weekend's `activity` must name a race weekend activity row.** A track addon that adds a new track adds none, and the season drops the round silently.
+- **Choose Driver screen:** the F2 tab lists only drivers who are both in the `career_f2_*_for_f1_*` list and on the championship's grid.
+- **Saves:** changing which championships a mode uses breaks careers saved before (`Game_SaveData_DeserialiseContainer` on profile load). Steam Cloud brings the old save back if it's on.
+
+## Build and test
 
 ```bash
-SWOFTY_REPO=/caminho/SwoftyLauncher native/build.sh
+SWOFTY_REPO=/path/to/SwoftyLauncher native/build.sh
 ```
 
-No launcher: instale a pasta, ligue o addon num perfil de teste e limpe `%LOCALAPPDATA%\Swofty\cache\overlay\<perfil>` antes de testar uma versão nova.
+The build needs zig (`winget install zig.zig`) and a SwoftyLauncher clone. In the launcher, install the folder, turn the addon on in a test profile with the two track addons, and clear `%LOCALAPPDATA%\Swofty\cache\overlay\<profile>` before testing a new version.
+
+## Credits and licence
+
+AGPL-3.0-or-later. The career layout and `tools/titles_2026.json` come from Swofty's Progressive Career (AGPL-3.0-or-later). Portimão by Pajko and Istanbul Park by Apoc & RK are separate addons.

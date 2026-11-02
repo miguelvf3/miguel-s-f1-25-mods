@@ -8312,6 +8312,14 @@
   },
   {
    "op": "set",
+   "select": "championships.Championship[_metadata_=F2_career_23]",
+   "field": "ComDriverAcademies_0.data_group",
+   "value": "2026",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
    "select": "schedule.event_lists.event_list[_metadata_=F2_career_21]",
    "field": "_season_instancecount_",
    "value": "1"

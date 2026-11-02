@@ -154,8 +154,12 @@ def career(c):
     # The entrant list stat_id indexes the game's entrant list registry, which ends at the stock lists'
     # highest id (104): a list above it is not found and pressing the tile crashed in the router.
     # 53 and 68 are unused stock ids below it.
+    # Its references bring in the grid, the driver pool, the reserves and the F2 drivers, whose F2 teams the
+    # game clears at career creation so they're F1 free agents the market can sign. The stock list names
+    # the F2 2025 grid (career_f2_2025_for_f1_2026); this career's F2 is 2026, so it names f2_2026.
     add("entrants.entrant_lists", "entrants.entrant_lists.entrant_list[_metadata_=f1_career_2026]",
-        _metadata_=g, stat_id=c["list_stat"])
+        _metadata_=g, stat_id=c["list_stat"],
+        entrant_list_references=f"f1_2026,f1_career_2026_driver_pool,f1_career_2026_reserve_drivers,{F2_GRID}")
 
     # The F1 seasons are the stock career's (F1_career_26): the Custom Season screen picks the track list,
     # F1_2027_Long among them (calendars()). A copy naming F1_2027_full in each season (0.6.0-0.6.3) built

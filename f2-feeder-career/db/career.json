@@ -8269,7 +8269,8 @@
    "from": "entrants.entrant_lists.entrant_list[_metadata_=f1_career_2026]",
    "set": {
     "_metadata_": "f1_career_f2_26",
-    "stat_id": "68"
+    "stat_id": "68",
+    "entrant_list_references": "f1_2026,f1_career_2026_driver_pool,f1_career_2026_reserve_drivers,f2_2026"
    }
   },
   {

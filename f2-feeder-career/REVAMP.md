@@ -54,6 +54,16 @@ How F1 25's F2 career works inside, and what each part of the revamp could chang
 
 **Real academy for existing drivers (0.7.4, 2 Nov):** no game table ties an existing driver to an academy (only the suit art names it). `DriverAcademiesComponent` keeps a driver key > academy map (saved as `assignedAcademies`), and on career load the DLL adds the player's entry from its own table (Câmara and Beganović Ferrari, Tsolov Red Bull, Minì, Dunne and Maini Alpine, Herta Cadillac, Boya Mercedes). The game's academies already include the partner teams (Mercedes with Aston Martin, Ferrari with Haas, Red Bull with Racing Bulls). In game, Câmara on Skip to F1: the log shows `academy: Rafael Camara: Ferrari (driver 203, slot 7, status 2)`, and the Ferrari contract screen shows 38% recognition against Leclerc with "Inc. 5% Bonus". The Team Select Insights, opened before the hub, still show 36% and "Inc. 1% Bonus".
 
+**Promotion by result (0.7.5, 2-4 Nov; ran in game on 4 Nov):** with Câmara at Haas, the log shows Tsolov (61 pts) in Lawson's seat and León (44 pts) in Lindblad's, both `result ok`, the second with a number change. The F2 standings were read live (22 drivers). at the first F1 season's Team HQ, once the player has signed for an F1 team, the best 3 AI drivers of the F2 season take the seats open for 2027 in the news (Ocon at Haas, Lawson and Lindblad at Racing Bulls; until 3 Nov Ocon, Bottas, Lawson and Stroll), an academy driver first at his academy's team, through the core's `set_seat`. The F2 order is the F2 championship's last season standings: points, then countback over the sessions that scored (a three-way tie on 6 Nov showed qualifying has result rows too; countback gives the game's order, León, Tsolov, Bilinski). Found on the way:
+- The game passes through the Team HQ once *before* the F2 > F1 Team Select (`career.hub` fires with the player still on his F2 team), hence the wait for the player's F1 team.
+- A free agent's entrant row keeps a team position: a seat needs an F1 team too.
+- The finished F2 championship's standings exist only in the session the F2 season ends. After a load they are empty and `Career_Rebuild_ChampionshipStandings` finds no results to rebuild them from. The DLL keeps the order it reads in its storage (`f2_standings.txt`, with the player's driver) and reads it back after a load.
+- Tsolov was missing from the Driver Rating Comparison, promoted or not. The list (0x1416da8e0) sorts the 117 driverData entries and drops every driver in a map of driver pool rows unless he's the player. The map holds the rows of `f1_2025_driver_pool` and `f1_2026_driver_pool` (objects named after the row, `tsolov`, `rasmussen`), and Tsolov is in both, as a young driver in the Icons tab. Removing him only from this career's lists didn't help: the content set loads the stock pools for every career. 0.7.5 takes his row out of both pools, so he also leaves the Icons tab of every career while the addon is on. Still open: on 7 Nov he was still missing after an F1 GP in a career started before this fix, and a career started with it hasn't been checked. The user set it aside as minor, to look at again with the next batch of tests. His `icon_driver_nikola_tsolov` option stays in Driver Icon Settings (stock data).
+- In game on 4 Nov: both promoted drivers show in the grid reveal in Racing Bulls suits, León at 57 overall in the comparison; Lawson and Lindblad are free agents. Accolades shows the five goals, and the calendar is the 2027 one (Bahrain first, Portugal and Turkey in), though the Custom Season screen showed the 2026 list.
+- The standings are right after the grid reveal: Lawson and Lindblad only show at other teams before it, and the promoted drivers then appear with 0 points. No fix needed.
+
+**Accolades (0.7.5, 3 Nov, build checked, not in game):** the empty Accolades panel was Câmara's: the stock 2026 accolades (`AccoladeDataGroup` `f1_career_2026`, copied for this career) have no row for ten F2 2026 drivers (Fittipaldi, Inthraphuvasak, León, Bilinski, Herta, Câmara, Boya, Stenshorne, van Hoepen, Varrone). They get Oliver Goethe's five goals. `add-row` copied only the row's own two keys (no catalogue entry for the goals), so the generator writes the goals with `set`.
+
 ## Suggested order
 
 1. **Academy bonus test** (`2026` group on the F2 academies). Done.
@@ -62,6 +72,95 @@ How F1 25's F2 career works inside, and what each part of the revamp could chang
 4. **Promotion by result** (DLL at the end of F2).
 5. **Contract offers instead of the Team Select.**
 6. **F2 hub.**
+
+## Plan for the next steps (3 Nov)
+
+Research done offline (Swofty main at `91b49d7`, 4 Nov: `re/db`, `docs/std`). Each step says what is known and what needs the game.
+
+### To test first (0.7.5)
+
+1. New career, Start in F2, 3 races; finish F2, sign for a team, reach the Team HQ. Check the 3 promoted drivers in the grid (Haas, Racing Bulls), the log lines `[f2-feeder] promotion:` and that `f2_standings.txt` exists in the addon folder.
+2. Save, quit, load: no second promotion (the leaving drivers are gone from their seats).
+3. Tsolov in the Driver Rating Comparison when he isn't promoted.
+4. Accolades with Câmara: the panel shows five goals. If the old save still shows it empty, a new career.
+5. Skip to F1 career: no promotion (no F2 season), academy as in 0.7.4.
+
+### 4b. Rating bonus for the F2 top finishers
+
+**Built (0.7.5, 4 Nov, not tested in game):** the simpler route won. `set_driver_ratings` writes into the driver's curves, so the promotion sets the promoted drivers' ratings once, by final F2 position (`kPromotedRatings`): overall about 75, 73, 71 and 70 for P1, P2, P3 and P4 or below (overall = (0.25 exp + racecraft + 0.25 awareness + 2 pace) / 3.5). The player gets to about 74 through the F2 season's XP; León reached F1 at 57. The research below is kept for reference: the `driver.ratings.read` route isn't used.
+
+- The career keeps a driver's ratings in `DriverStatisticsComponent` (`driverData`, 0x50-byte entries per driver key; each statistic is an evolution curve plus `dynamicLevel` and `temporaryBoostValue`). The game reads them with `Career_Get_DriverStatValue` (0x141140ee0) and `Career_Get_DriverOverallRating` (0x14113d120), both L2.
+- Swofty's `driver.ratings.read` event (`drivers::events::RatingsRead`, before) lets an addon change each value the career reads, per driver and statistic. Progressive Career uses it for its season ratings. That is the route: no need to read the current value first.
+- Plan: when the promotion runs, keep the F2 top 5 with their positions in the storage file. A `driver.ratings.read` handler, only in this career (`.in(owner)`), raises those drivers' values. To decide: the size, whether experience changes too, and whether it fades over seasons.
+- How far apart F2 and F1 are (`driver_statistics` holders, the `season_2026` sets; a curve is `x:value` over the career, the second `0:` point the start):
+
+  | Driver | Experience | Racecraft | Awareness | Pace |
+  |---|---|---|---|---|
+  | F2 2026 (Câmara, Goethe, Tsolov, Mini, Bilinski, Herta...) | 31-38 | 49-68 | 57-62 | 64-78 |
+  | Lindblad (F1 rookie 2026) | 32 | 70 | 60 | 72 |
+  | Lawson | 73 | 79 | 71 | 81 |
+  | Ocon | 83 | 85 | 84 | 84 |
+
+  An F2 driver's curve rises to about 80 over the career, so a promoted rookie starts at the back.
+- The market won't sign them on its own: each team asks for a driver rating (`driver_market` group 2026: Audi 82, Williams 83, Haas 84, Racing Bulls 85, Alpine 86, Cadillac 87, up to McLaren 99), and an F2 driver's overall is around 60. Even the 0.7.3 free agents stay unsigned unless the promotion (or a rating floor) moves them.
+- So the bonus works better as a floor than a plus: `value = max(value, floor)`, with the floor by F2 position near a real rookie's (Lindblad: racecraft 70, pace 72). Proposal: P1 racecraft 72 / awareness 66 / pace 78; P2 70 / 64 / 76; P3 68 / 62 / 74; P4-5 66 / 60 / 72. The curve still grows from there.
+- Check: the handler needs the std-2 event headers (`swofty/systems/drivers.hpp`); `driver_id` names `game/<label>`, so the DLL needs label <-> stat id (`swofty::career::detail::live_ops()->driver_stat`).
+
+### 4c. Numbers and looks of the promoted drivers
+
+- Every F2 2026 driver has F1 number 99 in `entrants.drivers` (Tsolov 48), so two promoted drivers share 99. The game gives a free number on its own signings (`Career_DriverNumbers_AssignFree`); whether the core's `set_seat` does is to check in the 0.7.5 test. If not: `career::set_car_number` (table version 4) after each promotion, with a number of our own per driver (to choose), else a free one.
+- Looks: check in the test whether a promoted driver races in his F2 team's suit; Swofty's `set_look` names a look for a driver.
+
+### 5. Contract offers instead of the free Team Select
+
+Known:
+- The end-of-season contract path: `Career_Decide_ContractNegotiation` (0x142d57d10) goes to `StateDriverCareerContractNegotiationsTeamSelect` when the player's contract ends this season, else to the agent (Intro, Update, Outro). With no contract record (`Career_Needs_DriverContract`) it goes to the agent.
+- The Driver Career Team Select list is built by 0x141873a30, which first calls `Game_DriverContracts_BuildOffers` (0x140d80ef0) for the player: offers at contracts manager +0x3c8..+0x3d0 (0x48-byte entries), none when `Game_DriverContracts_RankTeam` has no valid rank. `Game_TeamSelect_FocusTeam` / `ShowTeamDrivers` fill the focused team.
+- The Team Select state is absent from the start-of-career flow, so the screen after F2 (Custom Season, Team Select, career intro) may be the wizard's team select instead. Unknown which.
+
+Traced in game (4 Nov, end of F2 with Câmara): `... > StateFrontendWorld > StateFrontend > StateOnlineFrontend`, then the Team Select list builder 0x141873a30 runs in the front end, without `Game_DriverContracts_BuildOffers` and without `Game_ContractTeamSelect_OnEnter`. Then `StateLaunch > StateCareerHQWorld > PreHQCareerDataSync > FirePlayers > StateTeamHQ > StateTeamHQUpdate > ContractNegotiations* > ContractNegotiationsDecision > Intro`: the contract scene runs from the Team HQ flow, through the agent path. So the screen after F2 is the career start's Team Select, not the end-of-season one: the place to filter teams is the builder itself (its team list, vm+0x2d0). `career.hub` fires at `StateTeamHQUpdate`, with the player already on his F1 team.
+
+Still needs the game (Frida): which flow state shows the Team Select after F2 (answered above); whether 0x141873a30 runs there; what the offers list holds at that moment; whether a team tile can be hidden or locked (the list the builder fills).
+
+Design to decide: which teams offer a seat. Proposal: the academy's teams always; the teams whose driver market rating range (`team_driver_rating_range_requirements`, `driver_contracts.NCS.rating_ranges`) takes the player's rating; and for an F2 champion or top 3, the teams with a leaving driver (the promotion seats). The others are hidden or locked.
+
+Agreed with the user (3 Nov):
+- **Another F2 season when no team offers a seat.** The career repeats F2 instead of a free pick. Needs: whether the mode can run its F2 championship again (the `F2_Default` setup list runs F2 then F1; a second F2 season may need a second F2 setup or a reset of `F2_career_23`'s season), and the F2 grid for 2027 (the same 2026 grid, minus the promoted).
+- **Super licence as the gate.** FIA points for the F2 championship: 40, 40, 40, 30, 20, 10, 8, 6, 4, 3 for P1-P10, and 40 are needed (over three seasons; also at least six F2 events). So the F2 top 3 always qualify; P4 (30) and P5 (20) qualify only with points from before (an existing driver's real F3 or F2 results; a created driver has none). A second F2 season adds its points to the first.
+
+### 6. F2 hub
+
+- The Team HQ (and its laptop, where Swofty's `hub.tab` adds pages) exists only in the F1 part of a Driver Career. Between F2 weekends the game goes from one race to the next.
+- Options: (a) a Swofty screen (`operations.screens`, a `.ui` file with a native view model) shown between F2 rounds, with the calendar, standings and the academy; (b) make the F2 championship go through the Team HQ flow (`game_modes.ModeChampionship` flags such as `return_to_fe_between_weekends`; the hub state is F1's), riskier.
+- Traced in game (Frida on `FeFlow_Set_StateStatus`, 0.7.5, two F2 rounds): after a weekend's race, `... > Complete > PostRaceCareerHub > CareerRewards > PostRaceCareerHub > Exit > StateFrontendFrameLock > StateUnloadSession > WeekendSessionManager > StateSmokeTestSkipFEPreLaunchHold > StateCerberusServer > StateCareerHubSelector > StateLoadSession > PracticeAndQualifying`. Between a sprint and the feature race the session stays loaded (`Exit > Race`).
+- **`StateCareerHubSelector` is the place to look at for a hub:** the game runs it between weekends with the session unloaded, and the name says it picks whether a hub comes next. No Swofty note covers it yet. Next: find its vtable from the name string and read its `onUpdate` links (what sends F1 to the Team HQ and F2 to `StateLoadSession`), statically, without the game. Read `docs/reference/addons/in-game-ui.md` for the screen API too.
+
+**Option (c), seen in Silly Season (`alexs.silly-season` 1.0.0, 6 Nov; from its Addon Browser page, the addon itself not opened):** a full-screen panel on Swofty's experimental overlay (`swofty/overlay.hpp`, an immediate-mode 2D paint callback: rectangles, lines, text, images), opened with a key (F7 / Back + Y), plus a Team HQ tab. An overlay doesn't need the game's UI files or a flow state, so a calendar, standings and academy panel could work during F2 now. It can't advance time or start a session, so the FP1 events still need `StateCareerHubSelector`. Limits: experimental (`experimental_features: overlay`, an "experimental API" badge), and it may not draw with frame generation on. The user will ask the author (Alex Sánchez) before reusing anything.
+
+**Overlap with Silly Season:** it simulates F2, moves academy juniors up, retires and sacks drivers, and sends mails and press conferences; it needs launcher 1.8.16 and covers 2025 and 2026 careers. Check together: whether it works in this mod's own data group, and whether both change seats (our promotion against its market). Its option to let the game run the market may be the way to keep both on.
+
+### Later: FP1 outings (user's idea, 3 Nov)
+
+- For AI juniors in the F1 career: Swofty's `career.season` changes have a `stand_in` kind (from a round, until a round), but a change covers whole weekends, not FP1 only. An FP1-only swap needs a session hook (the entrants of a practice session), unresearched.
+- For the player during the F2 season: an F1 practice session inside the F2 championship is not something the career does; it would need an extra F1 weekend in the F2 calendar or a separate event. High difficulty, research after the F2 hub.
+- The user's shape for it (3 Nov): a special event in the F2 hub, on an F1 weekend that F2 doesn't race (as in Mexico 2026, where academy juniors drove FP1). If the F2 hub gets a Team HQ-like time advance, the event appears on that weekend's date: the player drives one F1 practice session for his academy's team, then the hub carries on to the next F2 round. To research then: starting a single F1 practice session from the hub (a one-session event, like the Grand Prix or invitational event setups) with the player in an F1 seat, and what it gives back (recognition with the academy team, ratings).
+
+## Later ideas
+
+- **F1 FP1 outings for academy drivers.** During the F2 season, now and then the player drives FP1 for his academy's F1 team, as real academy juniors do (usually one junior per academy at a given weekend). AI academy drivers would get FP1 outings too, in place of a race driver. See the plan above.
+- **Reserve or test driver** when there is no race seat: sign as an F1 team's reserve (the career has reserve rows: an entrant with team position 2 or more, `f1_career_2026_reserve_drivers`; `Career_Sign_DriverToTeam` fills a seat from a team's first reserve) and race F2 again, with more FP1 outings. Unknown whether the player's own row can sit in a reserve slot.
+- **Abu Dhabi young driver test**, a special event in the F2 hub after the last round, like the FP1 outings.
+- **An academy that reacts to results**: dropped after a poor season, an offer from another academy after a good one; told through the career's emails and news (the `emails` and `news` tables of the career data groups).
+- **Mid-season call-up**: when an F1 race driver leaves or is injured, an academy junior stands in (Swofty's `career.season` changes, kind `stand_in`, from a round until a round).
+- **Track acclimatisation practice programme misbehaves in F2** (reported 4 Nov, to look into). The programme reads its corner targets from the track's resource (`Game_PracticeTrackAcclimatisation_CopyTargets`, 0x14299a4f0); with no resource or empty corner data it has no targets, and Swofty's guard only stops the crash. Programme folder by season: `practice_programmes_26` for `season_2026`. Symptom at Qatar: the gates show, but none responds and the HUD stays on gate 16, the last one (before the final straight's DRS), even at the start of a lap; only the DRS press at the end registers. So it has targets but its current target is stuck. `Game_PracticeTrackAcclimatisation_Start` (0x1429a06b0) picks the current target once, from the car's lap distance, so two things to rule out: the save-data path (the weekend was quit in practice and reloaded, and the programme restores its progress from the save), and leaving the garage at a lap distance near the lap's end. Compare with a fresh practice at Qatar, another track and the stock F2 career before changing anything; it may not be this mod's.
+- **Custom Season after F2 showed the 2026 list when the career was reloaded during F2** (4 Nov): the DLL hid the 2026 presets only inside `Game_SeasonLength_ApplyPreset`, which first runs when the player advances. 0.7.5 hides them when the career loads too: the owner object is the schedule component's (`ScheduleComponent` +0x290). To confirm in game.
+- **Optional 2027 tracks** (user's idea, 6 Nov). Portimao isn't in the Addon Browser, so `mod.portimao` as a hard requirement blocks players. `requires` has no optional form: a profile builds only when every listed addon is on, and the Addon Browser refuses an install it can't resolve. Plan: drop both tracks from `requires`; add a `db` setting (`options`, `type: choice`, `binds: db`) for the calendar, read through `when` in the op file: the 22-round list of 0.6.8 by default, or the 24 rounds with Portugal and Turkey. The 24-round ops need the tracks, so check how a build behaves with that option on and an addon missing (a clear message, not a crash). Keep the F2 calendar and everything else independent of it. A `db` setting changes on rebuild, so it can't change inside a career; another option could later cover the promotion and its size.
+- Not planned: simulating F2 seasons after the player's (the player's focus is F1 by then).
+
+## The 2027 grid (news of 15 Oct 2026)
+
+[RacingNews365](https://racingnews365.com/complete-f1-2027-confirmed-driver-line-ups) and [The Race](https://www.the-race.com/formula-1/2027-f1-grid-every-confirmed-driver/): Câmara replaces Ocon at Haas (Bearman expected to stay); both Racing Bulls seats are open (Lawson and Lindblad); Mercedes not announced but expected unchanged. Stroll (Aston Martin) and Bottas (Cadillac) are confirmed for 2027, so the 0.7.5 list (Ocon, Bottas, Lawson, Stroll) doesn't match. 0.7.5 now uses Ocon (Haas), Lawson and Lindblad (Racing Bulls): three seats for the top 3 (the user's choice, 3 Nov). Câmara, a Ferrari junior, takes Haas first, as he does in reality.
+- **One standings file per career.** `f2_standings.txt` is one file for every career of this mod (keyed by the player's driver only). Two careers with the same driver ending F2 at the same time would share it.
 
 ## Sources
 

@@ -25,6 +25,11 @@ DATA_GROUP_TABLES = [
     ("resource_points", "data_group"),
     ("specialist_manager", "dataGroup"),
 ]
+ACCOLADE_DRIVERS = ["emmo_fittipaldi-jr", "tasanapol_inthraphuvasak", "noel_leon", "roman_bilinski", "colton_herta",
+                    "rafael_camara", "mari_boya", "martinius_stenshorne", "laurens_vanhoepen", "nicolas_varrone"]
+# Oliver Goethe's goals in the stock 2026 accolades: accolade and its three tiers.
+ACCOLADE_GOALS = [("race_starts", (1, 3, 5)), ("top_10_finishes", (1, 2, 4)), ("top_5_finishes", (1, 2, 3)),
+                  ("championship_points", (2, 3, 4)), ("top_5_championship", (1, 2, 4))]
 SHARED = "championships.shared_components"
 CS = "content_sets.content_set[_metadata_=2026]"
 OFFICIAL = f"{CS}.official_entrant_list"
@@ -151,6 +156,22 @@ def career(c):
     g, m = c["group"], c["mode"]
     for table, word in DATA_GROUP_TABLES:
         add(table, f"{table}.{word}[_metadata_=f1_career_2026]", _metadata_=g)
+    # The stock 2026 accolades have no row for ten F2 2026 drivers, and the Accolades screen was empty
+    # for one of them (Camara, 0.7.5 test). They get Oliver Goethe's goals, the stock row of an F2 rookie.
+    # add-row copies only the row's own two keys here (the catalogue has no entry for the goals), so
+    # the goals are written out.
+    drivers = f"accolades.AccoladeDataGroup[_metadata_={g}].driver_data"
+    for d in ACCOLADE_DRIVERS:
+        add(drivers, f"{drivers}.AccoladeDriver[_metadata_=oliver_goethe]", _metadata_=d, driver=d)
+        row = f"{drivers}.AccoladeDriver[_metadata_={d}]"
+        put(row, "_AccoladeDriverGoal_instancecount_", len(ACCOLADE_GOALS), 0)
+        for n, (accolade, tiers) in enumerate(ACCOLADE_GOALS):
+            goal = f"AccoladeDriverGoal_{n}"
+            put(row, f"{goal}._metadata_", f"accolade_{n}", 2)
+            put(row, f"{goal}.accolade", accolade, 4)
+            put(row, f"{goal}.initial_value", 0, 1)
+            for k, v in zip(("first_tier", "second_tier", "third_tier"), tiers):
+                put(row, f"{goal}.{k}", v, 0)
     # The entrant list stat_id indexes the game's entrant list registry, which ends at the stock lists'
     # highest id (104): a list above it is not found and pressing the tile crashed in the router.
     # 53 and 68 are unused stock ids below it.
@@ -345,6 +366,16 @@ def calendars():
 
 for c in CAREERS:
     career(c)
+# The driver pools (the Icons tab) name Tsolov, who races F2 2026 here. The game keeps every pool row in one
+# map and leaves those drivers out of the Driver Rating Comparison unless they're the player (0x1416da8e0), so
+# he never showed there. His row goes in the 2025 and 2026 pools, which every career shares: the pool's last
+# entrant takes it and the count drops by one.
+for pool, row, last, name, driver in (("f1_2025_driver_pool", 12, 18, "blakeley", "lucas_blakeley"),
+                                      ("f1_2026_driver_pool", 10, 17, "rasmussen", "frederik_rasmussen")):
+    list_row = f"entrants.entrant_lists.entrant_list[_metadata_={pool}]"
+    put(f"{list_row}.entrant_{row}", "_metadata_", name)
+    put(f"{list_row}.entrant_{row}", "entrant_reference", driver)
+    put(list_row, "_entrant_instancecount_", last - 1)
 calendars()
 
 # Key names of the copied rows the launcher's key catalogue lacks (championship_setups and the like).

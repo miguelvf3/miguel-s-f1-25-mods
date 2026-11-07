@@ -8265,6 +8265,2576 @@
   },
   {
    "op": "add-row",
+   "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "set": {
+    "_metadata_": "emmo_fittipaldi-jr",
+    "driver": "emmo_fittipaldi-jr"
+   }
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "_AccoladeDriverGoal_instancecount_",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_0._metadata_",
+   "value": "accolade_0",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_0.accolade",
+   "value": "race_starts",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_0.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_0.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_0.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_0.third_tier",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_1._metadata_",
+   "value": "accolade_1",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_1.accolade",
+   "value": "top_10_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_1.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_1.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_1.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_1.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_2._metadata_",
+   "value": "accolade_2",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_2.accolade",
+   "value": "top_5_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_2.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_2.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_2.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_2.third_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_3._metadata_",
+   "value": "accolade_3",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_3.accolade",
+   "value": "championship_points",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_3.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_3.first_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_3.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_3.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_4._metadata_",
+   "value": "accolade_4",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_4.accolade",
+   "value": "top_5_championship",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_4.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_4.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_4.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=emmo_fittipaldi-jr]",
+   "field": "AccoladeDriverGoal_4.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "add-row",
+   "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "set": {
+    "_metadata_": "tasanapol_inthraphuvasak",
+    "driver": "tasanapol_inthraphuvasak"
+   }
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "_AccoladeDriverGoal_instancecount_",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_0._metadata_",
+   "value": "accolade_0",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_0.accolade",
+   "value": "race_starts",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_0.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_0.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_0.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_0.third_tier",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_1._metadata_",
+   "value": "accolade_1",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_1.accolade",
+   "value": "top_10_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_1.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_1.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_1.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_1.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_2._metadata_",
+   "value": "accolade_2",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_2.accolade",
+   "value": "top_5_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_2.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_2.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_2.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_2.third_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_3._metadata_",
+   "value": "accolade_3",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_3.accolade",
+   "value": "championship_points",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_3.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_3.first_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_3.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_3.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_4._metadata_",
+   "value": "accolade_4",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_4.accolade",
+   "value": "top_5_championship",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_4.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_4.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_4.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=tasanapol_inthraphuvasak]",
+   "field": "AccoladeDriverGoal_4.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "add-row",
+   "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "set": {
+    "_metadata_": "noel_leon",
+    "driver": "noel_leon"
+   }
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "_AccoladeDriverGoal_instancecount_",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_0._metadata_",
+   "value": "accolade_0",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_0.accolade",
+   "value": "race_starts",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_0.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_0.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_0.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_0.third_tier",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_1._metadata_",
+   "value": "accolade_1",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_1.accolade",
+   "value": "top_10_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_1.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_1.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_1.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_1.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_2._metadata_",
+   "value": "accolade_2",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_2.accolade",
+   "value": "top_5_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_2.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_2.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_2.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_2.third_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_3._metadata_",
+   "value": "accolade_3",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_3.accolade",
+   "value": "championship_points",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_3.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_3.first_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_3.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_3.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_4._metadata_",
+   "value": "accolade_4",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_4.accolade",
+   "value": "top_5_championship",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_4.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_4.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_4.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=noel_leon]",
+   "field": "AccoladeDriverGoal_4.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "add-row",
+   "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "set": {
+    "_metadata_": "roman_bilinski",
+    "driver": "roman_bilinski"
+   }
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "_AccoladeDriverGoal_instancecount_",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_0._metadata_",
+   "value": "accolade_0",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_0.accolade",
+   "value": "race_starts",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_0.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_0.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_0.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_0.third_tier",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_1._metadata_",
+   "value": "accolade_1",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_1.accolade",
+   "value": "top_10_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_1.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_1.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_1.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_1.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_2._metadata_",
+   "value": "accolade_2",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_2.accolade",
+   "value": "top_5_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_2.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_2.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_2.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_2.third_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_3._metadata_",
+   "value": "accolade_3",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_3.accolade",
+   "value": "championship_points",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_3.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_3.first_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_3.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_3.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_4._metadata_",
+   "value": "accolade_4",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_4.accolade",
+   "value": "top_5_championship",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_4.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_4.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_4.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=roman_bilinski]",
+   "field": "AccoladeDriverGoal_4.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "add-row",
+   "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "set": {
+    "_metadata_": "colton_herta",
+    "driver": "colton_herta"
+   }
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "_AccoladeDriverGoal_instancecount_",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_0._metadata_",
+   "value": "accolade_0",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_0.accolade",
+   "value": "race_starts",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_0.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_0.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_0.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_0.third_tier",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_1._metadata_",
+   "value": "accolade_1",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_1.accolade",
+   "value": "top_10_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_1.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_1.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_1.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_1.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_2._metadata_",
+   "value": "accolade_2",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_2.accolade",
+   "value": "top_5_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_2.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_2.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_2.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_2.third_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_3._metadata_",
+   "value": "accolade_3",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_3.accolade",
+   "value": "championship_points",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_3.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_3.first_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_3.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_3.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_4._metadata_",
+   "value": "accolade_4",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_4.accolade",
+   "value": "top_5_championship",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_4.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_4.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_4.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=colton_herta]",
+   "field": "AccoladeDriverGoal_4.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "add-row",
+   "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "set": {
+    "_metadata_": "rafael_camara",
+    "driver": "rafael_camara"
+   }
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "_AccoladeDriverGoal_instancecount_",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_0._metadata_",
+   "value": "accolade_0",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_0.accolade",
+   "value": "race_starts",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_0.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_0.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_0.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_0.third_tier",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_1._metadata_",
+   "value": "accolade_1",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_1.accolade",
+   "value": "top_10_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_1.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_1.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_1.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_1.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_2._metadata_",
+   "value": "accolade_2",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_2.accolade",
+   "value": "top_5_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_2.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_2.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_2.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_2.third_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_3._metadata_",
+   "value": "accolade_3",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_3.accolade",
+   "value": "championship_points",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_3.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_3.first_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_3.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_3.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_4._metadata_",
+   "value": "accolade_4",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_4.accolade",
+   "value": "top_5_championship",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_4.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_4.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_4.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=rafael_camara]",
+   "field": "AccoladeDriverGoal_4.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "add-row",
+   "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "set": {
+    "_metadata_": "mari_boya",
+    "driver": "mari_boya"
+   }
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "_AccoladeDriverGoal_instancecount_",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_0._metadata_",
+   "value": "accolade_0",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_0.accolade",
+   "value": "race_starts",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_0.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_0.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_0.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_0.third_tier",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_1._metadata_",
+   "value": "accolade_1",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_1.accolade",
+   "value": "top_10_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_1.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_1.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_1.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_1.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_2._metadata_",
+   "value": "accolade_2",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_2.accolade",
+   "value": "top_5_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_2.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_2.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_2.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_2.third_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_3._metadata_",
+   "value": "accolade_3",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_3.accolade",
+   "value": "championship_points",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_3.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_3.first_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_3.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_3.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_4._metadata_",
+   "value": "accolade_4",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_4.accolade",
+   "value": "top_5_championship",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_4.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_4.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_4.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=mari_boya]",
+   "field": "AccoladeDriverGoal_4.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "add-row",
+   "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "set": {
+    "_metadata_": "martinius_stenshorne",
+    "driver": "martinius_stenshorne"
+   }
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "_AccoladeDriverGoal_instancecount_",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_0._metadata_",
+   "value": "accolade_0",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_0.accolade",
+   "value": "race_starts",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_0.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_0.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_0.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_0.third_tier",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_1._metadata_",
+   "value": "accolade_1",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_1.accolade",
+   "value": "top_10_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_1.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_1.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_1.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_1.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_2._metadata_",
+   "value": "accolade_2",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_2.accolade",
+   "value": "top_5_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_2.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_2.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_2.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_2.third_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_3._metadata_",
+   "value": "accolade_3",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_3.accolade",
+   "value": "championship_points",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_3.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_3.first_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_3.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_3.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_4._metadata_",
+   "value": "accolade_4",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_4.accolade",
+   "value": "top_5_championship",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_4.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_4.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_4.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=martinius_stenshorne]",
+   "field": "AccoladeDriverGoal_4.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "add-row",
+   "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "set": {
+    "_metadata_": "laurens_vanhoepen",
+    "driver": "laurens_vanhoepen"
+   }
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "_AccoladeDriverGoal_instancecount_",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_0._metadata_",
+   "value": "accolade_0",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_0.accolade",
+   "value": "race_starts",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_0.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_0.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_0.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_0.third_tier",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_1._metadata_",
+   "value": "accolade_1",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_1.accolade",
+   "value": "top_10_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_1.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_1.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_1.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_1.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_2._metadata_",
+   "value": "accolade_2",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_2.accolade",
+   "value": "top_5_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_2.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_2.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_2.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_2.third_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_3._metadata_",
+   "value": "accolade_3",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_3.accolade",
+   "value": "championship_points",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_3.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_3.first_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_3.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_3.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_4._metadata_",
+   "value": "accolade_4",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_4.accolade",
+   "value": "top_5_championship",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_4.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_4.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_4.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=laurens_vanhoepen]",
+   "field": "AccoladeDriverGoal_4.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "add-row",
+   "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "set": {
+    "_metadata_": "nicolas_varrone",
+    "driver": "nicolas_varrone"
+   }
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "_AccoladeDriverGoal_instancecount_",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_0._metadata_",
+   "value": "accolade_0",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_0.accolade",
+   "value": "race_starts",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_0.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_0.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_0.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_0.third_tier",
+   "value": "5",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_1._metadata_",
+   "value": "accolade_1",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_1.accolade",
+   "value": "top_10_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_1.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_1.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_1.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_1.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_2._metadata_",
+   "value": "accolade_2",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_2.accolade",
+   "value": "top_5_finishes",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_2.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_2.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_2.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_2.third_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_3._metadata_",
+   "value": "accolade_3",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_3.accolade",
+   "value": "championship_points",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_3.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_3.first_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_3.second_tier",
+   "value": "3",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_3.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_4._metadata_",
+   "value": "accolade_4",
+   "create": true,
+   "type": 2
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_4.accolade",
+   "value": "top_5_championship",
+   "create": true,
+   "type": 4
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_4.initial_value",
+   "value": "0",
+   "create": true,
+   "type": 1
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_4.first_tier",
+   "value": "1",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_4.second_tier",
+   "value": "2",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "set",
+   "select": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=nicolas_varrone]",
+   "field": "AccoladeDriverGoal_4.third_tier",
+   "value": "4",
+   "create": true,
+   "type": 0
+  },
+  {
+   "op": "add-row",
    "table": "entrants.entrant_lists",
    "from": "entrants.entrant_lists.entrant_list[_metadata_=f1_career_2026]",
    "set": {
@@ -8617,6 +11187,42 @@
    "select": "career.career_setup.CareerSetupDataGroup[_metadata_=f1_career_f2_26].SpawnedF2_0",
    "field": "driver_3",
    "value": "sebastian_montoya"
+  },
+  {
+   "op": "set",
+   "select": "entrants.entrant_lists.entrant_list[_metadata_=f1_2025_driver_pool].entrant_12",
+   "field": "_metadata_",
+   "value": "blakeley"
+  },
+  {
+   "op": "set",
+   "select": "entrants.entrant_lists.entrant_list[_metadata_=f1_2025_driver_pool].entrant_12",
+   "field": "entrant_reference",
+   "value": "lucas_blakeley"
+  },
+  {
+   "op": "set",
+   "select": "entrants.entrant_lists.entrant_list[_metadata_=f1_2025_driver_pool]",
+   "field": "_entrant_instancecount_",
+   "value": "17"
+  },
+  {
+   "op": "set",
+   "select": "entrants.entrant_lists.entrant_list[_metadata_=f1_2026_driver_pool].entrant_10",
+   "field": "_metadata_",
+   "value": "rasmussen"
+  },
+  {
+   "op": "set",
+   "select": "entrants.entrant_lists.entrant_list[_metadata_=f1_2026_driver_pool].entrant_10",
+   "field": "entrant_reference",
+   "value": "frederik_rasmussen"
+  },
+  {
+   "op": "set",
+   "select": "entrants.entrant_lists.entrant_list[_metadata_=f1_2026_driver_pool]",
+   "field": "_entrant_instancecount_",
+   "value": "16"
   },
   {
    "op": "add-row",

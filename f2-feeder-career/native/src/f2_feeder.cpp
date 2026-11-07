@@ -23,6 +23,9 @@
 // real academy (kDriverAcademies) when the career loads: the academies component keeps a map of
 // driver key -> academy, saved as assignedAcademies {driverStatId, academId}, and the entry goes in
 // the way its save loader puts one in.
+//
+// At the first F1 season's Team HQ, the best AI drivers of the F2 season (kPromoted) take the seats of
+// the drivers whose seats are open for 2027 (kLeavingSeats), read from the F2 season's standings.
 #include <swofty/career.hpp>
 #include <swofty/career_content.hpp>
 #include <swofty/career_wizard.hpp>
@@ -30,9 +33,13 @@
 #include <swofty/game.hpp>
 #include <swofty/lang.hpp>
 #include <swofty/mixin.hpp>
+#include <swofty/storage.hpp>
+#include <swofty/systems/ops.hpp>
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
 #include <cstring>
 #include <string>
 
@@ -260,6 +267,263 @@ void give_real_academy()
                 static_cast<unsigned long long>(slot.index), slot.status);
 }
 
+// Promotion by result: in the first F1 season the best AI drivers of the F2 season take the seats open
+// for 2027 in the news of 15 October 2026 (Camara replaces Ocon at Haas; both Racing Bulls seats open;
+// entrants.drivers / entrants.teams stat ids of the 2026 data). An academy driver takes his academy's
+// seat first (Ferrari: Haas, Red Bull: Racing Bulls); the others take the seats left, in this order.
+struct LeavingSeat {
+    uint16_t team, driver, academy;
+    const char *name;
+};
+constexpr LeavingSeat kLeavingSeats[] = {
+    {483, 17, 1, "Esteban Ocon (Haas)"},
+    {482, 113, 2, "Liam Lawson (Racing Bulls)"},
+    {482, 188, 2, "Arvid Lindblad (Racing Bulls)"},
+};
+constexpr size_t kPromoted = 3;
+// Alone among the F2 2026 drivers, Tsolov keeps his F2 number (6, Hadjar's) in F1: the others have 99, and the
+// seat change gives them a free one. His entrants.drivers number is 48.
+constexpr uint16_t kTsolov = 174;
+constexpr int kTsolovNumber = 48;
+
+// A promoted driver's ratings by his final F2 position: experience, racecraft, awareness, pace (the
+// career's statistics 0, 1, 3, 4; overall weights 0.25, 1, 0.25, 2). An AI driver doesn't grow in the F2
+// season as the player does (Leon reached F1 at 57, the player at 74, 4 Nov), so these give an overall
+// of about 75, 73, 71 and 70 for P1 to P4 and below. Set once, in the promotion; set_driver_ratings
+// writes them into the driver's curves, so they grow from there.
+struct PromotedRatings {
+    float values[4];
+};
+constexpr PromotedRatings kPromotedRatings[] = {
+    {{40, 74, 68, 80}}, {{38, 72, 66, 79}}, {{36, 70, 64, 77}}, {{34, 68, 62, 76}}};
+constexpr uint16_t kNoTeam = 0x3fff;
+
+// The career entity and its championships (re/db/structs CareerEntity, Championship, Season,
+// F1SeasonStandings): +0x1040..+0x1048 16-byte entries {?, Championship*}, +0x1058 the current one.
+// Championship +0x548..+0x550 16-byte season entries {?, Season*}, +0x560 the season index. Season
+// +0x2a8 the drivers' standings: +0x20..+0x28 points rounds and +0xd0..+0xd8 result rounds (0x20
+// bytes: +8..+0x10 sessions of 0x28 bytes: +8..+0x10 records), +0xa8..+0xb0 extra points. A points
+// record is {u32 entrant key, i32 points}, a result record {u32 key, i32 0-based position, ...}; the
+// key's high word is the driver stat id.
+struct Standing {
+    uint16_t driver = 0;
+    int points = 0;
+    uint8_t finishes[26] = {}; // finishes per position in the sessions that scored, for the countback
+};
+
+template <class F> void each_record(char *rounds_begin, char *rounds_end, size_t stride, F f)
+{
+    for (char *r = rounds_begin; r && r < rounds_end; r += 0x20)
+        for (char *s = at<char *>(r, 8), *se = at<char *>(r, 0x10); s && s < se; s += 0x28)
+            for (char *e = at<char *>(s, 8), *ee = at<char *>(s, 0x10); e && e < ee; e += stride)
+                f(e);
+}
+
+Standing *standing_of(Standing *table, size_t &n, size_t cap, uint16_t driver)
+{
+    for (size_t i = 0; i < n; ++i)
+        if (table[i].driver == driver)
+            return &table[i];
+    if (n == cap)
+        return nullptr;
+    table[n].driver = driver;
+    return &table[n++];
+}
+
+// The F2 season's final order: the last season of the entity's championship that isn't the current
+// one, sorted as the game's standings are: by points, then countback (most wins, then most P2s...).
+size_t read_standings(char *f2, Standing *out, size_t cap);
+
+// The finished F2 championship's results live only in the session the F2 season ends in: a loaded
+// save leaves its standings empty, and Career_Rebuild_ChampionshipStandings finds nothing to rebuild
+// them from (0.7.5 test). So the order read at the first Team HQ after F2 (before the player's Team
+// Select) is kept in the addon's storage for that driver, and a load in the first F1 season reads it.
+constexpr const char *kStandingsFile = "f2_standings.txt";
+
+size_t f2_standings(void *entity, uint16_t player, Standing *out, size_t cap)
+{
+    char *current = at<char *>(entity, 0x1058), *f2 = nullptr;
+    for (char *c = at<char *>(entity, 0x1040), *end = at<char *>(entity, 0x1048); c && c < end; c += 16)
+        if (char *champ = at<char *>(c, 8); champ && champ != current)
+            f2 = champ;
+    if (!f2)
+        return 0;
+    if (size_t n = read_standings(f2, out, cap)) {
+        std::string text = std::to_string(player) + "\n";
+        for (size_t i = 0; i < n; ++i)
+            text += std::to_string(out[i].driver) + " " + std::to_string(out[i].points) + "\n";
+        swofty::storage::write(kStandingsFile, text);
+        return n;
+    }
+    std::string text;
+    if (swofty::storage::read(kStandingsFile, text) != swofty::storage::Result::ok)
+        return 0;
+    size_t n = 0;
+    unsigned saved_player = 0, driver = 0;
+    int points = 0, used = 0;
+    const char *p = text.c_str();
+    if (std::sscanf(p, "%u%n", &saved_player, &used) != 1 || saved_player != player)
+        return 0;
+    for (p += used; n < cap && std::sscanf(p, "%u %d%n", &driver, &points, &used) == 2; p += used)
+        out[n++] = {static_cast<uint16_t>(driver), points};
+    swofty::log("[f2-feeder] promotion: F2 standings from %s (kept when the F2 season ended): %zu drivers",
+                kStandingsFile, n);
+    return n;
+}
+
+size_t read_standings(char *f2, Standing *out, size_t cap)
+{
+    char *sb = at<char *>(f2, 0x548), *se = at<char *>(f2, 0x550);
+    if (!sb || se <= sb || (se - sb) % 16)
+        return 0;
+    char *season = at<char *>(se - 16, 8);
+    if (!season)
+        return 0;
+    char *st = season + 0x2a8;
+    size_t n = 0;
+    auto add = [&](uint32_t key, int points) {
+        if (Standing *s = standing_of(out, n, cap, static_cast<uint16_t>(key >> 16)))
+            s->points += points;
+    };
+    each_record(at<char *>(st, 0x20), at<char *>(st, 0x28), 8, [&](char *e) { add(at<uint32_t>(e, 0), at<int32_t>(e, 4)); });
+    for (char *e = at<char *>(st, 0xa8), *ee = at<char *>(st, 0xb0); e && e < ee; e += 8)
+        add(at<uint32_t>(e, 0), at<int32_t>(e, 4));
+    // Only sessions that scored count: qualifying has result rows too, in the same round and session slots.
+    char *points_round = at<char *>(st, 0x20), *points_end = at<char *>(st, 0x28);
+    for (char *r = at<char *>(st, 0xd0), *re = at<char *>(st, 0xd8); r && r < re && points_round < points_end;
+         r += 0x20, points_round += 0x20) {
+        char *ps = at<char *>(points_round, 8), *pse = at<char *>(points_round, 0x10);
+        for (char *rs = at<char *>(r, 8), *rse = at<char *>(r, 0x10); rs && rs < rse && ps < pse; rs += 0x28, ps += 0x28) {
+            bool scored = false;
+            for (char *e = at<char *>(ps, 8), *ee = at<char *>(ps, 0x10); e && e < ee; e += 8)
+                scored = scored || at<int32_t>(e, 4) > 0;
+            if (!scored)
+                continue;
+            for (char *e = at<char *>(rs, 8), *ee = at<char *>(rs, 0x10); e && e < ee; e += 0x10) {
+                int32_t position = at<int32_t>(e, 4);
+                Standing *d = standing_of(out, n, cap, static_cast<uint16_t>(at<uint32_t>(e, 0) >> 16));
+                if (d && position >= 0 && position < static_cast<int32_t>(std::size(d->finishes)))
+                    ++d->finishes[position];
+            }
+        }
+    }
+    std::sort(out, out + n, [](const Standing &a, const Standing &b) {
+        if (a.points != b.points)
+            return a.points > b.points;
+        return std::lexicographical_compare(b.finishes, b.finishes + std::size(b.finishes), a.finishes,
+                                            a.finishes + std::size(a.finishes));
+    });
+    return n;
+}
+
+// A driver's F1 entrant row: its team stat id, or kNoTeam, and its race seat (0 or 1, else -1).
+struct Seat {
+    uint16_t team = kNoTeam;
+    int seat = -1;
+};
+
+// The F2 2026 teams are entrants.teams artgp_26 .. invicta_26 (489-499).
+bool f1_team(uint16_t team)
+{
+    return team != kNoTeam && (team < 489 || team > 499);
+}
+
+// A free agent keeps a team position, so a seat needs an F1 team too.
+Seat seat_of(void *entity, uint16_t driver)
+{
+    for (char *row = at<char *>(entity, 0x2e0), *end = at<char *>(entity, 0x2e8); row && row < end; row += 0x88) {
+        if (at<uint16_t>(row, 0x52) != driver)
+            continue;
+        uint16_t team = at<uint16_t>(row, 0x5a);
+        int position = (at<uint16_t>(row, 0x80) ^ 0x100) & 0xff;
+        return {team, f1_team(team) && position < 2 ? position : -1};
+    }
+    return {};
+}
+
+void promote_f2_drivers()
+{
+    void *entity = swofty::career::entity();
+    uint16_t player_key = 0, player = 0;
+    if (!entity || !player_driver(entity, &player_key, &player))
+        return;
+    char *current = at<char *>(entity, 0x1058);
+    Standing table[64];
+    size_t n = f2_standings(entity, player, table, std::size(table));
+    if (!current || at<uint32_t>(current, 0x560) != 0)
+        return; // promotions happen in the first F1 season only
+    if (seat_of(entity, player).seat < 0)
+        return; // the player's F1 team isn't signed yet: his pick comes first
+    if (!n)
+        return; // a Skip to F1 career: no F2 season
+    struct Open {
+        const LeavingSeat *leaving;
+        int seat;
+        bool taken;
+    } open[std::size(kLeavingSeats)];
+    size_t opens = 0;
+    for (const LeavingSeat &l : kLeavingSeats)
+        if (Seat s = seat_of(entity, l.driver); s.team == l.team && s.seat >= 0)
+            open[opens++] = {&l, s.seat, false};
+    if (!opens)
+        return; // done on an earlier visit, or the player took the seats
+    std::string order;
+    for (size_t i = 0; i < n && i < 10; ++i)
+        order += (i ? ", " : "") + std::to_string(table[i].driver) + ":" + std::to_string(table[i].points);
+    swofty::log("[f2-feeder] promotion: F2 final order (driver:points) %s", order.c_str());
+    const Standing *chosen[kPromoted] = {};
+    size_t picks = 0;
+    for (size_t i = 0; i < n && picks < kPromoted && picks < opens; ++i) {
+        const Standing &s = table[i];
+        if (s.driver == player || seat_of(entity, s.driver).seat >= 0)
+            continue; // the player, or a driver already racing in F1
+        chosen[picks++] = &s;
+    }
+    auto academy_of = [](uint16_t driver) -> int {
+        for (const DriverAcademy &d : kDriverAcademies)
+            if (d.driver == driver)
+                return d.academy;
+        return -1;
+    };
+    // The core's set_seat (swofty::career::set_seat_of_team's request, by stat ids): a free agent takes
+    // the seat and its driver leaves the grid.
+    const SwoftyCareerOps *ops = swofty::career::detail::live_ops();
+    if (!ops || ops->version < 4 || !ops->set_seat) {
+        swofty::log("[f2-feeder] promotion: this core has no set_seat; left alone");
+        return;
+    }
+    auto place = [&](const Standing *s, Open &o) {
+        o.taken = true;
+        std::string request = "{\"driver\":" + std::to_string(s->driver) + ",\"team\":" +
+                              std::to_string(o.leaving->team) + ",\"seat\":" + std::to_string(o.seat) + "}";
+        char report[1024] = {};
+        size_t len = 0;
+        int r = ops->set_seat({request.data(), request.size()}, report, sizeof report - 1, &len);
+        swofty::log("[f2-feeder] promotion: driver %u (F2 %d pts) takes the seat of %s, seat %d: result %d %s",
+                    s->driver, s->points, o.leaving->name, o.seat, r, report);
+    };
+    bool placed[kPromoted] = {};
+    for (size_t i = 0; i < picks; ++i)
+        for (size_t j = 0; j < opens && !placed[i]; ++j)
+            if (!open[j].taken && open[j].leaving->academy == academy_of(chosen[i]->driver))
+                place(chosen[i], open[j]), placed[i] = true;
+    for (size_t i = 0; i < picks; ++i)
+        for (size_t j = 0; j < opens && !placed[i]; ++j)
+            if (!open[j].taken)
+                place(chosen[i], open[j]), placed[i] = true;
+    for (size_t i = 0; i < picks; ++i) {
+        static constexpr uint16_t stats[] = {0, 1, 3, 4};
+        size_t position = chosen[i] - table;
+        const PromotedRatings &ratings = kPromotedRatings[std::min(position, std::size(kPromotedRatings) - 1)];
+        int r = ops->set_driver_ratings(chosen[i]->driver, stats, ratings.values, std::size(stats));
+        swofty::log("[f2-feeder] promotion: driver %u ratings (F2 P%zu): result %d", chosen[i]->driver, position + 1, r);
+        if (chosen[i]->driver == kTsolov) {
+            r = ops->set_car_number(kTsolov, kTsolovNumber, 0);
+            swofty::log("[f2-feeder] promotion: driver %u number %d: result %d", kTsolov, kTsolovNumber, r);
+        }
+    }
+}
+
 struct Title {
     const char *language, *key, *text;
 };
@@ -290,8 +554,20 @@ void on_career(const SwoftyEvent *, void *)
     set_titles(mine, "career loaded or Team HQ");
     if (!mine)
         show_2026("another career");
-    else
+    else {
+        // The season length owner is the schedule component's (+0x290). A career loaded during F2 hasn't
+        // been through ApplyPreset when the Custom Season screen opens, so its lists go here too.
+        if (char *schedule = static_cast<char *>(swofty::career::component("k_Career_ScheduleComponentDesc")))
+            hide_2026(at<char *>(schedule, 0x290));
         give_real_academy();
+    }
+}
+
+void on_hub(const SwoftyEvent *e, void *user)
+{
+    on_career(e, user);
+    if (swofty::career::is(kCareers[0].group))
+        promote_f2_drivers();
 }
 
 void on_unloaded(const SwoftyEvent *, void *)
@@ -315,8 +591,10 @@ bool register_tiles()
         swofty::log("[f2-feeder] tile %s (%s): %s; experience step route %s", c.id, c.group,
                     swofty::career::name(r), wz::name(w));
     }
-    for (const char *ev : {SWOFTY_EVENT_CAREER_LOADED, SWOFTY_EVENT_CAREER_HUB})
-        swofty::log("[f2-feeder] subscribe %s: %s", ev, swofty::events::name(swofty::events::subscribe(ev, on_career)));
+    swofty::log("[f2-feeder] subscribe %s: %s", SWOFTY_EVENT_CAREER_LOADED,
+                swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_CAREER_LOADED, on_career)));
+    swofty::log("[f2-feeder] subscribe %s: %s", SWOFTY_EVENT_CAREER_HUB,
+                swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_CAREER_HUB, on_hub)));
     swofty::log("[f2-feeder] subscribe %s: %s", SWOFTY_EVENT_CAREER_UNLOADED,
                 swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_CAREER_UNLOADED, on_unloaded)));
     return true;

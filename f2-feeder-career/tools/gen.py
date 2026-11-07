@@ -10,6 +10,7 @@ masks unchecked). The stock 2026 career is left as it is.
 
 Up to 0.4.9 there was a second career, F2 2025 -> F1 2026 (group f1_career_f2_25); 0.5.0 dropped it.
 """
+import itertools
 import json
 from pathlib import Path
 
@@ -111,7 +112,9 @@ F1_2027 = [("bahrain", "rw_bahrain_26", "March", 11), ("jeddah", "rw_jeddah_26",
            ("mexico", "rw_mexico_26", "October", 28), ("brazil", "rw_brazil_26", "November", 4),
            ("las_vegas", "rw_las_vegas_26", "November", 17), ("losail", "rw_losail_26", "December", 2),
            ("abu_dhabi", "rw_abu_dhabi_26", "December", 9)]
-# Portugal and Turkey race on track addons, which the manifest requires: F1 25 has neither circuit's files.
+# Portugal and Turkey race on track addons, as optional rounds: F1 25 has neither circuit's files. `requires`
+# has no optional form and the Addon Browser refuses an addon it can't resolve (Portimao isn't there), so each
+# is a db setting named after the track, off by default: 22 rounds, up to 24 with both on.
 # mod.portimao (Pajko) fills the stock portimao slot (its data cloned from Zandvoort; without it a copy of
 # rw_portimao made a calendar round and no season weekend, 0.6.0), and track.istanbul_park (Apoc & RK)
 # adds istanbul_park cloned from Spa, so its race weekend is Spa's with the activity changed. A race
@@ -122,6 +125,7 @@ F1_2027 = [("bahrain", "rw_bahrain_26", "March", 11), ("jeddah", "rw_jeddah_26",
 F1_2027_ADDON_TRACKS = [("portimao", "rw_portimao", "June", 17, None),
                         ("istanbul_park", "rw_spa_francorchamps_26", "September", 30, "istanbul_park")]
 ACTIVITY_STAT = 814
+TRACK_ADDONS = {"portimao": "mod.portimao", "istanbul_park": "track.istanbul_park"}
 F1_EVENT_STAT = EVENT_STAT + len(F2_2026_TRACKS)
 # The 16 and 10 race seasons: F1_2026_16 and F1_2026_10's tracks, Monaco for Zandvoort.
 F1_2027_16 = ["melbourne", "shanghai", "suzuka", "bahrain", "miami", "montreal", "austria", "silverstone",
@@ -299,23 +303,51 @@ def race_weekend(name, src, stat_id, date=None, activity=None):
         ops.append(op)
 
 
+def when(condition, build):
+    """Keeps the ops build() writes only under these db settings."""
+    start = len(ops)
+    build()
+    for op in ops[start:]:
+        op["when"] = condition
+
+
 def calendars():
     for k, t in enumerate(F2_2026_TRACKS):
         race_weekend(f"rw_f2_{t}_26", f"rw_{t}_26", EVENT_STAT + k)
     f1 = []
     acts = "schedule.activities"
-    for k, (t, src, month, day, *activity) in enumerate(F1_2027 + F1_2027_ADDON_TRACKS):
-        if activity and activity[0]:
-            add(acts, f"{acts}.activity_race_weekend[_metadata_=spa_francorchamps]", _metadata_=activity[0],
-                track=activity[0], stat_id=ACTIVITY_STAT)
+    for k, (t, src, month, day) in enumerate(F1_2027):
         f1.append(f"rw_f1_{t}_27")
-        race_weekend(f1[-1], src, F1_EVENT_STAT + k, (2026, month, day), *activity)
+        race_weekend(f1[-1], src, F1_EVENT_STAT + k, (2026, month, day))
+
+    def addon_round(k, t, src, month, day, activity):
+        if activity:
+            add(acts, f"{acts}.activity_race_weekend[_metadata_=spa_francorchamps]", _metadata_=activity,
+                track=activity, stat_id=ACTIVITY_STAT)
+        race_weekend(f"rw_f1_{t}_27", src, F1_EVENT_STAT + k, (2026, month, day), activity)
+
+    for k, (t, src, month, day, activity) in enumerate(F1_2027_ADDON_TRACKS, len(F1_2027)):
+        when({t: True}, lambda: addon_round(k, t, src, month, day, activity))
+        when({t: True}, lambda: ops.append({"op": "warn", "message": f"F2 Feeder: the {t} round is on, which needs {TRACK_ADDONS[t]}."}))
     add(TL, f"{TL}.track_event_list[_metadata_=F1_2026_full]", _metadata_=CAREERS[0]["f1_track_list"])
     sel = f"{TL}.track_event_list[_metadata_={CAREERS[0]['f1_track_list']}]"
-    put(sel, "_fixed_event_reference_instancecount_", len(f1), 0)
     for i, e in enumerate(f1):
         put(f"{sel}.fixed_event_reference_{i}", "_metadata_", f"fixed_event_reference_{e}", 2)
         put(f"{sel}.fixed_event_reference_{i}", "event_name", e, 4)
+    # The list's length and the rounds after the fixed ones depend on which of the two settings are on. The list
+    # sorts by date, so their place in it doesn't matter.
+    def long_list(on):
+        rounds = f1 + [f"rw_f1_{t}_27" for t in on]
+        put(sel, "_fixed_event_reference_instancecount_", len(rounds), 0)
+        for i, e in enumerate(rounds[len(f1):], len(f1)):
+            put(f"{sel}.fixed_event_reference_{i}", "_metadata_", f"fixed_event_reference_{e}", 2)
+            put(f"{sel}.fixed_event_reference_{i}", "event_name", e, 4)
+        put(f"{DY}.custom_dynamic_available_track_list_data[_metadata_=F1_2027_Long]", "max_num_tracks", len(rounds))
+        # The list is a copy of the 24 round stock one: the rows past its end go, or they read as dropped rounds.
+        for i in range(len(rounds), len(f1) + len(F1_2027_ADDON_TRACKS)):
+            for field in ("_metadata_", "event_name"):
+                ops.append({"op": "remove-record", "key": f"{sel}.fixed_event_reference_{i}.{field}"})
+
     # The shorter seasons: the 2026 ones' rounds in 2027, Zandvoort (gone in 2027) swapped for Monaco.
     lists = {"Long": (CAREERS[0]["f1_track_list"], len(f1))}
     for kind, label, tracks in (("Medium", "F1_2027_16", F1_2027_16), ("Short", "F1_2027_10", F1_2027_10)):
@@ -326,6 +358,9 @@ def calendars():
     for kind, (label, count) in lists.items():
         add(DY, f"{DY}.custom_dynamic_available_track_list_data[_metadata_=F1_2026_{kind}]",
             _metadata_=f"F1_2027_{kind}", track_list_name=label, max_num_tracks=count)
+    addon_tracks = [t for t, *_ in F1_2027_ADDON_TRACKS]
+    for choice in itertools.product((False, True), repeat=len(addon_tracks)):
+        when(dict(zip(addon_tracks, choice)), lambda: long_list([t for t, on in zip(addon_tracks, choice) if on]))
     # The Custom Season screen's track pool for it (F1_2026's is F1_2026_full_plus). The game takes the
     # first preset and pool that fit the mode and season, so f2_feeder.dll sets the 2026 ones aside while
     # this career is in focus.

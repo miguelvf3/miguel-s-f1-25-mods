@@ -5,20 +5,20 @@ A Swofty Launcher addon for F1 25 with the 2026 season: a Driver Career that sta
 | Phase | What you race |
 |---|---|
 | F2 2026 | The `f2_2026` grid (Câmara, Herta, Montoya...) on the real 2026 F2 calendar, Melbourne first, with Madrid. 14, 8 or 3 rounds. |
-| F1 2027 | The 2026 cars on the FIA 2027 calendar: 24 rounds, including Portugal (Portimão) and Turkey (Istanbul Park). Shorter 16 and 10-round seasons. GP and championship titles read 2027. |
+| F1 2027 | The 2026 cars on the FIA 2027 calendar: 22 rounds, or 24 with the optional Portugal (Portimão) and Turkey (Istanbul Park). Shorter 16 and 10-round seasons. GP and championship titles read 2027. |
 
 Later F1 seasons repeat the year, as in the game's own careers.
 
 ## Requirements
 
 - Swofty Launcher with `swofty.core` 0.2.13 or later.
-- Two track addons, which the manifest requires because F1 25 has neither circuit:
-  - `mod.portimao` (Portimão, by Pajko);
-  - `track.istanbul_park` (Istanbul Park, by Apoc & RK), in the Swofty addon catalogue.
+- Optional track addons, for the two rounds F1 25 has no circuit for. Each round has its own setting on the addon, off by default. Turn it on with its track addon before starting a career:
+  - `portimao` needs `mod.portimao` (Portimão, by Pajko);
+  - `istanbul_park` needs `track.istanbul_park` (Istanbul Park, by Apoc & RK), in the Swofty addon catalogue.
 
 ## Playing it
 
-1. Install the folder and turn the addon on in a profile, with the two track addons.
+1. Install the folder and turn the addon on in a profile, with any track addons you want.
 2. Driver Career > **Addons** row > **F2 Feeder Career 2026**.
 3. Pick a driver. **Start in F2** races the F2 season first; **Skip to F1** goes straight to F1 2027.
    - A created driver picks an academy (the 2026 ones, with Audi and Cadillac). Its recognition bonus shows on the contract screen.

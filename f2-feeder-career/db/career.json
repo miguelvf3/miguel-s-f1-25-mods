@@ -13571,6 +13571,9 @@
    "set": {
     "_metadata_": "rw_f1_portimao_27",
     "stat_id": "173"
+   },
+   "when": {
+    "portimao": true
    }
   },
   {
@@ -13579,7 +13582,10 @@
    "field": "date_time.year",
    "create": true,
    "type": 0,
-   "value": "2026"
+   "value": "2026",
+   "when": {
+    "portimao": true
+   }
   },
   {
    "op": "set",
@@ -13587,7 +13593,10 @@
    "field": "date_time.month",
    "create": true,
    "type": 3,
-   "value": "June"
+   "value": "June",
+   "when": {
+    "portimao": true
+   }
   },
   {
    "op": "set",
@@ -13595,7 +13604,10 @@
    "field": "date_time.day",
    "create": true,
    "type": 0,
-   "value": "17"
+   "value": "17",
+   "when": {
+    "portimao": true
+   }
   },
   {
    "op": "set",
@@ -13603,7 +13615,10 @@
    "field": "date_time.hour",
    "create": true,
    "type": 0,
-   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_portimao].date_time.hour"
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_portimao].date_time.hour",
+   "when": {
+    "portimao": true
+   }
   },
   {
    "op": "set",
@@ -13611,7 +13626,10 @@
    "field": "date_time.minute",
    "create": true,
    "type": 0,
-   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_portimao].date_time.minute"
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_portimao].date_time.minute",
+   "when": {
+    "portimao": true
+   }
   },
   {
    "op": "set",
@@ -13619,7 +13637,10 @@
    "field": "date_time.second",
    "create": true,
    "type": 0,
-   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_portimao].date_time.second"
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_portimao].date_time.second",
+   "when": {
+    "portimao": true
+   }
   },
   {
    "op": "set",
@@ -13627,7 +13648,17 @@
    "field": "date_time.daylight_saving",
    "create": true,
    "type": 5,
-   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_portimao].date_time.daylight_saving"
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_portimao].date_time.daylight_saving",
+   "when": {
+    "portimao": true
+   }
+  },
+  {
+   "op": "warn",
+   "message": "F2 Feeder: the portimao round is on, which needs mod.portimao.",
+   "when": {
+    "portimao": true
+   }
   },
   {
    "op": "add-row",
@@ -13637,6 +13668,9 @@
     "_metadata_": "istanbul_park",
     "track": "istanbul_park",
     "stat_id": "814"
+   },
+   "when": {
+    "istanbul_park": true
    }
   },
   {
@@ -13647,6 +13681,9 @@
     "_metadata_": "rw_f1_istanbul_park_27",
     "stat_id": "174",
     "activity": "istanbul_park"
+   },
+   "when": {
+    "istanbul_park": true
    }
   },
   {
@@ -13655,7 +13692,10 @@
    "field": "date_time.year",
    "create": true,
    "type": 0,
-   "value": "2026"
+   "value": "2026",
+   "when": {
+    "istanbul_park": true
+   }
   },
   {
    "op": "set",
@@ -13663,7 +13703,10 @@
    "field": "date_time.month",
    "create": true,
    "type": 3,
-   "value": "September"
+   "value": "September",
+   "when": {
+    "istanbul_park": true
+   }
   },
   {
    "op": "set",
@@ -13671,7 +13714,10 @@
    "field": "date_time.day",
    "create": true,
    "type": 0,
-   "value": "30"
+   "value": "30",
+   "when": {
+    "istanbul_park": true
+   }
   },
   {
    "op": "set",
@@ -13679,7 +13725,10 @@
    "field": "date_time.hour",
    "create": true,
    "type": 0,
-   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.hour"
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.hour",
+   "when": {
+    "istanbul_park": true
+   }
   },
   {
    "op": "set",
@@ -13687,7 +13736,10 @@
    "field": "date_time.minute",
    "create": true,
    "type": 0,
-   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.minute"
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.minute",
+   "when": {
+    "istanbul_park": true
+   }
   },
   {
    "op": "set",
@@ -13695,7 +13747,10 @@
    "field": "date_time.second",
    "create": true,
    "type": 0,
-   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.second"
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.second",
+   "when": {
+    "istanbul_park": true
+   }
   },
   {
    "op": "set",
@@ -13703,7 +13758,17 @@
    "field": "date_time.daylight_saving",
    "create": true,
    "type": 5,
-   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.daylight_saving"
+   "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.daylight_saving",
+   "when": {
+    "istanbul_park": true
+   }
+  },
+  {
+   "op": "warn",
+   "message": "F2 Feeder: the istanbul_park round is on, which needs track.istanbul_park.",
+   "when": {
+    "istanbul_park": true
+   }
   },
   {
    "op": "add-row",
@@ -13712,14 +13777,6 @@
    "set": {
     "_metadata_": "F1_2027_full"
    }
-  },
-  {
-   "op": "set",
-   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full]",
-   "field": "_fixed_event_reference_instancecount_",
-   "value": "24",
-   "create": true,
-   "type": 0
   },
   {
    "op": "set",
@@ -14074,38 +14131,6 @@
    "type": 4
   },
   {
-   "op": "set",
-   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_22",
-   "field": "_metadata_",
-   "value": "fixed_event_reference_rw_f1_portimao_27",
-   "create": true,
-   "type": 2
-  },
-  {
-   "op": "set",
-   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_22",
-   "field": "event_name",
-   "value": "rw_f1_portimao_27",
-   "create": true,
-   "type": 4
-  },
-  {
-   "op": "set",
-   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_23",
-   "field": "_metadata_",
-   "value": "fixed_event_reference_rw_f1_istanbul_park_27",
-   "create": true,
-   "type": 2
-  },
-  {
-   "op": "set",
-   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_23",
-   "field": "event_name",
-   "value": "rw_f1_istanbul_park_27",
-   "create": true,
-   "type": 4
-  },
-  {
    "op": "add-row",
    "table": "schedule.track_lists",
    "from": "schedule.track_lists.track_event_list[_metadata_=F1_2026_16]",
@@ -14440,7 +14465,7 @@
    "set": {
     "_metadata_": "F1_2027_Long",
     "track_list_name": "F1_2027_full",
-    "max_num_tracks": "24"
+    "max_num_tracks": "22"
    }
   },
   {
@@ -14461,6 +14486,254 @@
     "_metadata_": "F1_2027_Short",
     "track_list_name": "F1_2027_10",
     "max_num_tracks": "10"
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full]",
+   "field": "_fixed_event_reference_instancecount_",
+   "value": "22",
+   "create": true,
+   "type": 0,
+   "when": {
+    "portimao": false,
+    "istanbul_park": false
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F1_2027_Long]",
+   "field": "max_num_tracks",
+   "value": "22",
+   "when": {
+    "portimao": false,
+    "istanbul_park": false
+   }
+  },
+  {
+   "op": "remove-record",
+   "key": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_22._metadata_",
+   "when": {
+    "portimao": false,
+    "istanbul_park": false
+   }
+  },
+  {
+   "op": "remove-record",
+   "key": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_22.event_name",
+   "when": {
+    "portimao": false,
+    "istanbul_park": false
+   }
+  },
+  {
+   "op": "remove-record",
+   "key": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_23._metadata_",
+   "when": {
+    "portimao": false,
+    "istanbul_park": false
+   }
+  },
+  {
+   "op": "remove-record",
+   "key": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_23.event_name",
+   "when": {
+    "portimao": false,
+    "istanbul_park": false
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full]",
+   "field": "_fixed_event_reference_instancecount_",
+   "value": "23",
+   "create": true,
+   "type": 0,
+   "when": {
+    "portimao": false,
+    "istanbul_park": true
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_22",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f1_istanbul_park_27",
+   "create": true,
+   "type": 2,
+   "when": {
+    "portimao": false,
+    "istanbul_park": true
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_22",
+   "field": "event_name",
+   "value": "rw_f1_istanbul_park_27",
+   "create": true,
+   "type": 4,
+   "when": {
+    "portimao": false,
+    "istanbul_park": true
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F1_2027_Long]",
+   "field": "max_num_tracks",
+   "value": "23",
+   "when": {
+    "portimao": false,
+    "istanbul_park": true
+   }
+  },
+  {
+   "op": "remove-record",
+   "key": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_23._metadata_",
+   "when": {
+    "portimao": false,
+    "istanbul_park": true
+   }
+  },
+  {
+   "op": "remove-record",
+   "key": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_23.event_name",
+   "when": {
+    "portimao": false,
+    "istanbul_park": true
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full]",
+   "field": "_fixed_event_reference_instancecount_",
+   "value": "23",
+   "create": true,
+   "type": 0,
+   "when": {
+    "portimao": true,
+    "istanbul_park": false
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_22",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f1_portimao_27",
+   "create": true,
+   "type": 2,
+   "when": {
+    "portimao": true,
+    "istanbul_park": false
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_22",
+   "field": "event_name",
+   "value": "rw_f1_portimao_27",
+   "create": true,
+   "type": 4,
+   "when": {
+    "portimao": true,
+    "istanbul_park": false
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F1_2027_Long]",
+   "field": "max_num_tracks",
+   "value": "23",
+   "when": {
+    "portimao": true,
+    "istanbul_park": false
+   }
+  },
+  {
+   "op": "remove-record",
+   "key": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_23._metadata_",
+   "when": {
+    "portimao": true,
+    "istanbul_park": false
+   }
+  },
+  {
+   "op": "remove-record",
+   "key": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_23.event_name",
+   "when": {
+    "portimao": true,
+    "istanbul_park": false
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full]",
+   "field": "_fixed_event_reference_instancecount_",
+   "value": "24",
+   "create": true,
+   "type": 0,
+   "when": {
+    "portimao": true,
+    "istanbul_park": true
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_22",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f1_portimao_27",
+   "create": true,
+   "type": 2,
+   "when": {
+    "portimao": true,
+    "istanbul_park": true
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_22",
+   "field": "event_name",
+   "value": "rw_f1_portimao_27",
+   "create": true,
+   "type": 4,
+   "when": {
+    "portimao": true,
+    "istanbul_park": true
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_23",
+   "field": "_metadata_",
+   "value": "fixed_event_reference_rw_f1_istanbul_park_27",
+   "create": true,
+   "type": 2,
+   "when": {
+    "portimao": true,
+    "istanbul_park": true
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.track_lists.track_event_list[_metadata_=F1_2027_full].fixed_event_reference_23",
+   "field": "event_name",
+   "value": "rw_f1_istanbul_park_27",
+   "create": true,
+   "type": 4,
+   "when": {
+    "portimao": true,
+    "istanbul_park": true
+   }
+  },
+  {
+   "op": "set",
+   "select": "schedule.dynamic_event_data.default_ui_track_list_data.custom_dynamic_available_track_list_data[_metadata_=F1_2027_Long]",
+   "field": "max_num_tracks",
+   "value": "24",
+   "when": {
+    "portimao": true,
+    "istanbul_park": true
    }
   },
   {

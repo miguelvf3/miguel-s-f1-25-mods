@@ -238,7 +238,8 @@ def career(c):
            "championship_setups.ChampionshipSetupList_0.ChampionshipSetup_0.championship": c["f1_champ"],
            "championship_setups.ChampionshipSetupList_0.ChampionshipSetup_0.event_list": c["f1_events"],
            "championships.ChampionshipReference_0.Championship": c["f1_champ"]})
-    # F2_Default like driver_career_25's: the F2 season, then F1.
+    # F2_Default like driver_career_25's: the F2 season, then F1. A second F2 row reuses the same
+    # Championship and hangs; the F2 championship builds one season whatever its event list holds (8 Nov).
     add(setups, f"{setups}.ChampionshipSetupList_0", _metadata_="F2_Default")
     lst = f"{setups}.ChampionshipSetupList[_metadata_=F2_Default]"
     put(lst, "_ChampionshipSetup_instancecount_", 2, 0)

@@ -1,4 +1,7 @@
-# F2 Feeder Career 2026
+# F2 Revamp
+
+Formerly F2 Feeder Career 2026 (`community.f2-feeder-career`). From 0.8.0 the addon id is `miguelvf3.f2-revamp`: careers saved with the old addon need it, so start a new career.
+
 
 A Swofty Launcher addon for F1 25 with the 2026 season: a Driver Career that starts in the 2026 Formula 2 season and moves up to Formula 1 for 2027. It has its own tile in the **Addons** row of the career select, with its own game mode and save slots. The game's own 2026 career is unchanged.
 
@@ -19,13 +22,40 @@ Later F1 seasons repeat the year, as in the game's own careers.
 ## Playing it
 
 1. Install the folder and turn the addon on in a profile, with any track addons you want.
-2. Driver Career > **Addons** row > **F2 Feeder Career 2026**.
+2. Driver Career > **Addons** row > **F2 2026 > F1 2027**.
 3. Pick a driver. **Start in F2** races the F2 season first; **Skip to F1** goes straight to F1 2027.
    - A created driver picks an academy (the 2026 ones, with Audi and Cadillac). Its recognition bonus shows on the contract screen.
    - Existing drivers have no academy (the base game works the same way).
 4. Season length: **Full Season** or **Custom Season** (24, 16 or 10 rounds) give the 2027 calendar.
 
-After F2 the game shows its free Team Select, as in the base game.
+## After F2: offers and promotions
+
+Your final F2 place decides which F1 teams sign you at Team Select. A team that won't shows a popup naming the teams open to you.
+
+| F2 place | Teams open to you |
+|---|---|
+| P1-P3 (enough super licence points) | Your easy team, Haas, Racing Bulls and your academy's teams |
+| P4 or lower | Only your easy team |
+
+Your easy team depends on your academy:
+
+| Academy | Easy team |
+|---|---|
+| Ferrari | Haas |
+| Mercedes | Aston Martin |
+| Red Bull | Racing Bulls |
+| Alpine, Williams, Audi, Cadillac | Their own team |
+| McLaren, or no academy | Cadillac or Aston Martin |
+
+A created driver uses the academy picked when creating the driver. **Skip to F1** has no F2 season, so every team is open.
+
+At the first F1 Team HQ, the best AI drivers of your F2 season take the seats of Ocon (Haas), Lawson and Lindblad (Racing Bulls), with ratings set by their F2 place. A driver the game refuses (an F1 reserve, say) is skipped for the next one.
+
+## Known issues
+
+- Ties on points can rank you one place off the game's standings in the offer popup.
+- After a promotion, Driver Details > Rivals can still show the released driver as your teammate rival, and a promoted driver can be missing from the Driver Rating Comparison.
+- Repeating F2 after a poor season isn't possible yet: the F2 championship runs one season.
 
 ## How it works
 

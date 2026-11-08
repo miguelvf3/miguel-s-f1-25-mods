@@ -33,6 +33,7 @@
 #include <swofty/game.hpp>
 #include <swofty/lang.hpp>
 #include <swofty/mixin.hpp>
+#include <swofty/popup.hpp>
 #include <swofty/storage.hpp>
 #include <swofty/systems/ops.hpp>
 
@@ -122,8 +123,27 @@ void find_pair(char *begin, char *end, size_t stride, Name name, const char *fro
     }
 }
 
+// The offsets and addresses here come from one exe. Another build's PE timestamp
+// leaves everything that reads them off; the tiles and titles go through Swofty, and keep working.
+constexpr DWORD kKnownExeStamp = 1789118616;
+
+bool known_build()
+{
+    auto *dos = reinterpret_cast<const IMAGE_DOS_HEADER *>(GetModuleHandleW(nullptr));
+    auto *nt = reinterpret_cast<const IMAGE_NT_HEADERS *>(reinterpret_cast<const char *>(dos) + dos->e_lfanew);
+    static const bool known = [nt] {
+        bool same = nt->FileHeader.TimeDateStamp == kKnownExeStamp;
+        swofty::log("[f2-feeder] game exe stamp %lu: %s", static_cast<unsigned long>(nt->FileHeader.TimeDateStamp),
+                    same ? "known build" : "another build; calendar lists, academies and promotion stay off");
+        return same;
+    }();
+    return known;
+}
+
 void hide_2026(char *owner)
 {
+    if (!known_build())
+        return;
     if (!owner)
         return;
     char *const *presets = reinterpret_cast<char *const *>(owner + 0xc0);
@@ -190,7 +210,6 @@ constexpr DriverAcademy kDriverAcademies[] = {
 // calls 0x140e091e0(map, &slot, &key): status 1 the key was there, 2 or 3 a new slot (write the key),
 // 0 a failure; then it stores the record in the slot.
 constexpr uintptr_t kAcademiesDesc = 0x605c0b8, kAcademyMapFindOrAdd = 0xe091e0;
-constexpr uint8_t kFindOrAddHead[] = {0x41, 0x57, 0x41, 0x56, 0x41, 0x55, 0x41, 0x54, 0x56, 0x57, 0x55, 0x53};
 
 struct MapSlot {
     uint64_t index;
@@ -225,11 +244,9 @@ bool player_driver(void *entity, uint16_t *key, uint16_t *stat)
 
 void give_real_academy()
 {
-    char *base = reinterpret_cast<char *>(GetModuleHandleW(nullptr));
-    if (std::memcmp(base + kAcademyMapFindOrAdd, kFindOrAddHead, sizeof kFindOrAddHead)) {
-        swofty::log("[f2-feeder] academy: another game build (the map insert isn't where it was); left alone");
+    if (!known_build())
         return;
-    }
+    char *base = reinterpret_cast<char *>(GetModuleHandleW(nullptr));
     void *entity = swofty::career::entity();
     char *comp = static_cast<char *>(swofty::career::component_by_desc(base + kAcademiesDesc));
     uint16_t key = 0, stat = 0;
@@ -441,6 +458,223 @@ Seat seat_of(void *entity, uint16_t driver)
     return {};
 }
 
+// Offers after F2: Team Select refuses a team that offers no seat. Its screen object (vtable 0x145729db0) takes
+// every UI message in slot 10 (0x141a69a50: this, name, data): team_selected is the confirm, and +0x564 holds
+// the focused team's key (Frida, 7 Nov). A created driver's academy isn't read yet, only kDriverAcademies'.
+constexpr uintptr_t kTeamSelectVtable = 0x5729db0;
+constexpr size_t kTeamSelectMessageSlot = 10;
+constexpr uint32_t kTeamSelectedHash = 0xb2738f54;
+constexpr uint16_t kOpenSeatTeams[] = {483, 482};  // Haas, Racing Bulls: the seats kLeavingSeats opens
+constexpr size_t kLicencePlaces = 3;               // F2 P1-P3 carry the 40 super licence points
+constexpr uint16_t kAcademyTeams[][2] = {{476, 480}, {477, 483}, {478, 482}, {481, 0},
+                                         {484, 0},   {479, 0},   {485, 0},   {486, 0}};
+// The easiest seat by academy (same order): a partner team, or the academy's own team where it isn't at the
+// front. McLaren's is, so its drivers go where a driver with no academy goes: the two weakest teams.
+constexpr uint16_t kEasyTeams[][2] = {{480, 0}, {483, 0}, {482, 0}, {481, 0}, {486, 480}, {479, 0}, {485, 0}, {486, 0}};
+constexpr uint16_t kNoAcademyEasyTeams[2] = {486, 480};
+struct TeamName {
+    uint16_t team;
+    const char *name;
+};
+constexpr TeamName kTeamNames[] = {{476, "Mercedes"}, {477, "Ferrari"},      {478, "Red Bull"}, {484, "McLaren"},
+                                   {481, "Alpine"},   {479, "Williams"},     {485, "Audi"},     {480, "Aston Martin"},
+                                   {482, "Racing Bulls"}, {483, "Haas"},     {486, "Cadillac"}};
+struct Offer {
+    size_t place = 0; // the player's F2 place; 0 when he didn't race an F2 season (Skip to F1)
+    int academy = -1;
+};
+
+bool offers_seat(const Offer &offer, uint16_t team)
+{
+    bool academy = offer.academy >= 0 && offer.academy < static_cast<int>(std::size(kAcademyTeams));
+    const uint16_t *easy = academy ? kEasyTeams[offer.academy] : kNoAcademyEasyTeams;
+    if (easy[0] == team || easy[1] == team)
+        return true;
+    if (offer.place > kLicencePlaces)
+        return false;
+    if (std::find(std::begin(kOpenSeatTeams), std::end(kOpenSeatTeams), team) != std::end(kOpenSeatTeams))
+        return true;
+    return academy && (kAcademyTeams[offer.academy][0] == team || kAcademyTeams[offer.academy][1] == team);
+}
+
+void show_refusal(const Offer &offer, uint16_t team)
+{
+    std::string open;
+    const char *refused = "That team";
+    for (const TeamName &t : kTeamNames) {
+        if (t.team == team)
+            refused = t.name;
+        if (offers_seat(offer, t.team))
+            open += (open.empty() ? "" : ", ") + std::string(t.name);
+    }
+    std::string body = std::string(refused) + " won't sign you after P" + std::to_string(offer.place) +
+                       " in F2. Teams open to you: " + open + ".";
+    swofty::popup::Result r = swofty::popup::show("No seat available", body);
+    if (r != swofty::popup::Result::ok)
+        swofty::log("[f2-feeder] offers: refusal popup: %s", swofty::popup::name(r));
+}
+
+// A driver's academy: the real drivers' table, else what the game's map holds (a created driver's pick). The
+// map's slots run from +0x2c8 to +0x2d0; a record only counts if it's one of this career's academies.
+int academy_of_driver(void *entity, uint16_t driver)
+{
+    for (const DriverAcademy &d : kDriverAcademies)
+        if (d.driver == driver)
+            return d.academy;
+    char *comp = static_cast<char *>(swofty::career::component_by_desc(
+        reinterpret_cast<char *>(GetModuleHandleW(nullptr)) + kAcademiesDesc));
+    if (!comp || at<void *>(comp, 0x278) != entity)
+        return -1;
+    char *e = at<char *>(comp, 0x2c8), *end = at<char *>(comp, 0x2d0);
+    if (!e || end < e || (end - e) % 16 || end - e > 16 * 256)
+        return -1;
+    for (; e < end; e += 16) {
+        char *record = at<char *>(e, 8);
+        if (!record || (at<uint16_t>(e, 0) & 0x3fff) != driver)
+            continue;
+        for (char *a = at<char *>(comp, 0x298), *ae = at<char *>(comp, 0x2a0); a && a < ae; a += 16)
+            if (at<char *>(a, 8) == record)
+                return at<uint16_t>(record, 0);
+    }
+    return -1;
+}
+
+// The player's F1 season is yet to start at Team Select, so his entrant row can be gone, and a loaded save has
+// no F2 results (see kStandingsFile). What on_f2_session kept at the last race answers then.
+size_t read_kept_place(uint16_t *player)
+{
+    std::string text;
+    if (swofty::storage::read(kStandingsFile, text) != swofty::storage::Result::ok)
+        return 0;
+    unsigned saved = 0, driver = 0;
+    int points = 0, used = 0;
+    const char *p = text.c_str();
+    if (std::sscanf(p, "%u%n", &saved, &used) != 1)
+        return 0;
+    *player = static_cast<uint16_t>(saved);
+    size_t i = 0;
+    for (p += used; std::sscanf(p, "%u %d%n", &driver, &points, &used) == 2; p += used) {
+        ++i;
+        if (driver == saved)
+            return i;
+    }
+    return 0;
+}
+
+// The human's row team, or 0 with no human row.
+uint16_t player_team(void *entity)
+{
+    for (char *row = at<char *>(entity, 0x2e0), *end = at<char *>(entity, 0x2e8); row && row < end; row += 0x88)
+        if (at<uint32_t>(row, 0x48) & 0x10000000)
+            return at<uint16_t>(row, 0x5a);
+    return 0;
+}
+
+size_t read_live_table(void *entity, Standing *table, size_t cap)
+{
+    char *current = at<char *>(entity, 0x1058);
+    return current ? read_standings(current, table, cap) : 0;
+}
+
+// Read at the confirm itself: Team Select comes in the front end, with no career.hub first (0.7.8 tests, 7 Nov).
+Offer read_offer()
+{
+    Offer offer;
+    void *entity = swofty::career::entity();
+    bool ours = swofty::career::is(kCareers[0].group);
+    swofty::career::State state{};
+    swofty::career::state(&state);
+    uint16_t key = 0, player = 0;
+    bool has_row = entity && player_driver(entity, &key, &player);
+    uint16_t team = entity ? player_team(entity) : 0;
+    Standing table[64];
+    size_t n = entity ? read_live_table(entity, table, std::size(table)) : 0;
+    swofty::log("[f2-feeder] offers: confirm: ours %d entity %p rows %zu human row %d team %u; core key %s has_player %u "
+                "driver %u team %u; championships %zu, live table %zu",
+                ours ? 1 : 0, entity, entity ? (at<char *>(entity, 0x2e8) - at<char *>(entity, 0x2e0)) / 0x88 : 0,
+                has_row ? 1 : 0, team, state.key, state.has_player, state.player_driver, state.player_team,
+                entity ? (at<char *>(entity, 0x1048) - at<char *>(entity, 0x1040)) / 16 : 0, n);
+    if (!ours || !entity || (has_row && (team < 489 || team > 499)))
+        return offer; // not our career, or a driver already in F1. A Skip to F1 has no kept table: see on_starting
+    for (size_t i = 0; has_row && i < n; ++i)
+        if (table[i].driver == player)
+            offer.place = i + 1;
+    if (!offer.place)
+        offer.place = read_kept_place(&player);
+    offer.academy = academy_of_driver(entity, player);
+    swofty::log("[f2-feeder] offers: player %u is F2 P%zu, academy %d", player, offer.place, offer.academy);
+    return offer;
+}
+
+// Every F2 session end and results screen keeps the table, so the last one holds the final order.
+void on_f2_session(const SwoftyEvent *, void *)
+{
+    void *entity = swofty::career::entity();
+    uint16_t key = 0, player = 0;
+    if (!known_build() || !swofty::career::is(kCareers[0].group))
+        return;
+    bool has_row = entity && player_driver(entity, &key, &player);
+    uint16_t team = entity ? player_team(entity) : 0;
+    Standing table[64];
+    size_t n = entity ? read_live_table(entity, table, std::size(table)) : 0, place = 0;
+    swofty::log("[f2-feeder] offers: F2 session end: entity %p human row %d team %u live table %zu", entity,
+                has_row ? 1 : 0, team, n);
+    if (!has_row || team < 489 || team > 499 || !n)
+        return;
+    std::string text = std::to_string(player) + "\n";
+    for (size_t i = 0; i < n; ++i) {
+        text += std::to_string(table[i].driver) + " " + std::to_string(table[i].points) + "\n";
+        if (table[i].driver == player)
+            place = i + 1;
+    }
+    swofty::storage::write(kStandingsFile, text);
+    swofty::log("[f2-feeder] offers: F2 table kept: player P%zu of %zu, %d points", place, n,
+                place ? table[place - 1].points : 0);
+}
+
+using TeamSelectMessage = void *(void *screen, const uint32_t *const *name, void *data, void *extra);
+TeamSelectMessage *g_team_select_message = nullptr;
+
+void *team_select_message(void *screen, const uint32_t *const *name, void *data, void *extra)
+{
+    uint16_t team = static_cast<uint16_t>(at<uint32_t>(screen, 0x564) >> 16);
+    // The same screen opens Start in F2 with the F2 teams: only an F1 pick is an offer.
+    if (name && *name && **name == kTeamSelectedHash && team && (team < 489 || team > 499)) {
+        if (Offer offer = read_offer(); offer.place) {
+            bool yes = offers_seat(offer, team);
+            swofty::log("[f2-feeder] offers: team %u %s (F2 P%zu)", team, yes ? "offers a seat" : "refused", offer.place);
+            if (!yes) {
+                show_refusal(offer, team);
+                return nullptr;
+            }
+        }
+    }
+    return g_team_select_message(screen, name, data, extra);
+}
+
+// A new career starts with no F2 behind it: an earlier career's table must not answer its Team Select.
+void on_starting(const SwoftyEvent *e, void *)
+{
+    auto *start = static_cast<const swofty::career::Starting *>(e ? e->data : nullptr);
+    if (!start || start->kind != SWOFTY_CAREER_START_NEW || wz::group() != kCareers[0].group)
+        return;
+    swofty::storage::Result r = swofty::storage::write(kStandingsFile, "0");
+    swofty::log("[f2-feeder] offers: new career, kept F2 table cleared: %d", static_cast<int>(r));
+}
+
+void hook_team_select()
+{
+    auto **slot = reinterpret_cast<TeamSelectMessage **>(reinterpret_cast<char *>(GetModuleHandleW(nullptr)) +
+                                                         kTeamSelectVtable) + kTeamSelectMessageSlot;
+    DWORD old = 0;
+    if (!VirtualProtect(slot, sizeof *slot, PAGE_READWRITE, &old))
+        return;
+    g_team_select_message = *slot;
+    *slot = team_select_message;
+    VirtualProtect(slot, sizeof *slot, old, &old);
+    swofty::log("[f2-feeder] offers: Team Select hooked");
+}
+
 void promote_f2_drivers()
 {
     void *entity = swofty::career::entity();
@@ -471,14 +705,6 @@ void promote_f2_drivers()
     for (size_t i = 0; i < n && i < 10; ++i)
         order += (i ? ", " : "") + std::to_string(table[i].driver) + ":" + std::to_string(table[i].points);
     swofty::log("[f2-feeder] promotion: F2 final order (driver:points) %s", order.c_str());
-    const Standing *chosen[kPromoted] = {};
-    size_t picks = 0;
-    for (size_t i = 0; i < n && picks < kPromoted && picks < opens; ++i) {
-        const Standing &s = table[i];
-        if (s.driver == player || seat_of(entity, s.driver).seat >= 0)
-            continue; // the player, or a driver already racing in F1
-        chosen[picks++] = &s;
-    }
     auto academy_of = [](uint16_t driver) -> int {
         for (const DriverAcademy &d : kDriverAcademies)
             if (d.driver == driver)
@@ -492,8 +718,7 @@ void promote_f2_drivers()
         swofty::log("[f2-feeder] promotion: this core has no set_seat; left alone");
         return;
     }
-    auto place = [&](const Standing *s, Open &o) {
-        o.taken = true;
+    auto place = [&](const Standing *s, Open &o) -> bool {
         std::string request = "{\"driver\":" + std::to_string(s->driver) + ",\"team\":" +
                               std::to_string(o.leaving->team) + ",\"seat\":" + std::to_string(o.seat) + "}";
         char report[1024] = {};
@@ -501,26 +726,50 @@ void promote_f2_drivers()
         int r = ops->set_seat({request.data(), request.size()}, report, sizeof report - 1, &len);
         swofty::log("[f2-feeder] promotion: driver %u (F2 %d pts) takes the seat of %s, seat %d: result %d %s",
                     s->driver, s->points, o.leaving->name, o.seat, r, report);
+        o.taken = r == 0;
+        return o.taken;
     };
-    bool placed[kPromoted] = {};
-    for (size_t i = 0; i < picks; ++i)
-        for (size_t j = 0; j < opens && !placed[i]; ++j)
-            if (!open[j].taken && open[j].leaving->academy == academy_of(chosen[i]->driver))
-                place(chosen[i], open[j]), placed[i] = true;
-    for (size_t i = 0; i < picks; ++i)
-        for (size_t j = 0; j < opens && !placed[i]; ++j)
-            if (!open[j].taken)
-                place(chosen[i], open[j]), placed[i] = true;
-    for (size_t i = 0; i < picks; ++i) {
-        static constexpr uint16_t stats[] = {0, 1, 3, 4};
-        size_t position = chosen[i] - table;
-        const PromotedRatings &ratings = kPromotedRatings[std::min(position, std::size(kPromotedRatings) - 1)];
-        int r = ops->set_driver_ratings(chosen[i]->driver, stats, ratings.values, std::size(stats));
-        swofty::log("[f2-feeder] promotion: driver %u ratings (F2 P%zu): result %d", chosen[i]->driver, position + 1, r);
-        if (chosen[i]->driver == kTsolov) {
-            r = ops->set_car_number(kTsolov, kTsolovNumber, 0);
-            swofty::log("[f2-feeder] promotion: driver %u number %d: result %d", kTsolov, kTsolovNumber, r);
+    // A refused driver (an F1 reserve, say) leaves his seat open for the next one in the table.
+    bool tried[std::size(table)] = {};
+    size_t promoted = 0;
+    for (;;) {
+        const Standing *chosen[kPromoted] = {};
+        size_t picks = 0, seats = 0;
+        for (size_t j = 0; j < opens; ++j)
+            seats += !open[j].taken;
+        for (size_t i = 0; i < n && picks < seats && promoted + picks < kPromoted; ++i) {
+            const Standing &s = table[i];
+            if (tried[i] || s.driver == player || seat_of(entity, s.driver).seat >= 0)
+                continue; // tried, the player, or a driver already racing in F1
+            chosen[picks++] = &s;
         }
+        if (!picks)
+            break;
+        auto attempt = [&](const Standing *s, bool same_academy) {
+            for (size_t j = 0; j < opens; ++j) {
+                if (open[j].taken || (same_academy && open[j].leaving->academy != academy_of(s->driver)))
+                    continue;
+                tried[s - table] = true;
+                if (!place(s, open[j]))
+                    return;
+                ++promoted;
+                static constexpr uint16_t stats[] = {0, 1, 3, 4};
+                size_t position = s - table;
+                const PromotedRatings &ratings = kPromotedRatings[std::min(position, std::size(kPromotedRatings) - 1)];
+                int r = ops->set_driver_ratings(s->driver, stats, ratings.values, std::size(stats));
+                swofty::log("[f2-feeder] promotion: driver %u ratings (F2 P%zu): result %d", s->driver, position + 1, r);
+                if (s->driver == kTsolov) {
+                    r = ops->set_car_number(kTsolov, kTsolovNumber, 0);
+                    swofty::log("[f2-feeder] promotion: driver %u number %d: result %d", kTsolov, kTsolovNumber, r);
+                }
+                return;
+            }
+        };
+        for (size_t i = 0; i < picks; ++i)
+            attempt(chosen[i], true);
+        for (size_t i = 0; i < picks; ++i)
+            if (!tried[chosen[i] - table])
+                attempt(chosen[i], false);
     }
 }
 
@@ -552,12 +801,15 @@ void on_career(const SwoftyEvent *, void *)
 {
     bool mine = swofty::career::is(kCareers[0].group);
     set_titles(mine, "career loaded or Team HQ");
-    if (!mine)
+    if (!mine) {
         show_2026("another career");
+    }
     else {
         // The season length owner is the schedule component's (+0x290). A career loaded during F2 hasn't
         // been through ApplyPreset when the Custom Season screen opens, so its lists go here too.
-        if (char *schedule = static_cast<char *>(swofty::career::component("k_Career_ScheduleComponentDesc")))
+        char *schedule = known_build() ? static_cast<char *>(swofty::career::component("k_Career_ScheduleComponentDesc"))
+                                       : nullptr;
+        if (schedule)
             hide_2026(at<char *>(schedule, 0x290));
         give_real_academy();
     }
@@ -566,7 +818,7 @@ void on_career(const SwoftyEvent *, void *)
 void on_hub(const SwoftyEvent *e, void *user)
 {
     on_career(e, user);
-    if (swofty::career::is(kCareers[0].group))
+    if (swofty::career::is(kCareers[0].group) && known_build())
         promote_f2_drivers();
 }
 
@@ -578,6 +830,9 @@ void on_unloaded(const SwoftyEvent *, void *)
 
 bool register_tiles()
 {
+    if (known_build()) {
+        hook_team_select();
+    }
     for (const Career &c : kCareers) {
         content::Result r = content::add({.id = c.id,
                                           .title = c.title,
@@ -595,6 +850,12 @@ bool register_tiles()
                 swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_CAREER_LOADED, on_career)));
     swofty::log("[f2-feeder] subscribe %s: %s", SWOFTY_EVENT_CAREER_HUB,
                 swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_CAREER_HUB, on_hub)));
+    swofty::log("[f2-feeder] subscribe %s: %s", SWOFTY_EVENT_CAREER_STARTING,
+                swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_CAREER_STARTING, on_starting)));
+    swofty::log("[f2-feeder] subscribe %s: %s", SWOFTY_EVENT_SESSION_END,
+                swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_SESSION_END, on_f2_session)));
+    swofty::log("[f2-feeder] subscribe %s: %s", SWOFTY_EVENT_RESULTS,
+                swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_RESULTS, on_f2_session)));
     swofty::log("[f2-feeder] subscribe %s: %s", SWOFTY_EVENT_CAREER_UNLOADED,
                 swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_CAREER_UNLOADED, on_unloaded)));
     return true;
@@ -629,7 +890,7 @@ SWOFTY_WRAP(Game_CareerWizard_StartsInF1, bool, void *entrants, void *wizard_dat
 SWOFTY_WRAP(Game_SeasonLength_ApplyPreset, void, void *component, uint8_t preset)
 {
     std::string group = swofty::career::current_data_group();
-    if (component && (group.empty() ? g_wizard_ours : ours(group.c_str())))
+    if (component && known_build() && (group.empty() ? g_wizard_ours : ours(group.c_str())))
         hide_2026(*reinterpret_cast<char **>(static_cast<char *>(component) + 0x290));
     else
         show_2026("another career's season length");

@@ -64,6 +64,8 @@ How F1 25's F2 career works inside, and what each part of the revamp could chang
 
 **Accolades (0.7.5, 3 Nov, build checked, not in game):** the empty Accolades panel was Câmara's: the stock 2026 accolades (`AccoladeDataGroup` `f1_career_2026`, copied for this career) have no row for ten F2 2026 drivers (Fittipaldi, Inthraphuvasak, León, Bilinski, Herta, Câmara, Boya, Stenshorne, van Hoepen, Varrone). They get Oliver Goethe's five goals. `add-row` copied only the row's own two keys (no catalogue entry for the goals), so the generator writes the goals with `set`.
 
+- Game build guard (0.7.7): the DLL compares the exe's PE timestamp (1789118616) once. On another build it logs that and leaves off what reads game offsets: the calendar list swap, academies and promotion. The tiles and titles keep working. Exe checked on disk; the log line is still to confirm in game.
+
 ## Suggested order
 
 1. **Academy bonus test** (`2026` group on the F2 academies). Done.
@@ -124,6 +126,13 @@ Still needs the game (Frida): which flow state shows the Team Select after F2 (a
 
 Design to decide: which teams offer a seat. Proposal: the academy's teams always; the teams whose driver market rating range (`team_driver_rating_range_requirements`, `driver_contracts.NCS.rating_ranges`) takes the player's rating; and for an F2 champion or top 3, the teams with a leaving driver (the promotion seats). The others are hidden or locked.
 
+Offer rule for the first version, approved by the user (7 Nov), from the player's final F2 position:
+- Easy team, by academy: Ferrari Haas; Mercedes Aston Martin; Red Bull Racing Bulls; Alpine, Williams, Audi and Cadillac their own team; McLaren or no academy Cadillac and Aston Martin.
+- P4 or lower: only the easy team. P1-P3 (40 super licence points): the easy team, Haas, Racing Bulls and the teams of the academy. A refused team shows a popup with the open teams. This stands in for repeating F2 until that exists, and ignores the 40-point limit for now.
+- Whether a team without an offer can be hidden or locked is the first thing to find out with Frida.
+
+Traced on 7 Nov (Skip to F1 Team Select; same builder as after F2): the screen object has vtable 0x145729db0, and slot 10 (0x141a69a50) takes every UI message as (this, name, data). `team_selected_changed` (hash 0x9c4d00fd) is a focus change and `team_selected` (0xb2738f54) the confirm; +0x564 holds the focused team's key. Skipping that call for a team refuses it and the screen stays usable: tested live with Haas and Racing Bulls only. The team list itself sits at +0x3d0 with a 0x14 stride (read only; hiding a tile is untested). 0.7.8 refuses teams without an offer this way. Not done: on-screen text, a created driver's academy (only kDriverAcademies), and the lowest constructors' team, which is Haas because no F1 season has run yet.
+
 Agreed with the user (3 Nov):
 - **Another F2 season when no team offers a seat.** The career repeats F2 instead of a free pick. Needs: whether the mode can run its F2 championship again (the `F2_Default` setup list runs F2 then F1; a second F2 season may need a second F2 setup or a reset of `F2_career_23`'s season), and the F2 grid for 2027 (the same 2026 grid, minus the promoted).
 - **Super licence as the gate.** FIA points for the F2 championship: 40, 40, 40, 30, 20, 10, 8, 6, 4, 3 for P1-P10, and 40 are needed (over three seasons; also at least six F2 events). So the F2 top 3 always qualify; P4 (30) and P5 (20) qualify only with points from before (an existing driver's real F3 or F2 results; a created driver has none). A second F2 season adds its points to the first.
@@ -167,3 +176,31 @@ Agreed with the user (3 Nov):
 - Guides and forum: [Clutchpoints, F1 25 Driver Career Guide](https://clutchpoints.com/gaming/f1-25-driver-career-guide); [Yahoo Tech, F1 25 Driver Career Guide](https://tech.yahoo.com/gaming/articles/f1-25-driver-career-guide-143836977.html); [EA forum: Academy choice in F2 is not valid for F1](https://forums.ea.com/idea/f1-25-bug-reports-en/academy-choice-in-f2-is-not-valid-for-f1/12295483); [EA forum: F1 25 career mode needs more freedom](https://forums.ea.com/discussions/f1-25-general-discussion-en/f1-25-career-mode-needs-more-freedom-f2-career--full-driver-market/13705477); [EA forum: patch 1.04 thread](https://forums.ea.com/discussions/f1-25-general-discussion-en/f1%C2%AE-25---patch-1-04-discussion-thread/12277624/replies/12292462); [EA forum: current rookies from F2](https://forums.ea.com/idea/f1-25-bug-reports-en/cannot-select-current-f1-rookies-when-starting-driver-career-from-f2/12294630); [EA, F1 25 career deep dive](https://www.ea.com/games/f1/f1-25/news/f1-25-career-deep-dive).
 - Swofty: `re/db/subsystems/career.md`, `re/db/functions.tsv`, `docs/std/systems/career.md`, `docs/reference/addons/in-game-ui.md`.
 - Game database: `driver_academies`, `driver_market.driver_market`, `recognition`, `entrants.drivers`, and the championships' components (read by path with `gamedb.fnv1a64`).
+
+### Team Select state (7 Nov tests)
+
+- `career.hub` does not fire before Team Select after F2, and the core has no `career.season.end` (subscribe returns invalid).
+- At the confirm the entity is live with 2 championships, but it has no human row and an empty live F2 table on a loaded save; the core state is empty too.
+- So the F2 order is kept in `f2_standings.txt` at each F2 `session.end` and `results`, and Team Select reads that file. A final-race capture is not tested yet.
+- The refusal itself works: with P1 and Ferrari, only Ferrari, Haas and Racing Bulls opened. That P1 came from an old file, not from a real result.
+- An old `f2_standings.txt` with 3 columns gets misread and produced wrong promotions in that test career.
+- Attaching Frida to a long-running game crashed it (access violation in frida-agent, 11:56).
+
+Known gap (7 Nov, left as it is by the user): ties in the kept F2 table can differ from the game. A player tied on 2 points with Herta read P13, and the game showed P14. The rule is unknown.
+
+### Repeating F2 (7 Nov probe)
+
+- `F2_Default` with F2, F2, F1 boots, and a second F2 Custom Season follows the first (user test on the test profile; a throwaway change to the installed copy only).
+- User rule: repeat only below P10, with the same 2026 season and grid, and nobody moves to F1 from F2 in those repeats.
+- 0x1407c26f0 walks the order list at entity +0x1068..+0x1070 and makes the first unfinished championship current through Career_Set_CurrentChampionship (0x1407be1d0). A wrap there could send a qualified player past the spare F2 entries to F1. Not tried yet.
+- With several F2 championships, `read_live_table` must read the current one, not the first with results.
+
+Frida on the hung game (7 Nov): the order list held the same Championship pointer twice, then F1, and the entity had 2 championships. So rows naming F2_career_23 share one object, its one season is reused, and the first session of the second F2 never ends. The F1 skip code can't work on such a list, so it is not called and F2_SEASONS is back to 1. A repeat needs a different championship in each row.
+
+Step 6 lead (8 Nov, Swofty docs `reference/addons/in-game-ui.md`): `hub_tab` in the manifest adds a settings-style tab for a data group to the career hub laptop (`laptop_container` in `career_hub_flow`) and to Team HQ, with Progressive Career as the example. The F2 phase has no hub screen to put it on: Advance after a round goes straight to the next weekend's first session (user, 8 Nov), so an F2 hub needs a screen of its own. `operations.screens` adds whole screens.
+
+Repeat F2 dropped (8 Nov, with the user): a second season in the F2 event list did nothing. Frida after that F2: the F2 championship held one season (status +0x538 = 2, complete) while the F1 one held ten. F2_2024_career as a second row was never tried. A player at P4 or lower goes to the easy team.
+
+Retest (8 Nov) with `_season_instancecount_` = 2 on F2_career_21, checked in the built database: the F2 still ended after one season and went to Team Select (Tsolov P2, Red Bull academy: Mercedes refused, Racing Bulls took him). Repeat stays dropped unless the core can keep a championship open.
+
+Bug (8 Nov): with the player at Racing Bulls, Driver Details > Rivals shows Liam Lawson as the teammate rival after the promotion released him. The rivalry isn't updated by set_seat; look for where it is set (maybe at the grid reveal).

@@ -15,7 +15,7 @@ The game's 2026 career has no Start in F2; its 2025 career has one (F2 2024, the
 - **Academies (0.7.2):** the F2 championship's academies component now names the `2026` group. A created driver gets the 2026 academies at Start in F2, and the bonus shows on the F1 contract screen (Mercedes: 29% with academy, 26% without).
 - The Tsolov save (made before 0.6) loads and keeps its 2026 calendar.
 - Later F1 seasons repeat the year, like the game's careers. Decided on 2 Nov: no 2028+ calendars.
-- A frozen copy, `community.f2-feeder-career-stable` (0.7.1), is on in the `default` profile with the two track addons; the dev copy `community.f2-feeder-career` is on in `test`. They conflict, so each profile has one.
+- A frozen copy, `community.f2-feeder-career-stable` (0.7.1), is on in the `default` profile with the two track addons; the dev copy (id `miguelvf3.f2-revamp` from 0.8.0, `community.f2-feeder-career` before) is on in `test`. They conflict, so each profile has one.
 
 ### 0.6.0 to 0.6.3: the Team HQ crash
 

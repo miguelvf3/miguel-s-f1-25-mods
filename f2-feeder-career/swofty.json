@@ -1,10 +1,12 @@
 {
   "schema_version": 1,
-  "id": "community.f2-feeder-career",
-  "name": "F2 Feeder Career 2026",
-  "version": "0.7.6",
-  "author": "community",
-  "description": "A Driver Career that starts in the 2026 Formula 2 season, then moves up to Formula 1. Its own tile and save slots; the stock 2026 career is unchanged.",
+  "id": "miguelvf3.f2-revamp",
+  "name": "F2 Revamp",
+  "version": "0.8.0",
+  "author": "miguelvf3",
+  "description": "A Driver Career that starts in the 2026 Formula 2 season: finish well to earn an F1 seat, while the best F2 drivers move up too. Its own tile and save slots; the stock 2026 career is unchanged.",
+  "repository": "https://github.com/miguelvf3/miguel-s-f1-25-mods",
+  "icon": "icon.png",
   "license": "AGPL-3.0-or-later",
   "category": "career",
   "kind": [
@@ -52,7 +54,7 @@
   ],
   "saves": {
     "affects": true,
-    "message": "F2 Feeder careers won't load without it; the launcher keeps them in the save until it is back on."
+    "message": "F2 Revamp careers won't load without it; the launcher keeps them in the save until it is back on."
   },
   "operations": {
     "database": [

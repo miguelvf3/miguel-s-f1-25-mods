@@ -204,3 +204,11 @@ Repeat F2 dropped (8 Nov, with the user): a second season in the F2 event list d
 Retest (8 Nov) with `_season_instancecount_` = 2 on F2_career_21, checked in the built database: the F2 still ended after one season and went to Team Select (Tsolov P2, Red Bull academy: Mercedes refused, Racing Bulls took him). Repeat stays dropped unless the core can keep a championship open.
 
 Bug (8 Nov): with the player at Racing Bulls, Driver Details > Rivals shows Liam Lawson as the teammate rival after the promotion released him. The rivalry isn't updated by set_seat; look for where it is set (maybe at the grid reveal).
+
+### Request: F2 2025 > F1 2026 (8 Nov, from the Overtake thread)
+
+Asked by a player after 0.8.0 went up. It existed up to 0.4.9 and was dropped in 0.5.0 (f2a145e) to focus on 2026.
+- Both careers would need an F2 championship: F2_career_23 is the only free one and holds its grid (f2_2026), and copied F2 championships crash the boot.
+- The offers and promotions are 2026 data: kLeavingSeats (Ocon, Lawson, Lindblad), the 2026 academy group with Audi and Cadillac, kDriverAcademies. A 2025 career needs its own.
+- F2 2025 grid `f2_2025` and `career_f2_2025_for_f1_2026` exist in the game; the F1 2026 calendar is stock.
+- Priority: after the 2026 fixes (known issues in README).

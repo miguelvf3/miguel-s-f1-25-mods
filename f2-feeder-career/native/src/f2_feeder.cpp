@@ -35,6 +35,7 @@
 #include <swofty/mixin.hpp>
 #include <swofty/popup.hpp>
 #include <swofty/storage.hpp>
+#include <swofty/systems/career.hpp>
 #include <swofty/systems/ops.hpp>
 
 #include <algorithm>
@@ -42,6 +43,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
+#include <mutex>
 #include <string>
 
 #include <windows.h>
@@ -354,8 +356,46 @@ size_t read_standings(char *f2, Standing *out, size_t cap);
 // The finished F2 championship's results live only in the session the F2 season ends in: a loaded
 // save leaves its standings empty, and Career_Rebuild_ChampionshipStandings finds nothing to rebuild
 // them from (0.7.5 test). So the order read at the first Team HQ after F2 (before the player's Team
-// Select) is kept in the addon's storage for that driver, and a load in the first F1 season reads it.
+// Select) is kept for that driver, and a load in the first F1 season reads it. Since 0.8.1 it lives in the
+// career's own addon data (career::saves, the core's per-career JSON that moves with the save), written at each
+// F2 session end (the core writes the file at once; career.saving is a modify event the C subscribe refuses); the old storage file stays as a fallback for 0.8.0 careers.
 constexpr const char *kStandingsFile = "f2_standings.txt";
+constexpr const char *kAddonId = "miguelvf3.f2-revamp";
+
+std::mutex g_kept_lock;
+std::string g_kept; // the table this session kept
+
+const char *result_name(swofty::career::Result r)
+{
+    return swofty::career::name(r);
+}
+
+void keep_table(const std::string &text, const char *why)
+{
+    {
+        std::lock_guard<std::mutex> lock(g_kept_lock);
+        g_kept = text;
+    }
+    swofty::storage::write(kStandingsFile, text);
+    swofty::json::Value v = swofty::json::Value::object();
+    v["table"] = swofty::json::Value(text);
+    swofty::career::Result r = swofty::career::saves::data(kAddonId).set_current(v, 1);
+    swofty::log("[f2-feeder] kept F2 table (%s): career data %s, career %s", why, result_name(r),
+                swofty::career::saves::current().c_str());
+}
+
+// The career's own data first, else the 0.8.0 storage file.
+bool read_kept(std::string &text)
+{
+    if (auto stored = swofty::career::saves::data(kAddonId).get_current()) {
+        std::string_view t = stored->value["table"].as_string();
+        if (!t.empty()) {
+            text.assign(t);
+            return true;
+        }
+    }
+    return swofty::storage::read(kStandingsFile, text) == swofty::storage::Result::ok;
+}
 
 size_t f2_standings(void *entity, uint16_t player, Standing *out, size_t cap)
 {
@@ -369,11 +409,11 @@ size_t f2_standings(void *entity, uint16_t player, Standing *out, size_t cap)
         std::string text = std::to_string(player) + "\n";
         for (size_t i = 0; i < n; ++i)
             text += std::to_string(out[i].driver) + " " + std::to_string(out[i].points) + "\n";
-        swofty::storage::write(kStandingsFile, text);
+        keep_table(text, "Team HQ after F2");
         return n;
     }
     std::string text;
-    if (swofty::storage::read(kStandingsFile, text) != swofty::storage::Result::ok)
+    if (!read_kept(text))
         return 0;
     size_t n = 0;
     unsigned saved_player = 0, driver = 0;
@@ -383,8 +423,7 @@ size_t f2_standings(void *entity, uint16_t player, Standing *out, size_t cap)
         return 0;
     for (p += used; n < cap && std::sscanf(p, "%u %d%n", &driver, &points, &used) == 2; p += used)
         out[n++] = {static_cast<uint16_t>(driver), points};
-    swofty::log("[f2-feeder] promotion: F2 standings from %s (kept when the F2 season ended): %zu drivers",
-                kStandingsFile, n);
+    swofty::log("[f2-feeder] promotion: F2 standings kept when the F2 season ended: %zu drivers", n);
     return n;
 }
 
@@ -544,7 +583,7 @@ int academy_of_driver(void *entity, uint16_t driver)
 size_t read_kept_place(uint16_t *player)
 {
     std::string text;
-    if (swofty::storage::read(kStandingsFile, text) != swofty::storage::Result::ok)
+    if (!read_kept(text))
         return 0;
     unsigned saved = 0, driver = 0;
     int points = 0, used = 0;
@@ -627,7 +666,7 @@ void on_f2_session(const SwoftyEvent *, void *)
         if (table[i].driver == player)
             place = i + 1;
     }
-    swofty::storage::write(kStandingsFile, text);
+    keep_table(text, "F2 session end");
     swofty::log("[f2-feeder] offers: F2 table kept: player P%zu of %zu, %d points", place, n,
                 place ? table[place - 1].points : 0);
 }
@@ -658,6 +697,10 @@ void on_starting(const SwoftyEvent *e, void *)
     auto *start = static_cast<const swofty::career::Starting *>(e ? e->data : nullptr);
     if (!start || start->kind != SWOFTY_CAREER_START_NEW || wz::group() != kCareers[0].group)
         return;
+    {
+        std::lock_guard<std::mutex> lock(g_kept_lock);
+        g_kept.clear(); // a new career has no data of its own yet
+    }
     swofty::storage::Result r = swofty::storage::write(kStandingsFile, "0");
     swofty::log("[f2-feeder] offers: new career, kept F2 table cleared: %d", static_cast<int>(r));
 }
@@ -719,6 +762,19 @@ void promote_f2_drivers()
         return;
     }
     auto place = [&](const Standing *s, Open &o) -> bool {
+        // career::swap_drivers first, in case a driver has a race seat; an F2 driver has none in the F1 season, so
+        // the core refuses it (0.8.1 test, 8 Nov) and set_seat does the move.
+        if (ops->swap_drivers) {
+            int r = ops->swap_drivers(s->driver, o.leaving->driver);
+            Seat now = seat_of(entity, s->driver);
+            bool seated = r == 0 && now.team == o.leaving->team && now.seat >= 0;
+            swofty::log("[f2-feeder] promotion: swap driver %u (F2 %d pts) with %s: result %d, now team %u seat %d%s",
+                        s->driver, s->points, o.leaving->name, r, now.team, now.seat, seated ? "" : "; trying set_seat");
+            if (seated) {
+                o.taken = true;
+                return true;
+            }
+        }
         std::string request = "{\"driver\":" + std::to_string(s->driver) + ",\"team\":" +
                               std::to_string(o.leaving->team) + ",\"seat\":" + std::to_string(o.seat) + "}";
         char report[1024] = {};
@@ -815,11 +871,68 @@ void on_career(const SwoftyEvent *, void *)
     }
 }
 
+// The teammate rivalry (Driver Details > Rivals). The RivalManagerComponent (desc 0x1460631a0) holds one manager
+// per driver in a vector at +0xbd8 (16-byte entries, manager at +8; the manager's driver id at +0x7a). A manager's
+// rivalries are 16-byte shared pointers at +0x18..+0x20; a rivalry's type is its byte +0x10 (0 teammate, 1
+// championship, 2 driver rating) and its vtable slot 3 (+0x18) returns its rival's key ({u8, u8, u16 driver}).
+// 0x14124fad0 starts a teammate rivalry only for a manager without one (Game_Rivalry_Start 0x141249ce0, type 0),
+// with the teammate's entrant key (row +0x50), so a promotion after the grid is set leaves the released driver
+// as the rival (0.8.0). Read from the code, 9 Nov.
+constexpr uintptr_t kRivalManagerDesc = 0x60631a0;
+
+void fix_teammate_rival(void *entity)
+{
+    uint16_t key = 0, player = 0;
+    if (!entity || !player_driver(entity, &key, &player))
+        return;
+    uint16_t team = player_team(entity);
+    uint32_t mate_key = 0;
+    for (char *row = at<char *>(entity, 0x2e0), *end = at<char *>(entity, 0x2e8); row && row < end; row += 0x88) {
+        if (at<uint16_t>(row, 0x5a) != team || at<uint16_t>(row, 0x52) == player)
+            continue;
+        if (((at<uint16_t>(row, 0x80) ^ 0x100) & 0xff) < 2) {
+            mate_key = at<uint32_t>(row, 0x50);
+            break;
+        }
+    }
+    uint16_t mate = static_cast<uint16_t>(mate_key >> 16);
+    if (!mate_key || !f1_team(team))
+        return;
+    char *base = reinterpret_cast<char *>(GetModuleHandleW(nullptr));
+    char *comp = static_cast<char *>(swofty::career::component_by_desc(base + kRivalManagerDesc));
+    if (!comp || at<void *>(comp, 0x278) != entity)
+        return;
+    for (char *m = at<char *>(comp, 0xbd8), *me = at<char *>(comp, 0xbe0); m && m < me; m += 0x10) {
+        char *mgr = at<char *>(m, 8);
+        if (!mgr || at<uint16_t>(mgr, 0x7a) != player)
+            continue;
+        for (char *r = at<char *>(mgr, 0x18), *re = at<char *>(mgr, 0x20); r && r < re; r += 0x10) {
+            char *rivalry = at<char *>(r, 0);
+            if (!rivalry || at<uint8_t>(rivalry, 0x10) != 0)
+                continue;
+            using RivalKey = uint32_t *(*)(void *);
+            uint32_t *rival = reinterpret_cast<RivalKey>(at<void **>(rivalry, 0)[3])(rivalry);
+            if (!rival)
+                return;
+            uint16_t old = static_cast<uint16_t>(*rival >> 16);
+            bool leaving = std::any_of(std::begin(kLeavingSeats), std::end(kLeavingSeats),
+                                       [&](const LeavingSeat &l) { return l.driver == old; });
+            if (old == mate || !leaving)
+                return; // already the teammate, or a rival this addon didn't move
+            swofty::log("[f2-feeder] rivals: teammate rival %u (key %08x) -> %u (key %08x)", old, *rival, mate, mate_key);
+            *rival = mate_key;
+            return;
+        }
+    }
+}
+
 void on_hub(const SwoftyEvent *e, void *user)
 {
     on_career(e, user);
-    if (swofty::career::is(kCareers[0].group) && known_build())
+    if (swofty::career::is(kCareers[0].group) && known_build()) {
         promote_f2_drivers();
+        fix_teammate_rival(swofty::career::entity());
+    }
 }
 
 void on_unloaded(const SwoftyEvent *, void *)

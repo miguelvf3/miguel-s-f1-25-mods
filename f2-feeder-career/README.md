@@ -54,7 +54,7 @@ At the first F1 Team HQ, the best AI drivers of your F2 season take the seats of
 ## Known issues
 
 - Ties on points can rank you one place off the game's standings in the offer popup.
-- After a promotion, Driver Details > Rivals can still show the released driver as your teammate rival, and a promoted driver can be missing from the Driver Rating Comparison.
+- A promoted driver can be missing from the Driver Rating Comparison (seems tied to the Iconic Edition driver icons).
 - Repeating F2 after a poor season isn't possible yet: the F2 championship runs one season.
 
 ## How it works

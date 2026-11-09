@@ -212,3 +212,24 @@ Asked by a player after 0.8.0 went up. It existed up to 0.4.9 and was dropped in
 - The offers and promotions are 2026 data: kLeavingSeats (Ocon, Lawson, Lindblad), the 2026 academy group with Audi and Cadillac, kDriverAcademies. A 2025 career needs its own.
 - F2 2025 grid `f2_2025` and `career_f2_2025_for_f1_2026` exist in the game; the F1 2026 calendar is stock.
 - Priority: after the 2026 fixes (known issues in README).
+
+### Swofty bot answers (9 Nov) and 0.8.1
+
+- Rivals: no core call refreshes them (DB `rivals.RivalryType`, `eTeammate`). 0.8.1 promotes with `career::swap_drivers` (the game's full move sequence; the leaving driver takes the F2 driver's row) and falls back to `set_seat`. To test: does Rivals still show Lawson?
+- Kept F2 table: 0.8.1 stores it in `career::saves::data("miguelvf3.f2-revamp")` (per-career JSON in `$DATA/careers/data/<career>/`, moves with the save; experimental since launcher 1.7.0), at each F2 session end and at `career.saving`. Reads it first, else `f2_standings.txt` (0.8.0 careers). A brand-new career may refuse the write until the index knows it; the `career.saving` write covers that.
+- Repeat F2: no core call reopens a championship; F2 length is undocumented. Still dropped.
+- `career.season.end` / `career.weekend.*`: `Fired::no` on main. Use `career.hub` + `career::current_round()`, or our session.end.
+- Screens: `operations.screens` registers one, but opening it mid-flow needs our own route or mixin.
+- F2 2025 data for the 2025 career: `track_data.game_setup.TrackDataSet_15` (`f2_2025`), `_14` (`f2_2025_sprint`); 2026 is `_19` / `_18`. `career.season` has `year`, `calendar`, `teams`.
+- Dev vs published: the addons folder is shared by every profile, so installing a dev build replaces the published one for all of them. The browser only offers an update to a higher version, so dev builds need a higher number.
+- Driver Rating Comparison missing Tsolov: probably the Iconic Edition driver icons (user, 9 Nov), not the mod.
+
+0.8.1 test (8 Nov evening): career data works: written at every F2 session end (`career data ok`), file `$DATA/careers/data/driver_career_f2_26%3a<guid>/miguelvf3.f2-revamp.json` on disk at once. `career.saving` via the C `subscribe` returns invalid (modify event), so that handler was removed. `swap_drivers` is refused: "noel_leon(200) has no race seat" (F2 drivers have no F1 row), so set_seat still does the promotions. Rivals still shows Lawson: the teammate rivalry is probably set at Team Select, before our promotion at the first Team HQ. Next: find where the rivalry is stored (RE).
+
+### Teammate rival fix (9 Nov, 0.8.1)
+
+RE with capstone on F1_25.exe (offsets from the module base):
+- RivalManagerComponent desc at +0x60631a0. Component +0x278 = career entity; +0xbd8..+0xbe0 = vector of 16-byte entries, manager pointer at +8. Manager u16 +0x7a = driver id (player 203).
+- Manager +0x18..+0x20: rivalries, 16-byte shared_ptr {Rivalry*, ctrl*}. Rivalry byte +0x10 = type (0 teammate, 1 championship, 2 driver rating). Vtable slot 3 returns a pointer to the rival's u32 entrant key (u16 driver in the high half), the same value as entrant row +0x50.
+- 0x14124fad0 creates the teammate rivalry only when the manager has none of type 0 (teammate from 0x142456690, then Game_Rivalry_Start 0x141249ce0 with type 0). So it is set once, at Team Select, before our promotion.
+- Fix: `fix_teammate_rival` at every Team HQ (after `promote_f2_drivers`) writes the current teammate's key into that rivalry, only when the old rival is one of kLeavingSeats. Tested: log `teammate rival 113 (key 00710000) -> 193 (key 00c10000)`, Rivals screen shows Câmara vs Montoya. Still to check: it survives save and reload (it is reapplied at each Team HQ anyway).

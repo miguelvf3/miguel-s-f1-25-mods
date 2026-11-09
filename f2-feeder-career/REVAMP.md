@@ -233,3 +233,11 @@ RE with capstone on F1_25.exe (offsets from the module base):
 - Manager +0x18..+0x20: rivalries, 16-byte shared_ptr {Rivalry*, ctrl*}. Rivalry byte +0x10 = type (0 teammate, 1 championship, 2 driver rating). Vtable slot 3 returns a pointer to the rival's u32 entrant key (u16 driver in the high half), the same value as entrant row +0x50.
 - 0x14124fad0 creates the teammate rivalry only when the manager has none of type 0 (teammate from 0x142456690, then Game_Rivalry_Start 0x141249ce0 with type 0). So it is set once, at Team Select, before our promotion.
 - Fix: `fix_teammate_rival` at every Team HQ (after `promote_f2_drivers`) writes the current teammate's key into that rivalry, only when the old rival is one of kLeavingSeats. Tested: log `teammate rival 113 (key 00710000) -> 193 (key 00c10000)`, Rivals screen shows Câmara vs Montoya. Still to check: it survives save and reload (it is reapplied at each Team HQ anyway).
+
+### Silly Season (9 Nov, 0.8.2)
+
+aleex0428's answer: Silly Season does nothing in `f1_career_f2_26` today (unknown data group). To support it he would treat it as the 2026 career with year 2027, stay idle in F2 and give our promoted drivers a 2-year contract. Agreed interface, through `swofty/services.hpp`:
+- Ours, `f2_revamp.career` v1 (`api/f2_revamp_api/career.hpp`, MIT so he can copy it): `in_f2()`, `standings(driver_stat, cap)` (the kept table, best first), `promoted(out, cap)` ({driver, team, replaced, F2 place}).
+- His, `silly_season.market` v1, our guess of the layout until he publishes it: `{size, int (*sign)(driver_stat, team_stat, until)}` (`signed` is a C++ keyword). We call it for each promotion with until = 2028, and once per loaded career at Team HQ for the recorded ones.
+- Promotions are recorded in the career data (`promoted` next to `table`). A career promoted before 0.8.2 has no record: in its first F1 season, F2 drivers now seated at Haas or Racing Bulls count as promoted (replaced unknown, 0).
+- His code is MIT (aleex0428/silly-season): the overlay kit (`native/src/hub.inl`) can be reused with his copyright notice. Inbox mails: rows in `emails.triggers` copied from `mt_drivermarket_retired`, with our own lng keys filled by `swofty::lang::set`.

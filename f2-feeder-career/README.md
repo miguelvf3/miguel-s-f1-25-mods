@@ -57,6 +57,10 @@ At the first F1 Team HQ, the best AI drivers of your F2 season take the seats of
 - A promoted driver can be missing from the Driver Rating Comparison (seems tied to the Iconic Edition driver icons).
 - Repeating F2 after a poor season isn't possible yet: the F2 championship runs one season.
 
+## For other addons
+
+F2 Revamp publishes the Swofty service `f2_revamp.career` v1: whether the loaded career is still in F2, the F2 order, and who it promoted. Include [api/f2_revamp_api/career.hpp](api/f2_revamp_api/career.hpp) (MIT) and look it up with `swofty::services::when<F2RevampCareer>`. When Silly Season publishes `silly_season.market`, each promotion is signed there with a contract to the end of 2028.
+
 ## How it works
 
 `db/career.json` and `lang/career.json` are written by `tools/gen.py`; change the generator, not the files. The DLL is `native/src/f2_feeder.cpp`.

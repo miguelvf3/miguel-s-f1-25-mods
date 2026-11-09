@@ -34,19 +34,24 @@
 #include <swofty/lang.hpp>
 #include <swofty/mixin.hpp>
 #include <swofty/popup.hpp>
+#include <swofty/services.hpp>
 #include <swofty/storage.hpp>
 #include <swofty/systems/career.hpp>
 #include <swofty/systems/ops.hpp>
 
 #include <algorithm>
+#include <atomic>
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
 #include <mutex>
 #include <string>
+#include <vector>
 
 #include <windows.h>
+
+#include <f2_revamp_api/career.hpp>
 
 namespace {
 
@@ -370,6 +375,14 @@ const char *result_name(swofty::career::Result r)
     return swofty::career::name(r);
 }
 
+// The career's data object: {"table": the kept table text, "promoted": [{driver, team, replaced, place}]}.
+swofty::json::Value career_data()
+{
+    if (auto stored = swofty::career::saves::data(kAddonId).get_current(); stored && stored->value.is_object())
+        return stored->value;
+    return swofty::json::Value::object();
+}
+
 void keep_table(const std::string &text, const char *why)
 {
     {
@@ -377,7 +390,7 @@ void keep_table(const std::string &text, const char *why)
         g_kept = text;
     }
     swofty::storage::write(kStandingsFile, text);
-    swofty::json::Value v = swofty::json::Value::object();
+    swofty::json::Value v = career_data();
     v["table"] = swofty::json::Value(text);
     swofty::career::Result r = swofty::career::saves::data(kAddonId).set_current(v, 1);
     swofty::log("[f2-feeder] kept F2 table (%s): career data %s, career %s", why, result_name(r),
@@ -718,6 +731,85 @@ void hook_team_select()
     swofty::log("[f2-feeder] offers: Team Select hooked");
 }
 
+// Silly Season's market (aleex0428), as proposed on 9 Nov: each promotion is told to it as a signing with a
+// contract to the end of kContractUntil. Looked up with services::when, so it runs only when Silly Season is on.
+struct SillySeasonMarket {
+    static constexpr const char *name = "silly_season.market";
+    static constexpr uint32_t version = 1;
+    uint32_t size;
+    int (*sign)(uint32_t driver_stat, uint32_t team_stat, int until);
+};
+constexpr int kContractUntil = 2028; // two seasons: 2027 and 2028
+std::atomic<const SillySeasonMarket *> g_market{nullptr};
+bool g_market_told = false; // this career's promotions were told to the market (once per loaded career)
+
+std::vector<F2RevampPromotion> read_promotions()
+{
+    std::vector<F2RevampPromotion> out;
+    swofty::json::Value v = career_data();
+    if (const auto *a = v["promoted"].if_array())
+        for (const swofty::json::Value &e : *a)
+            out.push_back({static_cast<uint32_t>(e["driver"].as_int()), static_cast<uint32_t>(e["team"].as_int()),
+                           static_cast<uint32_t>(e["replaced"].as_int()), static_cast<uint32_t>(e["place"].as_int())});
+    if (v.contains("promoted"))
+        return out;
+    // A career promoted before 0.8.2 has no record: in its first F1 season, the F2 drivers (not the player) now
+    // racing for a team whose seat kLeavingSeats opened are the promoted ones; the replaced driver is unknown.
+    void *entity = swofty::career::entity();
+    uint16_t key = 0, player = 0;
+    char *current = entity ? at<char *>(entity, 0x1058) : nullptr;
+    if (!current || at<uint32_t>(current, 0x560) != 0 || !player_driver(entity, &key, &player))
+        return out;
+    Standing table[64];
+    size_t n = f2_standings(entity, player, table, std::size(table));
+    for (size_t i = 0; i < n; ++i) {
+        Seat s = seat_of(entity, table[i].driver);
+        if (table[i].driver == player || s.seat < 0)
+            continue;
+        if (std::any_of(std::begin(kLeavingSeats), std::end(kLeavingSeats), [&](const LeavingSeat &l) { return l.team == s.team; }))
+            out.push_back({table[i].driver, s.team, 0, static_cast<uint32_t>(i + 1)});
+    }
+    return out;
+}
+
+void tell_market(const F2RevampPromotion &p)
+{
+    const SillySeasonMarket *m = g_market.load();
+    if (!m || m->size < offsetof(SillySeasonMarket, sign) + sizeof m->sign || !m->sign)
+        return;
+    int r = m->sign(p.driver_stat, p.team_stat, kContractUntil);
+    swofty::log("[f2-feeder] market: driver %u signed by team %u until %d: %d", p.driver_stat, p.team_stat,
+                kContractUntil, r);
+}
+
+void record_promotion(const F2RevampPromotion &p)
+{
+    swofty::json::Value v = career_data();
+    if (!v["promoted"].is_array())
+        v["promoted"] = swofty::json::Value::array();
+    swofty::json::Value e = swofty::json::Value::object();
+    e["driver"] = swofty::json::Value(p.driver_stat);
+    e["team"] = swofty::json::Value(p.team_stat);
+    e["replaced"] = swofty::json::Value(p.replaced_stat);
+    e["place"] = swofty::json::Value(p.f2_place);
+    v["promoted"].push_back(std::move(e));
+    swofty::career::Result r = swofty::career::saves::data(kAddonId).set_current(v, 1);
+    swofty::log("[f2-feeder] promotion recorded (driver %u, team %u): career data %s", p.driver_stat, p.team_stat,
+                result_name(r));
+    tell_market(p);
+}
+
+// Once per loaded career, at Team HQ: promotions made earlier (another session, or before Silly Season was on)
+// are told again; the market takes a repeat as the same contract.
+void tell_market_all()
+{
+    if (g_market_told || !g_market.load())
+        return;
+    g_market_told = true;
+    for (const F2RevampPromotion &p : read_promotions())
+        tell_market(p);
+}
+
 void promote_f2_drivers()
 {
     void *entity = swofty::career::entity();
@@ -809,8 +901,9 @@ void promote_f2_drivers()
                 if (!place(s, open[j]))
                     return;
                 ++promoted;
-                static constexpr uint16_t stats[] = {0, 1, 3, 4};
                 size_t position = s - table;
+                record_promotion({s->driver, open[j].leaving->team, open[j].leaving->driver, static_cast<uint32_t>(position + 1)});
+                static constexpr uint16_t stats[] = {0, 1, 3, 4};
                 const PromotedRatings &ratings = kPromotedRatings[std::min(position, std::size(kPromotedRatings) - 1)];
                 int r = ops->set_driver_ratings(s->driver, stats, ratings.values, std::size(stats));
                 swofty::log("[f2-feeder] promotion: driver %u ratings (F2 P%zu): result %d", s->driver, position + 1, r);
@@ -926,18 +1019,60 @@ void fix_teammate_rival(void *entity)
     }
 }
 
+// The f2_revamp.career service (api/f2_revamp_api/career.hpp).
+int svc_in_f2()
+{
+    void *entity = swofty::career::entity();
+    uint16_t key = 0, player = 0;
+    if (!entity || !swofty::career::is(kCareers[0].group) || !player_driver(entity, &key, &player))
+        return 0;
+    uint16_t team = player_team(entity);
+    return team >= 489 && team <= 499 ? 1 : 0;
+}
+
+uint32_t svc_standings(uint32_t *driver_stat, uint32_t cap)
+{
+    std::string text;
+    if (!swofty::career::is(kCareers[0].group) || !read_kept(text))
+        return 0;
+    unsigned player = 0, driver = 0;
+    int points = 0, used = 0;
+    const char *p = text.c_str();
+    if (std::sscanf(p, "%u%n", &player, &used) != 1 || !player)
+        return 0; // "0": a new career's cleared table
+    uint32_t n = 0;
+    for (p += used; std::sscanf(p, "%u %d%n", &driver, &points, &used) == 2; p += used, ++n)
+        if (driver_stat && n < cap)
+            driver_stat[n] = driver;
+    return n;
+}
+
+uint32_t svc_promoted(F2RevampPromotion *out, uint32_t cap)
+{
+    if (!swofty::career::is(kCareers[0].group))
+        return 0;
+    std::vector<F2RevampPromotion> all = read_promotions();
+    for (size_t i = 0; out && i < all.size() && i < cap; ++i)
+        out[i] = all[i];
+    return static_cast<uint32_t>(all.size());
+}
+
+const F2RevampCareer kCareerService{sizeof(F2RevampCareer), &svc_in_f2, &svc_standings, &svc_promoted};
+
 void on_hub(const SwoftyEvent *e, void *user)
 {
     on_career(e, user);
     if (swofty::career::is(kCareers[0].group) && known_build()) {
         promote_f2_drivers();
         fix_teammate_rival(swofty::career::entity());
+        tell_market_all();
     }
 }
 
 void on_unloaded(const SwoftyEvent *, void *)
 {
     set_titles(false, "career unloaded");
+    g_market_told = false;
     show_2026("career unloaded");
 }
 
@@ -971,6 +1106,13 @@ bool register_tiles()
                 swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_RESULTS, on_f2_session)));
     swofty::log("[f2-feeder] subscribe %s: %s", SWOFTY_EVENT_CAREER_UNLOADED,
                 swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_CAREER_UNLOADED, on_unloaded)));
+    swofty::log("[f2-feeder] service %s v%u: %s", F2RevampCareer::name, F2RevampCareer::version,
+                swofty::services::name(swofty::services::publish(kCareerService)));
+    swofty::log("[f2-feeder] lookup %s: %s", SillySeasonMarket::name,
+                swofty::services::name(swofty::services::when<SillySeasonMarket>([](const SillySeasonMarket &m) {
+                    g_market = &m;
+                    swofty::log("[f2-feeder] market: %s found", SillySeasonMarket::name);
+                })));
     return true;
 }
 

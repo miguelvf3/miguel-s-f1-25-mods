@@ -8266,7 +8266,7 @@
   {
    "op": "add-row",
    "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
-   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver_0",
    "set": {
     "_metadata_": "emmo_fittipaldi-jr",
     "driver": "emmo_fittipaldi-jr"
@@ -8523,7 +8523,7 @@
   {
    "op": "add-row",
    "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
-   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver_0",
    "set": {
     "_metadata_": "tasanapol_inthraphuvasak",
     "driver": "tasanapol_inthraphuvasak"
@@ -8780,7 +8780,7 @@
   {
    "op": "add-row",
    "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
-   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver_0",
    "set": {
     "_metadata_": "noel_leon",
     "driver": "noel_leon"
@@ -9037,7 +9037,7 @@
   {
    "op": "add-row",
    "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
-   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver_0",
    "set": {
     "_metadata_": "roman_bilinski",
     "driver": "roman_bilinski"
@@ -9294,7 +9294,7 @@
   {
    "op": "add-row",
    "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
-   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver_0",
    "set": {
     "_metadata_": "colton_herta",
     "driver": "colton_herta"
@@ -9551,7 +9551,7 @@
   {
    "op": "add-row",
    "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
-   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver_0",
    "set": {
     "_metadata_": "rafael_camara",
     "driver": "rafael_camara"
@@ -9808,7 +9808,7 @@
   {
    "op": "add-row",
    "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
-   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver_0",
    "set": {
     "_metadata_": "mari_boya",
     "driver": "mari_boya"
@@ -10065,7 +10065,7 @@
   {
    "op": "add-row",
    "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
-   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver_0",
    "set": {
     "_metadata_": "martinius_stenshorne",
     "driver": "martinius_stenshorne"
@@ -10322,7 +10322,7 @@
   {
    "op": "add-row",
    "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
-   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver_0",
    "set": {
     "_metadata_": "laurens_vanhoepen",
     "driver": "laurens_vanhoepen"
@@ -10579,7 +10579,7 @@
   {
    "op": "add-row",
    "table": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data",
-   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver[_metadata_=oliver_goethe]",
+   "from": "accolades.AccoladeDataGroup[_metadata_=f1_career_f2_26].driver_data.AccoladeDriver_0",
    "set": {
     "_metadata_": "nicolas_varrone",
     "driver": "nicolas_varrone"

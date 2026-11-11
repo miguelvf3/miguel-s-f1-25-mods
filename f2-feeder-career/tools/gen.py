@@ -163,10 +163,11 @@ def career(c):
     # The stock 2026 accolades have no row for ten F2 2026 drivers, and the Accolades screen was empty
     # for one of them (Camara, 0.7.5 test). They get Oliver Goethe's goals, the stock row of an F2 rookie.
     # add-row copies only the row's own two keys here (the catalogue has no entry for the goals), so
-    # the goals are written out.
+    # the goals are written out. The template is the table's first row, whoever it is: by Goethe's label the
+    # whole addon was refused when a team-swap addon had removed his row (players' reports, 11 Nov).
     drivers = f"accolades.AccoladeDataGroup[_metadata_={g}].driver_data"
     for d in ACCOLADE_DRIVERS:
-        add(drivers, f"{drivers}.AccoladeDriver[_metadata_=oliver_goethe]", _metadata_=d, driver=d)
+        add(drivers, f"{drivers}.AccoladeDriver_0", _metadata_=d, driver=d)
         row = f"{drivers}.AccoladeDriver[_metadata_={d}]"
         put(row, "_AccoladeDriverGoal_instancecount_", len(ACCOLADE_GOALS), 0)
         for n, (accolade, tiers) in enumerate(ACCOLADE_GOALS):

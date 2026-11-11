@@ -31,6 +31,7 @@
 #include <swofty/career_wizard.hpp>
 #include <swofty/events.hpp>
 #include <swofty/game.hpp>
+#include <swofty/hub.hpp>
 #include <swofty/lang.hpp>
 #include <swofty/mixin.hpp>
 #include <swofty/popup.hpp>
@@ -53,10 +54,23 @@
 
 #include <f2_revamp_api/career.hpp>
 
+#include "interest.hpp"
+#include "panel.hpp"
+
+// The career panel (panel.hpp): on or off, and the hub tab's row, where any change opens or closes it.
+SWOFTY_SETTING(bool, hub_panel, true);
+// The academy's notices and the F2 review, as the game's message popup.
+SWOFTY_SETTING(bool, notices, true);
+SWOFTY_SETTING(std::string_view, panel_open, "closed");
+
 namespace {
 
 namespace content = swofty::career::content;
 namespace wz = swofty::career::wizard;
+
+void refresh_panel(); // the career panel's numbers, below
+bool tell_notices(bool at_hub = false); // the academy's notices and the F2 review, below
+std::atomic<int> g_notice_tries{0}; // frame ticks left to tell a notice the career wasn't ready for
 
 thread_local bool g_in_router = false;
 bool g_wizard_ours = false; // the last career wizard check was for one of these careers
@@ -531,22 +545,109 @@ struct TeamName {
 constexpr TeamName kTeamNames[] = {{476, "Mercedes"}, {477, "Ferrari"},      {478, "Red Bull"}, {484, "McLaren"},
                                    {481, "Alpine"},   {479, "Williams"},     {485, "Audi"},     {480, "Aston Martin"},
                                    {482, "Racing Bulls"}, {483, "Haas"},     {486, "Cadillac"}};
+// What each team asks of the F2 form score (interest.hpp): the front four, the midfield, the two teams with an
+// open seat, and the newest team. A team of the player's academy asks kAcademyDiscount less.
+struct TeamAsk {
+    uint16_t team;
+    int score;
+};
+constexpr TeamAsk kTeamAsks[] = {{476, 90}, {477, 90}, {478, 90}, {484, 90}, {479, 70}, {480, 70},
+                                 {481, 70}, {485, 70}, {482, 50}, {483, 50}, {486, 35}};
+constexpr int kAcademyDiscount = 15;
+// Super licence points the real F2 2026 drivers bring from 2024 and 2025 (the F2 season is the third of the
+// three that count). From the series' final standings; the drivers not listed have none, or weren't checked
+// (Bilinski, Fittipaldi Jr., Varrone). TO VERIFY against the FIA's own tables before a release.
+struct PriorLicence {
+    uint16_t driver;
+    int points;
+};
+constexpr PriorLicence kPriorLicence[] = {
+    {203, 55}, // Camara: FRECA 2024 1st, F3 2025 1st
+    {202, 34}, // Herta: IndyCar 2024 2nd, 2025 7th
+    {174, 25}, // Tsolov: F3 2025 2nd
+    {192, 25}, // Mini: F3 2024 2nd
+    {204, 20}, // Boya: F3 2025 3rd
+    {194, 20}, // Dunne: F2 2025 5th
+    {189, 17}, // Beganovic: F3 2024 6th, F2 2025 7th
+    {205, 12}, // Stenshorne: F3 2025 5th
+    {164, 7},  // Duerksen: F2 2024 10th, 2025 9th
+    {191, 7},  // Goethe: F3 2024 7th
+    {199, 7},  // Inthraphuvasak: F3 2025 7th
+    {200, 2},  // Leon: F3 2024 10th
+};
+
 struct Offer {
     size_t place = 0; // the player's F2 place; 0 when he didn't race an F2 season (Skip to F1)
     int academy = -1;
+    bool has_form = false; // the career kept his F2 rounds (0.8.3 on)
+    int score = 0;         // interest::Form::score
+    int licence = 0;       // super licence points: what he brought plus the F2 place's
+    int bonus = 0;         // academy targets met: its teams ask this much less
+    bool dropped = false;  // three targets missed in a row: academy is -1 from then on
 };
 
-bool offers_seat(const Offer &offer, uint16_t team)
+// Each academy target met takes this off what the academy's teams ask, up to the cap.
+constexpr int kTargetBonus = 2, kTargetBonusMax = 10;
+
+bool academy_team(const Offer &offer, uint16_t team)
+{
+    bool academy = offer.academy >= 0 && offer.academy < static_cast<int>(std::size(kAcademyTeams));
+    return academy && (kAcademyTeams[offer.academy][0] == team || kAcademyTeams[offer.academy][1] == team);
+}
+
+bool easy_team(const Offer &offer, uint16_t team)
 {
     bool academy = offer.academy >= 0 && offer.academy < static_cast<int>(std::size(kAcademyTeams));
     const uint16_t *easy = academy ? kEasyTeams[offer.academy] : kNoAcademyEasyTeams;
-    if (easy[0] == team || easy[1] == team)
+    return easy[0] == team || easy[1] == team;
+}
+
+// What the team asks of this player's score; 0 for a team that isn't in kTeamAsks.
+int asked_by(const Offer &offer, uint16_t team)
+{
+    for (const TeamAsk &a : kTeamAsks)
+        if (a.team == team)
+            return a.score - (academy_team(offer, team) ? kAcademyDiscount + offer.bonus : 0);
+    return 0;
+}
+
+// A team outside the player's academy counts his score for less, and the front teams (the ones that ask 90)
+// for less still: a champion fills his academy's bar and the midfield's, not Mercedes' or McLaren's
+// (in-game test, 9 Nov: a title gave every team 100%). A player with no academy has no team behind him, but
+// none against him either. Per cent of the score: {midfield and back, front}.
+constexpr int kOutsideAcademy[] = {80, 65}, kNoAcademy[] = {90, 75}, kFrontAsk = 90;
+
+int score_for(const Offer &offer, uint16_t team)
+{
+    if (academy_team(offer, team))
+        return offer.score;
+    bool front = false;
+    for (const TeamAsk &a : kTeamAsks)
+        front = front || (a.team == team && a.score >= kFrontAsk);
+    return offer.score * (offer.academy >= 0 ? kOutsideAcademy : kNoAcademy)[front ? 1 : 0] / 100;
+}
+
+// The team's interest as a percentage: 100 is an offer.
+int interest_in(const Offer &offer, uint16_t team)
+{
+    if (easy_team(offer, team))
+        return 100;
+    int asked = asked_by(offer, team);
+    return asked && offer.has_form ? interest::percent(score_for(offer, team), asked) : 0;
+}
+
+// The easy team always offers. The 0.7.8 rule stays: P1-P3 also get the open seats and the academy's teams.
+// With the rounds kept, any team offers once the score reaches what it asks and the licence is there.
+bool offers_seat(const Offer &offer, uint16_t team)
+{
+    if (easy_team(offer, team))
         return true;
-    if (offer.place > kLicencePlaces)
-        return false;
-    if (std::find(std::begin(kOpenSeatTeams), std::end(kOpenSeatTeams), team) != std::end(kOpenSeatTeams))
+    if (offer.place && offer.place <= kLicencePlaces &&
+        (academy_team(offer, team) ||
+         std::find(std::begin(kOpenSeatTeams), std::end(kOpenSeatTeams), team) != std::end(kOpenSeatTeams)))
         return true;
-    return academy && (kAcademyTeams[offer.academy][0] == team || kAcademyTeams[offer.academy][1] == team);
+    int asked = asked_by(offer, team);
+    return offer.has_form && asked && offer.licence >= interest::kLicenceNeeded && score_for(offer, team) >= asked;
 }
 
 void show_refusal(const Offer &offer, uint16_t team)
@@ -559,8 +660,13 @@ void show_refusal(const Offer &offer, uint16_t team)
         if (offers_seat(offer, t.team))
             open += (open.empty() ? "" : ", ") + std::string(t.name);
     }
-    std::string body = std::string(refused) + " won't sign you after P" + std::to_string(offer.place) +
-                       " in F2. Teams open to you: " + open + ".";
+    std::string body = std::string(refused) + " won't sign you after P" + std::to_string(offer.place) + " in F2";
+    if (offer.has_form && offer.licence < interest::kLicenceNeeded)
+        body += " (super licence: " + std::to_string(offer.licence) + " of " +
+                std::to_string(interest::kLicenceNeeded) + " points)";
+    else if (offer.has_form)
+        body += " (interest: " + std::to_string(interest_in(offer, team)) + "%)";
+    body += ". Teams open to you: " + open + ".";
     swofty::popup::Result r = swofty::popup::show("No seat available", body);
     if (r != swofty::popup::Result::ok)
         swofty::log("[f2-feeder] offers: refusal popup: %s", swofty::popup::name(r));
@@ -628,6 +734,145 @@ size_t read_live_table(void *entity, Standing *table, size_t cap)
     return current ? read_standings(current, table, cap) : 0;
 }
 
+// The player's F2 teammate: the other entrant row of his team; 0 with none.
+uint16_t teammate_of(void *entity, uint16_t team)
+{
+    for (char *row = at<char *>(entity, 0x2e0), *end = at<char *>(entity, 0x2e8); row && row < end; row += 0x88)
+        if (!(at<uint32_t>(row, 0x48) & 0x10000000) && at<uint16_t>(row, 0x5a) == team)
+            return at<uint16_t>(row, 0x52);
+    return 0;
+}
+
+// The player's rounds of the current championship's season, from its standings (layout above Standing): the
+// result rounds and the points rounds run side by side, session by session.
+std::vector<interest::Round> live_rounds(void *entity, uint16_t player, uint16_t teammate)
+{
+    std::vector<interest::Round> out;
+    char *champ = at<char *>(entity, 0x1058);
+    char *sb = champ ? at<char *>(champ, 0x548) : nullptr, *se = champ ? at<char *>(champ, 0x550) : nullptr;
+    if (!sb || se <= sb || (se - sb) % 16)
+        return out;
+    char *season = at<char *>(se - 16, 8);
+    if (!season)
+        return out;
+    char *st = season + 0x2a8;
+    char *r = at<char *>(st, 0xd0), *re = at<char *>(st, 0xd8), *pr = at<char *>(st, 0x20), *pe = at<char *>(st, 0x28);
+    if (!r || re < r || (re - r) % 0x20 || re - r > 0x20 * 64)
+        return out;
+    for (; r < re; r += 0x20, pr += 0x20) {
+        std::vector<interest::Session> sessions;
+        bool paid = pr && pr < pe;
+        char *ps = paid ? at<char *>(pr, 8) : nullptr, *pse = paid ? at<char *>(pr, 0x10) : nullptr;
+        char *rs = at<char *>(r, 8), *rse = at<char *>(r, 0x10);
+        if (!rs || rse < rs || (rse - rs) % 0x28 || rse - rs > 0x28 * 16)
+            continue;
+        for (; rs < rse; rs += 0x28) {
+            interest::Session s;
+            char *e = at<char *>(rs, 8), *ee = at<char *>(rs, 0x10);
+            if (e && ee >= e && (ee - e) % 0x10 == 0 && ee - e <= 0x10 * 64)
+                for (; e < ee; e += 0x10)
+                    s.results.push_back({static_cast<uint16_t>(at<uint32_t>(e, 0) >> 16), at<int32_t>(e, 4)});
+            if (ps && ps < pse) {
+                char *p = at<char *>(ps, 8), *pp = at<char *>(ps, 0x10);
+                if (p && pp >= p && (pp - p) % 8 == 0 && pp - p <= 8 * 64)
+                    for (; p < pp; p += 8)
+                        s.points.push_back({static_cast<uint16_t>(at<uint32_t>(p, 0) >> 16), at<int32_t>(p, 4)});
+                ps += 0x28;
+            }
+            sessions.push_back(std::move(s));
+        }
+        interest::Round round;
+        if (interest::summarise(sessions, player, teammate, &round))
+            out.push_back(std::move(round));
+    }
+    return out;
+}
+
+// The rounds in the career data: "rounds": [{"q": quali place, "tq": the teammate's, "races": [[place, points,
+// teammate's place], ...]}], in the order they ran.
+std::vector<interest::Round> kept_rounds(const swofty::json::Value &data)
+{
+    std::vector<interest::Round> out;
+    if (const auto *a = data["rounds"].if_array())
+        for (const swofty::json::Value &e : *a) {
+            interest::Round r;
+            r.quali = static_cast<int>(e["q"].as_int());
+            r.teammate_quali = static_cast<int>(e["tq"].as_int());
+            r.done = e["d"].as_int() != 0;
+            if (const auto *races = e["races"].if_array())
+                for (const swofty::json::Value &x : *races)
+                    r.races.push_back({static_cast<int>(x[0].as_int()), static_cast<int>(x[1].as_int()),
+                                       static_cast<int>(x[2].as_int())});
+            out.push_back(std::move(r));
+        }
+    return out;
+}
+
+// At each F2 session end: the game's rounds go into the career data, for the offers at Team Select (a loaded
+// save may not hold them any more) and for the hub.
+void keep_rounds(void *entity, uint16_t player, uint16_t team)
+{
+    uint16_t teammate = teammate_of(entity, team);
+    std::vector<interest::Round> live = live_rounds(entity, player, teammate);
+    swofty::json::Value v = career_data();
+    std::vector<interest::Round> kept = kept_rounds(v);
+    std::vector<interest::Round> rounds = interest::merge(kept, live);
+    interest::Form f = interest::form(rounds, 0);
+    swofty::log("[f2-feeder] interest: rounds live %zu kept %zu -> %zu, teammate %u; %d races, %d points, %d wins, "
+                "%d podiums, %d poles, ahead of teammate %d of %d, score %d",
+                live.size(), kept.size(), rounds.size(), teammate, f.races, f.points, f.wins, f.podiums, f.poles,
+                f.ahead, f.compared, f.score);
+    interest::Targets t = interest::targets(rounds);
+    swofty::log("[f2-feeder] targets: met %d missed %d (in a row %d), last %d, dropped after round %zu; round %zu: %s",
+                t.met, t.missed, t.streak, t.last, t.dropped_after, t.next_round,
+                t.next_round ? interest::describe(t.next) : "none");
+    if (rounds == kept)
+        return;
+    swofty::json::Value list = swofty::json::Value::array();
+    for (const interest::Round &r : rounds) {
+        swofty::json::Value e = swofty::json::Value::object(), races = swofty::json::Value::array();
+        e["q"] = swofty::json::Value(r.quali);
+        e["tq"] = swofty::json::Value(r.teammate_quali);
+        e["d"] = swofty::json::Value(r.done ? 1 : 0);
+        for (const interest::Race &x : r.races)
+            races.push_back(swofty::json::Value::array(
+                {swofty::json::Value(x.place), swofty::json::Value(x.points), swofty::json::Value(x.teammate)}));
+        e["races"] = std::move(races);
+        list.push_back(std::move(e));
+    }
+    v["rounds"] = std::move(list);
+    swofty::career::Result r = swofty::career::saves::data(kAddonId).set_current(v, 1);
+    swofty::log("[f2-feeder] interest: rounds kept: career data %s", result_name(r));
+}
+
+int prior_licence(uint16_t driver)
+{
+    for (const PriorLicence &p : kPriorLicence)
+        if (p.driver == driver)
+            return p.points;
+    return 0;
+}
+
+// The offer's score and licence from the kept rounds; place and academy are set already. The academy's
+// targets count here: met ones ease its teams, three missed in a row and the player has no academy.
+interest::Form fill_offer(Offer &offer, uint16_t player, const std::vector<interest::Round> &rounds)
+{
+    interest::Form f = interest::form(rounds, offer.place);
+    if (offer.academy >= 0) {
+        interest::Targets t = interest::targets(rounds);
+        if (t.dropped_after) {
+            offer.dropped = true;
+            offer.academy = -1;
+        } else {
+            offer.bonus = std::min(kTargetBonusMax, t.met * kTargetBonus);
+        }
+    }
+    offer.has_form = offer.place && f.rounds > 0;
+    offer.score = f.score;
+    offer.licence = interest::licence_points(offer.place) + prior_licence(player);
+    return f;
+}
+
 // Read at the confirm itself: Team Select comes in the front end, with no career.hub first (0.7.8 tests, 7 Nov).
 Offer read_offer()
 {
@@ -654,7 +899,15 @@ Offer read_offer()
     if (!offer.place)
         offer.place = read_kept_place(&player);
     offer.academy = academy_of_driver(entity, player);
-    swofty::log("[f2-feeder] offers: player %u is F2 P%zu, academy %d", player, offer.place, offer.academy);
+    std::vector<interest::Round> rounds = kept_rounds(career_data());
+    interest::Form f = fill_offer(offer, player, rounds);
+    swofty::log("[f2-feeder] offers: player %u is F2 P%zu, academy %d; rounds kept %zu (%d races, %d points, %d wins, "
+                "%d poles), score %d, super licence %d; academy targets: bonus %d, dropped %d",
+                player, offer.place, offer.academy, rounds.size(), f.races, f.points, f.wins, f.poles, offer.score,
+                offer.licence, offer.bonus, offer.dropped ? 1 : 0);
+    for (const TeamName &t : kTeamNames)
+        swofty::log("[f2-feeder] offers: %s asks %d, interest %d%%, offer %d", t.name, asked_by(offer, t.team),
+                    interest_in(offer, t.team), offers_seat(offer, t.team) ? 1 : 0);
     return offer;
 }
 
@@ -682,6 +935,9 @@ void on_f2_session(const SwoftyEvent *, void *)
     keep_table(text, "F2 session end");
     swofty::log("[f2-feeder] offers: F2 table kept: player P%zu of %zu, %d points", place, n,
                 place ? table[place - 1].points : 0);
+    keep_rounds(entity, player, team);
+    refresh_panel();
+    tell_notices();
 }
 
 using TeamSelectMessage = void *(void *screen, const uint32_t *const *name, void *data, void *extra);
@@ -829,11 +1085,12 @@ void promote_f2_drivers()
         const LeavingSeat *leaving;
         int seat;
         bool taken;
+        int refused = 0; // set_seat refusals of this seat on this visit
     } open[std::size(kLeavingSeats)];
     size_t opens = 0;
     for (const LeavingSeat &l : kLeavingSeats)
         if (Seat s = seat_of(entity, l.driver); s.team == l.team && s.seat >= 0)
-            open[opens++] = {&l, s.seat, false};
+            open[opens++] = {&l, s.seat, false, 0};
     if (!opens)
         return; // done on an earlier visit, or the player took the seats
     std::string order;
@@ -875,6 +1132,19 @@ void promote_f2_drivers()
         swofty::log("[f2-feeder] promotion: driver %u (F2 %d pts) takes the seat of %s, seat %d: result %d %s",
                     s->driver, s->points, o.leaving->name, o.seat, r, report);
         o.taken = r == 0;
+        if (!o.taken) {
+            // The core refuses a driver with more than one row in the career's entrant table (Swofty bot, 11 Nov;
+            // a player's report had every driver refused that way). Which rows: for the next report.
+            std::string rows;
+            size_t index = 0;
+            for (char *row = at<char *>(entity, 0x2e0), *end = at<char *>(entity, 0x2e8); row && row < end;
+                 row += 0x88, ++index)
+                if (at<uint16_t>(row, 0x52) == s->driver)
+                    rows += " [row " + std::to_string(index) + " team " + std::to_string(at<uint16_t>(row, 0x5a)) +
+                            " flags 0x" + [](uint32_t v) { char b[12]; std::snprintf(b, sizeof b, "%x", v); return std::string(b); }(at<uint32_t>(row, 0x48)) + "]";
+            swofty::log("[f2-feeder] promotion: driver %u refused; his entrant rows:%s", s->driver,
+                        rows.empty() ? " none" : rows.c_str());
+        }
         return o.taken;
     };
     // A refused driver (an F1 reserve, say) leaves his seat open for the next one in the table.
@@ -898,8 +1168,16 @@ void promote_f2_drivers()
                 if (open[j].taken || (same_academy && open[j].leaving->academy != academy_of(s->driver)))
                     continue;
                 tried[s - table] = true;
-                if (!place(s, open[j]))
+                if (!place(s, open[j])) {
+                    // A seat that refuses two drivers in a row is the seat's problem (a player's report, 11 Nov:
+                    // ten drivers refused for one seat on every visit): leave it for the next Team HQ visit.
+                    if (++open[j].refused >= 2) {
+                        open[j].taken = true;
+                        swofty::log("[f2-feeder] promotion: the seat of %s refused two drivers; left for the next visit",
+                                    open[j].leaving->name);
+                    }
                     return;
+                }
                 ++promoted;
                 size_t position = s - table;
                 record_promotion({s->driver, open[j].leaving->team, open[j].leaving->driver, static_cast<uint32_t>(position + 1)});
@@ -950,6 +1228,7 @@ void on_career(const SwoftyEvent *, void *)
 {
     bool mine = swofty::career::is(kCareers[0].group);
     set_titles(mine, "career loaded or Team HQ");
+    refresh_panel();
     if (!mine) {
         show_2026("another career");
     }
@@ -961,6 +1240,7 @@ void on_career(const SwoftyEvent *, void *)
         if (schedule)
             hide_2026(at<char *>(schedule, 0x290));
         give_real_academy();
+        g_notice_tries = tell_notices() ? 0 : 240;
     }
 }
 
@@ -1059,6 +1339,257 @@ uint32_t svc_promoted(F2RevampPromotion *out, uint32_t cap)
 
 const F2RevampCareer kCareerService{sizeof(F2RevampCareer), &svc_in_f2, &svc_standings, &svc_promoted};
 
+// The F2 2026 grid, for the panel (entrants.drivers stat ids).
+struct DriverName {
+    uint16_t driver;
+    const char *name;
+};
+constexpr DriverName kF2Names[] = {
+    {203, "Rafael Camara"},     {164, "Joshua Duerksen"},  {166, "Ritomo Miyata"},     {202, "Colton Herta"},
+    {200, "Noel Leon"},         {174, "Nikola Tsolov"},    {189, "Dino Beganovic"},    {201, "Roman Bilinski"},
+    {192, "Gabriele Mini"},     {191, "Oliver Goethe"},    {193, "Sebastian Montoya"}, {204, "Mari Boya"},
+    {205, "Martinius Stenshorne"}, {194, "Alex Dunne"},    {153, "Kush Maini"},        {199, "Tasanapol Inthraphuvasak"},
+    {198, "Emerson Fittipaldi Jr."}, {187, "Cian Shields"}, {207, "Nicolas Varrone"},  {167, "Rafael Villagomez"},
+    {206, "Laurens van Hoepen"}, {197, "John Bennett"},
+};
+constexpr const char *kAcademyNames[] = {"Mercedes", "Ferrari", "Red Bull", "Alpine",
+                                         "McLaren",  "Williams", "Audi",    "Cadillac"};
+
+std::string driver_name(uint16_t driver, uint16_t player)
+{
+    for (const DriverName &d : kF2Names)
+        if (d.driver == driver)
+            return d.name;
+    return driver == player ? "You" : "Driver " + std::to_string(driver);
+}
+
+const char *team_name(uint32_t team)
+{
+    for (const TeamName &t : kTeamNames)
+        if (t.team == team)
+            return t.name;
+    return "an F1 team";
+}
+
+// The rookie season is the career season the player was first seen in F1 at Team HQ: its index is kept as
+// "rookie_season" (whether the F2 season counts as index 0 is not known, so the index itself is kept).
+void mark_rookie_season()
+{
+    if (svc_in_f2())
+        return;
+    auto pos = swofty::career::current_round();
+    if (!pos)
+        return;
+    swofty::json::Value v = career_data();
+    bool kept = v.contains("rookie_season");
+    swofty::log("[f2-feeder] rookie: season index %d, round %d of %d; rookie season kept %d (%lld)", pos->season_index,
+                pos->round, pos->rounds, kept ? 1 : 0, static_cast<long long>(v["rookie_season"].as_int(-1)));
+    if (kept)
+        return;
+    v["rookie_season"] = swofty::json::Value(pos->season_index);
+    swofty::career::Result r = swofty::career::saves::data(kAddonId).set_current(v, 1);
+    swofty::log("[f2-feeder] rookie: season %d kept as the rookie season: career data %s", pos->season_index,
+                result_name(r));
+}
+
+bool in_rookie_season(const swofty::json::Value &v)
+{
+    auto pos = swofty::career::current_round();
+    return pos && v.contains("rookie_season") && v["rookie_season"].as_int(-1) == pos->season_index;
+}
+
+// The panel's numbers, from the career data (the kept table and rounds), so it reads the same in F2, at Team
+// Select and in F1. Called on the game thread whenever they may have changed.
+void refresh_panel()
+{
+    bool mine = swofty::career::is(kCareers[0].group);
+    f2panel::enable(mine && hub_panel.get() && f2panel::start());
+    if (!mine)
+        return;
+    f2panel::Snapshot s;
+    void *entity = swofty::career::entity();
+    s.in_f2 = svc_in_f2() != 0;
+    std::string text;
+    unsigned player = 0, driver = 0;
+    int points = 0, used = 0;
+    if (read_kept(text) && std::sscanf(text.c_str(), "%u%n", &player, &used) == 1) {
+        for (const char *p = text.c_str() + used; std::sscanf(p, "%u %d%n", &driver, &points, &used) == 2; p += used) {
+            s.table.push_back({driver_name(static_cast<uint16_t>(driver), static_cast<uint16_t>(player)), points,
+                               driver == player});
+            if (driver == player) {
+                s.place = s.table.size();
+                s.points = points;
+            }
+        }
+    }
+    uint16_t key = 0, stat = 0;
+    if (!player && entity && player_driver(entity, &key, &stat))
+        player = stat;
+    s.player = player ? driver_name(static_cast<uint16_t>(player), static_cast<uint16_t>(player)) : "";
+    if (s.place > 1) {
+        const f2panel::Row &r = s.table[s.place - 2];
+        s.rival = "P" + std::to_string(s.place - 1) + " " + r.name + ", " + std::to_string(r.points - s.points) + " points ahead";
+    } else if (s.place == 1 && s.table.size() > 1) {
+        const f2panel::Row &r = s.table[1];
+        s.rival = "P2 " + r.name + ", " + std::to_string(s.points - r.points) + " points behind";
+    }
+    Offer offer;
+    offer.place = s.place;
+    offer.academy = entity && player ? academy_of_driver(entity, static_cast<uint16_t>(player)) : -1;
+    int academy = offer.academy;
+    std::vector<interest::Round> rounds = kept_rounds(career_data());
+    interest::Form f = fill_offer(offer, static_cast<uint16_t>(player), rounds);
+    s.has_form = offer.has_form;
+    s.rounds = f.rounds, s.races = f.races, s.wins = f.wins, s.podiums = f.podiums, s.poles = f.poles;
+    s.ahead = f.ahead, s.compared = f.compared, s.score = f.score;
+    s.licence_prior = prior_licence(static_cast<uint16_t>(player));
+    s.licence_place = interest::licence_points(s.place);
+    s.licence_needed = interest::kLicenceNeeded;
+    if (academy >= 0 && academy < static_cast<int>(std::size(kAcademyNames))) {
+        std::string name = kAcademyNames[academy];
+        interest::Targets t = interest::targets(rounds);
+        int judged = t.met + t.missed;
+        if (t.dropped_after) {
+            s.academy = "none";
+            s.academy_lines.push_back(name + " dropped you after round " + std::to_string(t.dropped_after) +
+                                      ": three targets missed in a row");
+        } else {
+            s.academy = name;
+            if (judged)
+                s.academy += "  |  targets met: " + std::to_string(t.met) + " of " + std::to_string(judged);
+            if (t.last >= 0)
+                s.academy_lines.push_back(std::string(t.last ? "Last target met: " : "Last target missed: ") +
+                                          interest::describe(t.last_goal));
+            if (s.in_f2) {
+                s.academy_lines.push_back("Target for round " + std::to_string(t.next_round) + ": " +
+                                          interest::describe(t.next));
+                if (t.streak == interest::kMissesToDrop - 1)
+                    s.academy_warning = "Two targets missed in a row: one more and " + name + " drops you";
+            }
+        }
+    }
+    if (s.place)
+        for (const TeamName &t : kTeamNames)
+            s.teams.push_back({t.name, interest_in(offer, t.team), offers_seat(offer, t.team), easy_team(offer, t.team)});
+    if (!s.in_f2) {
+        std::vector<F2RevampPromotion> moved = read_promotions();
+        std::sort(moved.begin(), moved.end(),
+                  [](const F2RevampPromotion &a, const F2RevampPromotion &b) { return a.f2_place < b.f2_place; });
+        for (const F2RevampPromotion &m : moved)
+            s.promoted.push_back(driver_name(static_cast<uint16_t>(m.driver_stat), 0) + " to " + team_name(m.team_stat) +
+                                 " (F2 P" + std::to_string(m.f2_place) + ")");
+    }
+    if (!s.in_f2 && entity && player && in_rookie_season(career_data())) {
+        std::vector<uint32_t> rookies{player};
+        for (const F2RevampPromotion &m : read_promotions())
+            rookies.push_back(m.driver_stat);
+        Standing live[64];
+        size_t n = read_live_table(entity, live, std::size(live));
+        for (size_t i = 0; i < n; ++i)
+            if (std::find(rookies.begin(), rookies.end(), live[i].driver) != rookies.end())
+                s.rookies.push_back({driver_name(live[i].driver, static_cast<uint16_t>(player)) + "  (P" +
+                                         std::to_string(i + 1) + " in F1)",
+                                     live[i].points, live[i].driver == player});
+        uint16_t team = player_team(entity);
+        interest::Form f1 = interest::form(live_rounds(entity, static_cast<uint16_t>(player), teammate_of(entity, team)), 0);
+        if (f1.compared)
+            s.rookie_line = "Ahead of your teammate in " + std::to_string(f1.ahead) + " of " +
+                            std::to_string(f1.compared) + " sessions this season";
+    }
+    f2panel::set(std::move(s));
+}
+
+// What the player should hear once, as the game's message popup (inbox mails can't be kept to this career yet:
+// REVAMP.md). In F2: the academy's verdict on the round just judged and the next target; "told" in the career
+// data is the number of judged rounds told, plus one. In F1: the F2 season's review, once ("review").
+// false: the career isn't ready to tell (no player row yet), try again later. The F2 review waits for Team HQ
+// (at_hub), where the promotions are made first, so it can name who moved up.
+bool tell_notices(bool at_hub)
+{
+    if (!notices.get() || !swofty::career::is(kCareers[0].group) || !swofty::popup::available())
+        return true;
+    void *entity = swofty::career::entity();
+    uint16_t key = 0, player = 0;
+    if (!entity || !player_driver(entity, &key, &player))
+        return false;
+    swofty::json::Value v = career_data();
+    std::vector<interest::Round> rounds = kept_rounds(v);
+    std::string title, body;
+    if (svc_in_f2()) {
+        int academy = academy_of_driver(entity, player);
+        if (academy < 0 || academy >= static_cast<int>(std::size(kAcademyNames)))
+            return true;
+        interest::Targets t = interest::targets(rounds);
+        int judged = t.met + t.missed;
+        if (v["told"].as_int() > judged)
+            return true;
+        std::string name = kAcademyNames[academy];
+        title = name + " academy";
+        if (t.last >= 0)
+            body = std::string(t.last ? "Target met: " : "Target missed: ") + interest::describe(t.last_goal) + ".\n";
+        if (t.dropped_after) {
+            body += "That is three targets missed in a row. " + name + " has dropped you from its academy.";
+        } else {
+            if (t.streak == interest::kMissesToDrop - 1)
+                body += "Two missed in a row: one more and you are out of the academy.\n";
+            body += "Target for round " + std::to_string(t.next_round) + ": " + interest::describe(t.next) + ".";
+        }
+        v["told"] = swofty::json::Value(judged + 1);
+    } else {
+        if (!at_hub || v["review"].as_int() || v["table"].as_string().empty())
+            return true;
+        uint16_t kept_player = 0;
+        size_t place = read_kept_place(&kept_player);
+        if (!place)
+            return true;
+        interest::Form f = interest::form(rounds, place);
+        title = "Your F2 season";
+        body = "You finished P" + std::to_string(place) + " in Formula 2";
+        if (f.rounds)
+            body += ": " + std::to_string(f.points) + " points, wins " + std::to_string(f.wins) +
+                    ", other podiums " + std::to_string(f.podiums) + ", poles " + std::to_string(f.poles);
+        body += ".";
+        std::string moved;
+        for (const F2RevampPromotion &m : read_promotions())
+            moved += (moved.empty() ? "" : ", ") + driver_name(static_cast<uint16_t>(m.driver_stat), 0) + " (" +
+                     team_name(m.team_stat) + ")";
+        if (!moved.empty())
+            body += "\nMoved up to F1 with you: " + moved + ".";
+        v["review"] = swofty::json::Value(1);
+    }
+    swofty::popup::Result shown = swofty::popup::show(title, body);
+    if (shown != swofty::popup::Result::ok) {
+        swofty::log("[f2-feeder] notice: no popup (%s): %s", swofty::popup::name(shown), title.c_str());
+        return true;
+    }
+    swofty::career::Result r = swofty::career::saves::data(kAddonId).set_current(v, 1);
+    swofty::log("[f2-feeder] notice: %s: %s (career data %s)", title.c_str(), body.c_str(), result_name(r));
+    return true;
+}
+
+// F8, Esc and B open and close the panel in the paint callback; the hub tab's row follows here, on the game
+// thread, so its next change does what it says.
+void panel_tick(double, void *)
+{
+    static int wait = 0;
+    if (++wait < 30)
+        return;
+    wait = 0;
+    // a new career goes straight to its first session: the notice career.loaded couldn't tell, and the panel
+    if (g_notice_tries > 0) {
+        bool told = tell_notices();
+        int left = told ? 0 : g_notice_tries - 1;
+        g_notice_tries = left;
+        if (told)
+            refresh_panel();
+        if (told || !left)
+            swofty::log("[f2-feeder] notice: after career loaded: %s", told ? "career ready" : "gave up waiting");
+    }
+    bool open = f2panel::g_open;
+    if (swofty::hub::available() && (panel_open.get() == "open") != open)
+        swofty::hub::set_option(kAddonId, "panel_open", open ? "open" : "closed");
+}
+
 void on_hub(const SwoftyEvent *e, void *user)
 {
     on_career(e, user);
@@ -1066,6 +1597,9 @@ void on_hub(const SwoftyEvent *e, void *user)
         promote_f2_drivers();
         fix_teammate_rival(swofty::career::entity());
         tell_market_all();
+        mark_rookie_season();
+        tell_notices(true);
+        refresh_panel();
     }
 }
 
@@ -1073,6 +1607,8 @@ void on_unloaded(const SwoftyEvent *, void *)
 {
     set_titles(false, "career unloaded");
     g_market_told = false;
+    g_notice_tries = 0;
+    f2panel::enable(false);
     show_2026("career unloaded");
 }
 
@@ -1094,6 +1630,8 @@ bool register_tiles()
         swofty::log("[f2-feeder] tile %s (%s): %s; experience step route %s", c.id, c.group,
                     swofty::career::name(r), wz::name(w));
     }
+    swofty::log("[f2-feeder] panel: overlay %s, frame tick %s", f2panel::start() ? "ok" : "not available",
+                swofty::events::name(swofty::events::on_frame(panel_tick)));
     swofty::log("[f2-feeder] subscribe %s: %s", SWOFTY_EVENT_CAREER_LOADED,
                 swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_CAREER_LOADED, on_career)));
     swofty::log("[f2-feeder] subscribe %s: %s", SWOFTY_EVENT_CAREER_HUB,
@@ -1117,6 +1655,17 @@ bool register_tiles()
 }
 
 } // namespace
+
+// The hub tab's row opens and closes the panel.
+SWOFTY_ON_CHANGE(panel_open, std::string_view v)
+{
+    f2panel::open(v == "open");
+}
+
+SWOFTY_ON_CHANGE(hub_panel, bool)
+{
+    refresh_panel();
+}
 
 SWOFTY_WRAP(FeTile_Route_CareerItem, swofty::game::Action *, swofty::game::HomeItem *item,
             swofty::game::Action *out)

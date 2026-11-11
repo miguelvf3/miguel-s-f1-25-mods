@@ -14,7 +14,7 @@ Later F1 seasons repeat the year, as in the game's own careers.
 
 ## Requirements
 
-- Swofty Launcher with `swofty.core` 0.2.13 or later.
+- Swofty Launcher 1.8.36 or later, with `swofty.core` 0.2.13 or later. Steam copy of the game; the EA app copy is not supported.
 - Optional track addons, for the two rounds F1 25 has no circuit for. Each round has its own setting on the addon, off by default. Turn it on with its track addon before starting a career:
   - `portimao` needs `mod.portimao` (Portimão, by Pajko);
   - `istanbul_park` needs `track.istanbul_park` (Istanbul Park, by Apoc & RK), in the Swofty addon catalogue.
@@ -30,12 +30,21 @@ Later F1 seasons repeat the year, as in the game's own careers.
 
 ## After F2: offers and promotions
 
-Your final F2 place decides which F1 teams sign you at Team Select. A team that won't shows a popup naming the teams open to you.
+Your F2 season decides which F1 teams sign you at Team Select. A team that won't shows a popup with the reason and the teams open to you.
 
-| F2 place | Teams open to you |
+Your easy team always signs you. For the others you need two things:
+
+- **A super licence: 40 points.** The final F2 place gives 40 for P1-P3, 30 for P4, 20 for P5, then 10, 8, 6, 4 and 3 down to P10. A real driver adds what he scored in 2024 and 2025 (Câmara 55, Herta 34, Tsolov and Minì 25, Boya and Dunne 20, Beganović 17, Stenshorne 12, Dürksen, Goethe and Inthraphuvasak 7, León 2). A created driver starts at 0, so he needs the top 3.
+- **The team's interest.** Your season gives a score from 0 to 100: points per round, wins, podiums, poles, how often you beat your teammate, and a bonus for P1-P3. Each team asks for a score:
+
+| Teams | Score asked |
 |---|---|
-| P1-P3 (enough super licence points) | Your easy team, Haas, Racing Bulls and your academy's teams |
-| P4 or lower | Only your easy team |
+| Mercedes, Ferrari, Red Bull, McLaren | 90 |
+| Williams, Aston Martin, Alpine, Audi | 70 |
+| Haas, Racing Bulls | 50 |
+| Cadillac | 35 |
+
+A team of your academy asks 15 less. P1-P3 always get Haas, Racing Bulls and the academy's teams, as before. A career whose F2 season was raced before 0.8.3 has no rounds kept and uses only that older rule.
 
 Your easy team depends on your academy:
 
@@ -49,10 +58,34 @@ Your easy team depends on your academy:
 
 A created driver uses the academy picked when creating the driver. **Skip to F1** has no F2 season, so every team is open.
 
+## Academy targets
+
+If you are in an academy, it sets a target for each F2 round: a qualifying place, points, a feature race place, or beating your teammate. The targets get harder as you score more points.
+
+- Each target met makes the academy's F1 teams ask a little less of you.
+- Three targets missed in a row and the academy drops you. Its teams then treat you like any other driver.
+- The career panel shows the target for the next round, the last result and a warning after two misses in a row.
+
+After each round a message tells you whether you met the target and what the next one is. When you reach F1, one message reviews your F2 season. The "Academy notices" option turns these messages off.
+
+## Career panel
+
+**F8** opens a panel over the game with the F2 table, your season (wins, podiums, poles, how you compare with your teammate), your title rival, your super licence points and each F1 team's interest in you as the season stands. In F1 it shows how your F2 season ended and who moved up with you. F8, Esc or B closes it.
+
+The career laptop also gets an **F2 Revamp** tab with a row that opens the panel, for players on a controller. While the panel is open the controller still moves the game's menu under it.
+
+The panel uses Swofty's overlay, an experimental feature, so the launcher tags the addon **Uses experimental features**. Turn **Career panel (F8)** off in ADDON SETTINGS to play without it.
+
 At the first F1 Team HQ, the best AI drivers of your F2 season take the seats of Ocon (Haas), Lawson and Lindblad (Racing Bulls), with ratings set by their F2 place. A driver the game refuses (an F1 reserve, say) is skipped for the next one.
+
+In your first F1 season the panel shows the rookie standings: you and the drivers who moved up from F2 with you, by F1 points.
 
 ## Known issues
 
+- With the Portimão or Istanbul Park setting on and its track addon off, the game doesn't start. Keep the setting off unless the track is on.
+- The Custom Season screen's long season button reads "24 Races" (the game's own text); the list under it has this career's 22 to 24 rounds.
+- In F2 the career panel only opens with F8: F2 weekends have no laptop for the tab.
+- The super licence points the real F2 drivers bring from earlier seasons are estimates for some of them.
 - Ties on points can rank you one place off the game's standings in the offer popup.
 - A promoted driver can be missing from the Driver Rating Comparison (seems tied to the Iconic Edition driver icons).
 - Repeating F2 after a poor season isn't possible yet: the F2 championship runs one season.

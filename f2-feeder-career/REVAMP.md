@@ -241,3 +241,195 @@ aleex0428's answer: Silly Season does nothing in `f1_career_f2_26` today (unknow
 - His, `silly_season.market` v1, our guess of the layout until he publishes it: `{size, int (*sign)(driver_stat, team_stat, until)}` (`signed` is a C++ keyword). We call it for each promotion with until = 2028, and once per loaded career at Team HQ for the recorded ones.
 - Promotions are recorded in the career data (`promoted` next to `table`). A career promoted before 0.8.2 has no record: in its first F1 season, F2 drivers now seated at Haas or Racing Bulls count as promoted (replaced unknown, 0).
 - His code is MIT (aleex0428/silly-season): the overlay kit (`native/src/hub.inl`) can be reused with his copyright notice. Inbox mails: rows in `emails.triggers` copied from `mt_drivermarket_retired`, with our own lng keys filled by `swofty::lang::set`.
+
+### Driver pool check and next-step research (9 Nov)
+
+Driver pool (asked by aleex0428): our career list's reference is right. `f1_career_2026_driver_pool` is a stock list (`entrants.entrant_lists.entrant_list_62`, stat 98, in content set 11) whose only reference is `f1_2026_driver_pool` (row 67, the list with the drivers). The stock `f1_career_2026` list (row 61) names the same career pool, and ours copies it. An addon that reads the pool should follow the reference.
+
+How to build what is left, from the Swofty SDK at `d181576` (launcher 1.8.33), the game database and Silly Season's source (MIT):
+
+- **F2 hub, step 1: a laptop tab.** `hub_tab` adds its tab to two screens: Driver Career's Team HQ (`team_hq_container`) and the career hub's laptop (`laptop_container` in `career_hub_flow`, the laptop of a race weekend). The flow trace of an F2 round has `PostRaceCareerHub`, so the F2 weekends may show that laptop: a `hub_tab` with `data_group: f1_career_f2_26` is the first thing to try, data only. The tab holds 1 to 6 option rows. Silly Season uses one `choice` option as a menu: changing it opens an overlay report.
+- **F2 hub, step 2: an overlay panel.** `swofty/overlay.hpp` + `overlay_ui.hpp` (panels, lists, buttons, gamepad focus; `experimental_features: ["overlay"]`), or Silly Season's kit (`native/src/hub.inl`, 2100 lines, keep his copyright notice). Content we already have: the kept F2 table, super licence points, the academy, the teams that would offer a seat now. Open from the tab's option or a key (F7 is his).
+- **F2 hub, step 3: between rounds.** `flow.state` (events.hpp, core API 6) reports every flow state by name, so `StateCareerHubSelector` entering is known without Frida. Its own code is behind the protected jump table (vtable right after its name at file 0x5858b95; update slot 0x1436bde60 jumps to 0x150e8ddd0), so reading it statically is costly. Cheaper: on `flow.state` for that state, show the overlay panel (round summary, next round) for a moment or until a button; holding the state open is the unknown part and needs one live test. FP1 outings still depend on this.
+- **Mails.** `emails.triggers` has 9 triggers (`practice_1/2/3`, `first_qualifying`, `race`, `post_race`, `new_contract`, `start_day`, `driver_moves_finalised`) and no F2 group. Silly Season adds groups with `add-row` from `mt_drivermarket_retired`, own `stat_id`s (254 to 259 are his: pick others), subject and body as lng keys set at run time with `lang::set` + `lang::refresh`. For us: a `new_contract` or `start_day` mail in the first F1 season (who moved up, the academy's welcome). Whether mails arrive during F2 is untested.
+- **Step 5 leftovers.** `career.contract.decide` and `career.contract.sign` are hook points in `systems/career.hpp` (ContractDecide has the `negotiate`, `ends_this_season` and `next` links), for the later end-of-season offers. A created driver's academy: read the player's entry from the `DriverAcademiesComponent` map we already write to.
+- **4c numbers.** `career::set_car_number(driver, number, swap)` exists (ops table version 4).
+- **Still blocked:** repeating F2 (no core call reopens a championship) and F2 2025 > F1 2026 (needs a second F2 championship; copies crash the boot). Both are questions for the Swofty bot.
+- Swofty main is 7 commits ahead of the local clone: `game.pause` / `game.resume` now fire and `swofty/view.hpp` gives the pause state.
+- **Variants (user, 9 Nov):** F2 2025 only, and F2 with or without the hub, would be separate addons later. The focus now is this addon, 2026 > 2027. So the hub should be built as a part that can be left out (its own option, or its own DLL).
+
+### New parts added to the plan (user, 9 Nov) and their research
+
+Added: interest meter, academy targets per round, super licence tracker, real prior super licence points, welcome and F2 review mail, rookie year, F2 title rival. Left out: F2 team tied to the academy (already there in practice). Swofty clone updated to `171ee41` (1.8.35) before this research.
+
+**Data we can already read (for the meter, the targets and the rival).** The F2 season's standings object (Season +0x2a8) keeps, per round and per session, a result record for every driver: `{u32 entrant key, i32 0-based position}`, qualifying included, and a points record `{key, points}`. `read_standings` walks both today. So at each F2 `session.end` the DLL can tell, per driver: qualifying place (pole), sprint and feature place, points of the round. Session kind by the points it paid: pole 2, sprint up to 10, feature up to 25. The teammate is the other entrant row with the player's F2 team (489 to 499). Nothing new to reverse for these three parts.
+
+**Interest meter (design proposal).** One number per F1 team, 0 to 100, kept in the career data next to `table`. After each round: + for the round's points, a pole, a win, a podium, finishing ahead of the teammate; a bonus factor for the academy's teams (kDriverAcademies and partner teams); a small weight by team level, so top teams fill slower. At Team Select, a team offers a seat when its meter passes its threshold; the easy team always offers. This replaces the fixed P1-P3 rule in `read_offer` / `offers_seat`, which stays as the fallback for careers with no meter data. Numbers to tune with the user.
+
+**Academy targets per round.** Same data. A target is picked before the round from a small list (score points in both races, finish ahead of the teammate, top 5 in the feature race, qualify in the top 8), harder as the player's place in the table rises. Met: interest up for the academy's teams. Missed three rounds in a row: a warning, then the academy drops the player (remove his entry from the `DriverAcademiesComponent` map; the map write exists in `give_real_academy`, the removal is untested). Shown in the hub panel and, if mails work in F2, as a mail.
+
+**Super licence tracker.** FIA table (Wikipedia, FIA Super Licence, as of March 2026), places 1 to 10: F2 40 40 40 30 20 10 8 6 4 3; F3 30 25 20 15 12 9 7 5 3 2; FRECA 25 20 15 10 7 5 3 2 1 0; IndyCar before 2026 40 30 20 10 8 6 4 3 2 1; Super Formula before 2025 25 20 15 10 7 5 3 2 1 0; Eurocup-3 and GB3 10 7 5 3 1. 40 points over the previous three seasons. Extras: 1 point per F1 weekend with 100 km in a free practice (up to 10), 2 points for a season with no penalty points. The FP1 point fits the FP1 outings idea.
+
+**Prior points of the F2 2026 grid (seasons 2024 + 2025; the game's 2026 F2 is the third).** From the Wikipedia standings, read through a text extraction: check each row before shipping. Rows marked ? were not checked at all.
+
+| Driver | 2024 | 2025 | Prior |
+|---|---|---|---|
+| Câmara | FRECA 1st, 25 (?) | F3 1st, 30 | 55 |
+| Herta | IndyCar 2nd, 30 (?) | IndyCar 7th, 4 | 34 |
+| Tsolov | F3 11th, 0 | F3 2nd, 25 | 25 |
+| Minì | F3 2nd, 25 | F2 13th, 0 | 25 |
+| Boya | F3 15th, 0 | F3 3rd, 20 | 20 |
+| Dunne | F3 14th, 0 | F2 5th, 20 | 20 |
+| Beganović | F3 6th, 9 | F2 7th, 8 | 17 |
+| Stenshorne | F3 18th, 0 | F3 5th, 12 | 12 |
+| Dürksen | F2 10th, 3 | F2 9th, 4 | 7 |
+| Goethe | F3 7th, 7 | F2 15th, 0 | 7 |
+| Inthraphuvasak | F3 24th, 0 | F3 7th, 7 | 7 |
+| León | F3 10th, 2 | F3 17th, 0 | 2 |
+| Miyata, Montoya, Maini, Shields, Villagómez, van Hoepen, Bennett | 0 | 0 | 0 |
+| Bilinski, Fittipaldi Jr., Varrone | ? | ? | ? |
+
+So Câmara would already have a licence; Herta needs P6 (10), Tsolov and Minì P5 (20), Boya and Dunne P5, Beganović P4 (30). A created driver has 0 and needs the top 3. Real 2026 F2 after 12 of 14 rounds, for flavour: Câmara 207, Tsolov 200, Dunne 189, Minì 163, Beganović 137, León 133.
+
+**Mails.** Stock data to copy from: `start_day` group `dc_welcome_boss` (conditions `email_dc_welcome`, cooldown 4000 days so it is sent once, from the team boss) for the welcome and F2 review mail; `post_race` groups for a round mail. A condition group is a list of condition names (`game_value_conditions.condition_groups`, `pass_all_conditions`); `career_type_NCSDriver` is the Driver Career test. There are conditions `expected_finish_position_type_F2` and `_F1` (condition_bool_358 / 357, true by the session's game setup mode), so a mail can be tied to the F2 or the F1 part with data only. No condition reads the data group, and `swofty/db.hpp` is read only, so a mail of ours would also reach other Driver Careers: the F2 condition limits that to careers with an F2 season; for the F1 mail, the open question is how to keep it out of the stock 2026 career (ask the Swofty bot: a `when` on the career's data group, or a core call to send one mail). Mails are generated when a session enters the hub (`Career_Emails_OnSessionEnter` 0x140dd4550, `Game_Emails_GenerateEmails` 0x140ddfb70). Text wildcards exist only for four staff characters.
+
+**Rookie year.** The contract's targets are rating targets: `recognition.contract_target_bonuses` (14 rows, target rating difference -3 to +10 with a recognition bonus -9 to +20), and `recognition.RecognitionDataGroup` (ours is a copy of `f1_career_2026`) has `driver_modifiers` (years with team) and `team_modifiers` (weightings per team, comparison driver). No rookie flag in the data. Routes: (a) data only, softer `team_modifiers.weightings` in our group, for every season; (b) the DLL eases the first F1 season only, through `career.contract.sign` (contract pointer in the payload) once the contract's target field is known. (b) needs one RE pass on the contract object.
+
+**F2 title rival.** Panel only at first: the nearest driver in the kept table, with the gap. A real game rivalry (type 1, `Game_Rivalry_Start` 0x141249ce0) only if `RivalManagerComponent` exists during F2: one log line at an F2 session end answers it.
+
+**Hub.** `hub_tab` goes on Team HQ and on the career hub laptop, the one the career opens in a weekend (`Career_Build_HubLaptop` 0x141c3f130, `Game_CareerEventsSequencer_OpenLaptop`). Whether F2 weekends show that laptop is the user's check. Overlay: draws with frame generation since the core draws into the game's back buffer (one frame late); input focus (v3) takes mouse and keyboard from the game but not the gamepad, so a panel must not sit over a screen where the pad still drives the game menu, or it opens from the tab's option as Silly Season does.
+
+**Order proposed:** 1. per-round data kept in the career data (base for the rest); 2. interest meter replacing the P1-P3 rule, with the super licence numbers; 3. hub tab + overlay panel showing table, meter, licence, rival, target; 4. academy targets; 5. mails; 6. rookie year; 7. between-rounds screen and FP1 outings.
+
+### Interest meter, first build (9 Nov, 0.8.3, built, not run in game)
+
+- `native/src/interest.hpp` (no game types): `summarise` turns a round's sessions into the player's round (quali place, each race's place, points and the teammate's place; a race is a session that paid 8 points or more, qualifying the last session with results before it), `form` gives the 0-100 score, `merge` joins the kept rounds with the game's, `licence_points` the FIA F2 table. Checked off the game by `native/test/interest_test.cpp` (`bash native/test/run.sh`).
+- `keep_rounds` runs at each F2 session end after `keep_table`: reads the current season's result and points rounds (`live_rounds`), merges and writes `"rounds"` into the career data. Log: `[f2-feeder] interest: rounds live N kept N -> N, teammate ..., score ...`.
+- `read_offer` computes the score and the licence (kPriorLicence + the F2 place) from the kept rounds; `offers_seat` = easy team, or the 0.7.8 rule for P1-P3, or licence >= 40 and score >= what the team asks (`kTeamAsks`, academy teams 15 less). It logs each team's ask, interest % and offer at the confirm. The popup says the interest % or the licence points.
+- To check in game: the `interest:` line after practice, qualifying, sprint and feature (does practice have result rows? is the pole's 2 in the qualifying session's points or in the extra points list?); the teammate id; whether a save loaded mid-season still holds the earlier rounds (live count against kept); the per-team lines at Team Select.
+- To do: the prior licence points need checking against the FIA tables; the score and the asks are first guesses to tune.
+
+### Career panel, first build (9 Nov, 0.8.3, built, not run in game)
+
+- `native/src/panel.hpp`: one paint callback on the overlay with `overlay_ui.hpp` (Swofty's own toolkit; nothing copied from Silly Season). It draws a `Snapshot` the plugin fills on the game thread in `refresh_panel` (career loaded, Team HQ, each F2 session end), all from the career data: table, rounds, form, licence, title rival, team interest "if the season ended now", and in F1 the promoted drivers.
+- Manifest: `experimental_features: ["overlay"]`; options `hub_panel` (toggle, on) and `panel_open` (choice Closed / Open, hidden from ADDON SETTINGS); `hub_tab` `f2_revamp` for `f1_career_f2_26` with both rows. `swofty dev check`: 0 errors.
+- F8 toggles it in the paint callback; Esc or B closes; `panel_tick` (on_frame, every 30 frames) moves the tab's row to match through `hub::set_option`. Focus is taken while open (overlay v3).
+- Built so it can be left out: the option turns it off, and the panel is its own header fed by one function.
+- To check in game: the `[f2-feeder] panel:` line at boot; whether the tab shows on the F2 weekend laptop and on Team HQ; the panel's layout at the user's resolution; F8 during a session; the row following F8; frame generation on.
+
+### Academy targets, first build (9 Nov, 0.8.3, built, not run in game)
+
+- Logic in `native/src/interest.hpp` (`goal_for`, `met`, `targets`), checked off the game by `native/test/run.sh`.
+- Nothing new is stored: the target of round N is computed from the kept rounds before it, so a reloaded save reads the same.
+- Kind by round, in turn: qualifying place, points, feature race place, teammate. With no teammate seen, the teammate target becomes the points one.
+- Level by points per round so far: under 5 easy, 5 or more medium, 12 or more hard (for example qualify top 12 / top 8 / top 4).
+- A round is judged once its second race is run, or a later round exists.
+- Met: the academy teams ask 2 less per target met, up to 10 (`kTargetBonus`, `kTargetBonusMax`), on top of the academy discount.
+- Three missed in a row: dropped for good. In the offers the player then counts as having no academy (no discount, no academy clause of the P1-P3 rule, the no-academy easy teams).
+- Not done: the game's own academy map still holds the player (the removal from `DriverAcademiesComponent` is untested), and nothing tells the player outside the panel (F8) and the log line `[f2-feeder] targets:`. A mail or popup comes with the mails step.
+- Players with no academy get no targets.
+- The panel's accent colour changed to a lighter red (0xff4d4d) so the warning line reads on the dark panel. To check in game.
+
+### Notices as popups instead of mails (9 Nov, 0.8.3, built, not run in game)
+
+- **Why not inbox mails yet.** `emails` is one global table, not a row per career data group, and no condition can tell our career apart: the 77 `condition_int` and the bool conditions read game values (positions, laps, rivalries, press answers), none reads the data group. A mail row of ours would reach every Driver Career of anyone with the addon on. Silly Season gates his by an addon option (`"when": {"emails": true}`), which is per install, not per career. Still to ask the Swofty bot: a `when` on the career data group, or a core call that sends one mail.
+- **What was built.** `tell_notices()` in `f2_feeder.cpp`, through `swofty::popup` (stable API, queued by the core), only in our career:
+  - in F2, once per judged round: target met or missed, the warning after two misses, the drop, and the next round's target. Also once at the start, with the round 1 target. Kept as `"told"` in the career data (judged rounds told, plus one).
+  - in F1, once: the F2 review (place, points, wins, podiums, poles, who moved up). Kept as `"review"`. Needs the kept table in the career data, so a Skip to F1 career gets none.
+- Called on career loaded, Team HQ and each F2 session end. Option `notices` ("Academy notices", default on) turns them off.
+- Log lines: `[f2-feeder] notice: ...`.
+- To check in game: that the popup after the feature race does not get in the way of the results screens, and that a career already in F1 gets the review once only.
+
+### Rookie year, first part (9 Nov, 0.8.3, built, not run in game)
+
+- **Not done: easing the team's expectations.** Both routes need the game running.
+  - Data route: `recognition.RecognitionDataGroup.team_modifiers` has per team `weightings` (four numbers, McLaren 0.6,0.75,0.9,1; Sauber 1.25,1.2,1.15,1.15), `ai_weighting` and `team_comparison_driver`; `driver_contracts.NCS.rating_ranges` has `recommended_rating`, `plus_range_value`, `minus_range_value` per rating band. What the four weightings index (years with the team, or recognition tiers) is not known: `Team_Load_Recognition` (0x141060240) only loads them, the reader was not found by static reading. Changing them blind would be a guess, and it would apply to every season.
+  - DLL route: needs the contract object's target field.
+- **Probe for the DLL route.** `on_contract`, an after handler on `career.contract.sign`: logs every signing in our career (`[f2-feeder] contract: sign ...`) and, for the player's, the first 0x80 bytes of the contract. Compare two signings with different rating targets to find the field. Remove the probe before a public release.
+- **Built: the rookie season in the panel.**
+  - `mark_rookie_season()` at Team HQ keeps the career season index of the first time the player is seen in F1 (`"rookie_season"` in the career data), read with `swofty::career::current_round()`. A career already past its first F1 season when it first loads 0.8.3 gets its current season marked: known limit.
+  - While that season runs, the panel shows the rookie standings (the player and the drivers promoted with him, by F1 points, with their overall place) and the count of sessions ahead of the teammate, in place of the teams' interest.
+  - The numbers refresh at Team HQ and on career load, not after each F1 session.
+  - On sprint weekends the teammate count takes sprint qualifying as the qualifying session.
+- To check in game: the `[f2-feeder] rookie:` line (season index in F2 and in the first F1 season), and that the F1 standings read the same layout as the F2 ones.
+
+### First in-game test of 0.8.3 (9 Nov, test copy `miguelvf3.f2-revamp-dev`, new career as Camara, Feature Only weekends)
+
+Worked: the panel (F8, Esc and B close it, layout fine at 1080p), the per-round reading (pole, win, points, teammate 164), the popups, the career data writes, `service f2_revamp.career v1` and `lookup silly_season.market`. The GPU has no frame generation.
+
+Found and fixed (built, not yet run):
+- **A Feature Only weekend was never judged** until the next round began: the rule was "two races run". A round now carries `done` (its feature race is run: a session whose winner got 20 points or more), kept as `"d"` in the career data.
+- **The first notice came after qualifying.** A new career goes straight to its first session, with no hub, and at `career.loaded` the player row isn't there yet, so `tell_notices` gave up silently. Now it returns false when the career isn't ready and the frame tick retries for about two minutes (240 tries); the panel refreshes then too.
+- **"0% Offer"** for the academy teams before any race: the tag now reads "Offer" and the bar is full when the offer comes from the table place alone.
+- **"95 of 40 points"** now reads "95 points, 40 needed".
+
+Learned:
+- **F2 has no laptop and no inbox.** Its hub is the Session Selection screen, so the hub tab only exists in F1 and F8 is the only way to the panel in F2 (nothing for the gamepad yet). Inbox mails in F2 are out.
+- **One round can fill every bar**: a pole and a win gave score 95 to 100 and every team at 100%. The score is "if the season ended now"; a damping by rounds run is the tuning to consider.
+- The targets' hard level assumes sprint and feature: with Feature Only, "Score 15 points or more" needs a top 2.
+
+### Second part of the first test: end of F2, Team Select, first F1 hub (9 Nov)
+
+Worked: F8 in a session and on loading screens; the gamepad moves the menu under the panel without harm; reload keeps the rounds; Team Select offers; the F2 review popup; the hub tab on the Team HQ laptop (row Closed/Open plus the toggle); promotions (Leon and Mini to Racing Bulls, recorded).
+
+Fixed after it (built, not yet run):
+- **Every team at 100% for a champion** (user: teams outside the academy should count less, the front ones much less). `score_for()`: an academy team takes the full score; outside it the score counts 80% for the midfield and back and 65% for the teams that ask 90 (Mercedes, Ferrari, Red Bull, McLaren); with no academy 90% and 75%. A Ferrari junior champion with score 100: Ferrari 100%, Mercedes, Red Bull and McLaren 72%, the rest 100%. The P1 to P3 rule and the easy team are unchanged.
+- **The review didn't name who moved up**: it was told at `career.loaded`, two seconds before the promotions at Team HQ. It now waits for Team HQ (`tell_notices(true)` after `promote_f2_drivers`).
+- Review wording: "wins 2, other podiums 1, poles 3".
+
+Read from the log:
+- `career.contract.sign`: `driver` and `team` are entrant keys, the stat id in the high word (player 203 << 16, Haas 483 << 16). 22 signings fire at once when the F1 grid is built, all with one contract pointer.
+- **The player's contract** (stack object, 0x793EF7B8): `+0x18 = 74`, `+0x1c = 83` as int32. 74 was the player's rating on screen, so `+0x1c` is very likely the contract's rating target (+9). One sample: confirm against the target the contract screen shows, then a `before` handler can lower `+0x1c` in the rookie season.
+- `current_round()` in the first F1 season: season index 0, round 1 of 24. So the F2 season does not count as a career season, and the rookie season is index 0.
+- Rookie standings did not show before the first F1 race (no rows in the F1 table yet, to confirm after one race).
+
+### Contract target confirmed, platform tag (9 Nov)
+
+- **Contract object:** `+0x18` is the driver's current rating and `+0x1c` the rating target (int32). The contract screen showed Target 83, Current 74, Retain Seat 68 for the dumped contract. But the player picks the target himself when signing (up to +9 for more influence), so lowering it for a rookie would undo his own choice. The rookie-year easing is dropped unless a better lever turns up (the Retain Seat value, 68 here, is not in the first 0x80 bytes). The `career.contract.sign` probe can go.
+- **Platform tag:** `compat.platforms: ["steam"]` with `launcher >= 1.8.36` (Swofty 1.8.36). Not EA: it does not work on the EA app copy, and the Swofty bot said nothing is to fix on our side. A launcher older than 1.8.36 rejects the field (`unknown field platforms`), so `swofty dev check` fails here until the local launcher (1.8.35) is updated; the test copy script strips the field.
+
+- 9 Nov: the `career.contract.sign` probe is removed (user's OK). Rookie-year contract easing is shelved: the player picks his own target, which trades risk for influence; an influence lever may come later.
+
+### Players' reports on 0.8.1 (Swofty Manager, 11 Nov; two Send Logs zips read)
+
+Fixed in the working tree (built; the database change builds on profile test with launcher 1.9.2):
+- **Play refused: `AccoladeDriver[oliver_goethe]: no row matches`.** The ten new accolade rows used Goethe's stock row as the `add-row` template, and team-swap addons remove it. The template is now the table's first row (`AccoladeDriver_0`): `add-row` copies only the row's own two keys and both are set. It is the only op that depended on a stock driver's row; the other templates are data groups, track events and track lists.
+- **Ten drivers refused for one seat on every Team HQ visit** (report 1, 40 addons with Silly Season 1.1.1: Tsolov took Lawson's seat, then every driver was refused for Ocon's with `the driver has more than one career row`). A seat that refuses two drivers in a row is now left for the next visit. Why the core refuses that seat is not known: a question for the Swofty bot, with the log lines.
+
+Already answered by a later version:
+- **Silly Season finds no `f2_revamp.career` service**: 0.8.2 publishes it. Still to test with Silly Season 1.1.1 (1.0.1 is installed here).
+- **Pit stop Supersoft to Supersoft**: the player confirmed it was a Pirelli tyres addon, not this mod.
+- **EA app**: not supported; `compat.platforms` is `["steam"]`.
+
+Open:
+- **Istanbul Park / Portimao options without the track**: crash at `Sess_Load_TrackDatabase` (report 2: both options on, Istanbul Park installed but off, no Portimao). The launcher warned at build time ("the game won't start like this") and built anyway. An op file can't test whether another addon is on (`when` reads this addon's options only), and `requires` has no optional form. Ways out: two small companion addons that `require` the track; or the std optional venue references (`venue/sochi?`), which means moving the calendar from database ops to the registries; or asking the core for a `when` on an addon. User's call.
+- **F1 2027 Custom Season 24/24 with a red ! and Advance dead; 22 rounds ran.** That player had both options off, so the list holds 22 rounds and `F1_2027_Long.max_num_tracks` is 22. Where the screen's 24 comes from is not found off the game (the addon's rows reach the game through the runtime route, not the built .bin, so they can't be read from the file). To reproduce: both track options off, a new career, finish F2, open Custom Season.
+- **`Track [...] is not found in game mode tracklist`** during F2 weekends: a warning, the game falls back to the global list. The mode row `driver_career_f2_26` is a copy of `driver_career_26`. Low priority.
+- **`drivers_available_from_team_setup`** for the F2 2026 drivers, so the stock market can sign them: not checked.
+- Not pinned on this mod: the rating staying at the F2 value in F1, and a freeze on Choose Driver with More Driver Models and Driver Manager on.
+
+### The Swofty bot's answers (11 Nov)
+
+- **No op can depend on another addon**, and an option can't declare one; logged as a launcher gap. With what exists: one small companion addon per optional round, each with `requires` on its track. The registry route (`venue/x?`) doesn't replace database ops: the core reads `career.calendar` only for the content box's track list, the event rows still come from the database.
+- **No guarded op syntax** today; logged as a gap.
+- **`set_seat` "the driver has more than one career row"** is about the incoming driver: the planner counts the rows of the loaded career's entrant table (F1 and F2) with his driver stat id, and refuses on two. In that report the first promotion had one row and every later driver two. The bot's lead, not proven: our two sets of `official_entrant_list` rows on content set 2026 (`F1CAREER_FB`, `F2CAREER_FB`, `ICONS_FB` and the same with `FB27`, both naming `f1_2026` and `f2_2026`; `gen.py` adds the `suffix[:2]` set and the full one). Against it: on a clean profile the same build promoted two drivers in a row (9 Nov test). Not changed, since the names may be in saves. The DLL now logs the refused driver's entrant rows (index, team, flags) for the next report.
+- **`remove-record`** of keys an `add-row` created does remove them on 1.8.38; a working removal prints nothing. "Events" is the DB Editor's label for `_fixed_event_reference_instancecount_`. The 24/24 is still unexplained: the DB Editor's Calendar page on the built database would tell, and the 24 may be what the game read before the DLL's pool swap.
+
+### Third in-game test: Silly Season 1.1.2, track options off (11 Nov, test copy)
+
+Confirmed in game:
+- The round 1 notice comes right after the driver is confirmed (`notice: after career loaded: career ready`).
+- A sprint and feature weekend: the round is judged after the feature race; the panel counts both races.
+- Balance: with the Ferrari academy and the F2 lead, Mercedes, Red Bull and McLaren read 67% after one race and 72% at Team Select; Mercedes refused with the interest in the popup; the others offered.
+- Custom Season with both track options off: 22 rounds, 22 of 22, Advance works. The report's 24/24 is not reproduced. The length button still reads "24 Races": it is the game's own string for the long season (`lng_season_length_long`), a wrong label, not a wrong list.
+- **Silly Season 1.1.2 works with the service**: `F2 Revamp's career service found: its F2 seasons wait, its promotions are signings`; its market starts in the first F1 season; both promotions reached it (`market: driver 174 signed by team 482 until 2028: 0`, the same for 200) and it follows the game's grid (`the market follows the game: Nikola Tsolov -> tororosso_26`). Its news banners announce them.
+- The F2 review comes at Team HQ with who moved up. Suits in the grid reveal are right.
+
+Fixed after it (built, not installed: the game was open):
+- Before any result the licence line read "0 for P0 in F2" and an empty "F1 TEAM INTEREST" heading showed.
+- "1 rounds, 1 races, 1 wins" now reads "Rounds 1, races 1 | Wins 1 ...".
+- The promoted drivers list is sorted by F2 place.
+
+For the Silly Season author: drivers outside his baseline get the name "Noel Leon Accent" and "Rafael Camara Accent" (`real grid: driver stat 200 is not in the baseline; added as Noel Leon Accent`), so his banner reads "FROM F2 TO RACING BULLS: ACCENT". The name is built on his side.
+
+Not tested yet: rookie standings after an F1 race, missed targets and the drop, the stock 2026 career.

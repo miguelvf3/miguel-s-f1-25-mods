@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "miguelvf3.f2-revamp",
   "name": "F2 Revamp",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "author": "miguelvf3",
   "description": "A Driver Career that starts in the 2026 Formula 2 season: finish well to earn an F1 seat, while the best F2 drivers move up too. Its own tile and save slots; the stock 2026 career is unchanged.",
   "repository": "https://github.com/miguelvf3/miguel-s-f1-25-mods",
@@ -22,7 +22,10 @@
     "seasons": [
       "f1_2026"
     ],
-    "launcher": ">=1.5.27"
+    "launcher": ">=1.8.36",
+    "platforms": [
+      "steam"
+    ]
   },
   "requires": [
     {
@@ -34,12 +37,15 @@
     "mod.portimao",
     "track.istanbul_park"
   ],
+  "experimental_features": [
+    "overlay"
+  ],
   "options": [
     {
       "id": "portimao",
       "type": "toggle",
       "label": "Portuguese GP (Portimao)",
-      "description": "Adds Portugal to the 2027 calendar. Needs the mod.portimao addon on. Choose before starting a career.",
+      "description": "Adds Portugal to the 2027 calendar. Only turn it on with the mod.portimao track addon enabled: without the track the game will not start. Choose before starting a career.",
       "default": false,
       "binds": "db"
     },
@@ -47,11 +53,55 @@
       "id": "istanbul_park",
       "type": "toggle",
       "label": "Turkish GP (Istanbul Park)",
-      "description": "Adds Turkey to the 2027 calendar. Needs the track.istanbul_park addon on. Choose before starting a career.",
+      "description": "Adds Turkey to the 2027 calendar. Only turn it on with the track.istanbul_park track addon enabled: without the track the game will not start. Choose before starting a career.",
       "default": false,
       "binds": "db"
+    },
+    {
+      "id": "hub_panel",
+      "type": "toggle",
+      "label": "Career panel (F8)",
+      "description": "F8 opens a panel with the F2 table, your season, your super licence points and each F1 team's interest in you. Also on the F2 Revamp tab of the career laptop. Turn off to play without it.",
+      "default": true,
+      "binds": "native"
+    },
+    {
+      "id": "notices",
+      "type": "toggle",
+      "label": "Academy notices",
+      "description": "Shows a message after each F2 round with the academy's verdict and the next target, and a review of your F2 season when you reach F1. Turn off to play without them.",
+      "default": true,
+      "binds": "native"
+    },
+    {
+      "id": "panel_open",
+      "type": "choice",
+      "label": "Career panel",
+      "description": "Opens and closes the career panel. F8 does the same.",
+      "values": [
+        {
+          "value": "closed",
+          "label": "Closed"
+        },
+        {
+          "value": "open",
+          "label": "Open"
+        }
+      ],
+      "default": "closed",
+      "binds": "native",
+      "hidden": true
     }
   ],
+  "hub_tab": {
+    "name": "f2_revamp",
+    "title": "F2 Revamp",
+    "options": [
+      "panel_open",
+      "hub_panel"
+    ],
+    "data_group": "f1_career_f2_26"
+  },
   "saves": {
     "affects": true,
     "message": "F2 Revamp careers won't load without it; the launcher keeps them in the save until it is back on."

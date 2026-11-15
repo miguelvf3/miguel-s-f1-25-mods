@@ -87,6 +87,7 @@ In your first F1 season the panel shows the rookie standings: you and the driver
 - Ties on points can rank you one place off the game's standings in the offer popup.
 - A promoted driver can be missing from the Driver Rating Comparison (seems tied to the Iconic Edition driver icons).
 - Repeating F2 after a poor season isn't possible yet: the F2 championship runs one season.
+- With two saved careers of the same driver, Continue from the main menu uses the data of the one played last. Pick the save from the load list to be sure.
 
 ## For other addons
 

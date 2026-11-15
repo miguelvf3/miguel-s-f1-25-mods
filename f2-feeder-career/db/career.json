@@ -13654,13 +13654,6 @@
    }
   },
   {
-   "op": "warn",
-   "message": "F2 Feeder: the portimao round is on, which needs mod.portimao.",
-   "when": {
-    "portimao": true
-   }
-  },
-  {
    "op": "add-row",
    "table": "schedule.activities",
    "from": "schedule.activities.activity_race_weekend[_metadata_=spa_francorchamps]",
@@ -13759,13 +13752,6 @@
    "create": true,
    "type": 5,
    "value_from": "schedule.all_track_events.fixed_event[_metadata_=rw_spa_francorchamps_26].date_time.daylight_saving",
-   "when": {
-    "istanbul_park": true
-   }
-  },
-  {
-   "op": "warn",
-   "message": "F2 Feeder: the istanbul_park round is on, which needs track.istanbul_park.",
    "when": {
     "istanbul_park": true
    }

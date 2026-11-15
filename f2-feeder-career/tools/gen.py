@@ -330,7 +330,6 @@ def calendars():
 
     for k, (t, src, month, day, activity) in enumerate(F1_2027_ADDON_TRACKS, len(F1_2027)):
         when({t: True}, lambda: addon_round(k, t, src, month, day, activity))
-        when({t: True}, lambda: ops.append({"op": "warn", "message": f"F2 Feeder: the {t} round is on, which needs {TRACK_ADDONS[t]}."}))
     add(TL, f"{TL}.track_event_list[_metadata_=F1_2026_full]", _metadata_=CAREERS[0]["f1_track_list"])
     sel = f"{TL}.track_event_list[_metadata_={CAREERS[0]['f1_track_list']}]"
     for i, e in enumerate(f1):

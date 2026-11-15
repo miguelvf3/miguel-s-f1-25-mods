@@ -14,8 +14,8 @@ Later F1 seasons repeat the year, as in the game's own careers.
 
 ## Requirements
 
-- Swofty Launcher 1.8.36 or later, with `swofty.core` 0.2.13 or later. Steam copy of the game; the EA app copy is not supported.
-- Optional track addons, for the two rounds F1 25 has no circuit for. Each round has its own setting on the addon, off by default. Turn it on with its track addon before starting a career:
+- Swofty Launcher 1.9.34 or later, with `swofty.core` 0.2.13 or later. Made and tested on the Steam copy of the game; the EA app copy is allowed but untested by the author.
+- Optional track addons, for the two rounds F1 25 has no circuit for. Each round has its own setting on the addon, off by default. The setting is locked off while its track addon is off. Turn both on before starting a career:
   - `portimao` needs `mod.portimao` (Portimão, by Pajko);
   - `istanbul_park` needs `track.istanbul_park` (Istanbul Park, by Apoc & RK), in the Swofty addon catalogue.
 
@@ -82,10 +82,8 @@ In your first F1 season the panel shows the rookie standings: you and the driver
 
 ## Known issues
 
-- With the Portimão or Istanbul Park setting on and its track addon off, the game doesn't start. Keep the setting off unless the track is on.
 - The Custom Season screen's long season button reads "24 Races" (the game's own text); the list under it has this career's 22 to 24 rounds.
 - In F2 the career panel only opens with F8: F2 weekends have no laptop for the tab.
-- The super licence points the real F2 drivers bring from earlier seasons are estimates for some of them.
 - Ties on points can rank you one place off the game's standings in the offer popup.
 - A promoted driver can be missing from the Driver Rating Comparison (seems tied to the Iconic Edition driver icons).
 - Repeating F2 after a poor season isn't possible yet: the F2 championship runs one season.

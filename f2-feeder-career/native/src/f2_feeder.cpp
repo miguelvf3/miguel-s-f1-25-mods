@@ -74,6 +74,8 @@ std::atomic<int> g_notice_tries{0}; // frame ticks left to tell a notice the car
 
 thread_local bool g_in_router = false;
 bool g_wizard_ours = false; // the last career wizard check was for one of these careers
+bool g_mine = false;        // one of these careers is loaded (career.loaded to career.unloaded)
+bool g_new_career = false;  // a new career of ours was started and hasn't loaded yet
 
 struct Career {
     const char *id, *title, *description, *group, *suffix, *mode;
@@ -173,8 +175,13 @@ void hide_2026(char *owner)
         Preset *from = nullptr, *to = nullptr;
         find_pair<Preset>(presets[0], presets[1], sizeof(Preset), [](Preset *p) { return p->track_list; },
                           kPresetSwaps[i].from, kPresetSwaps[i].to, from, to);
-        if (g_presets[i] || !from || !to || from->type != to->type)
+        // The lists can be built again (another career loaded): a kept pointer that is no longer the list's
+        // row is dropped, not written to, and the new row is hidden.
+        if (!from || !to || g_presets[i] == from || from->type == 0xff || from->type != to->type)
             continue;
+        if (g_presets[i])
+            swofty::log("[f2-feeder] season length %u: the lists moved, hiding %s again", g_preset_types[i],
+                        kPresetSwaps[i].from);
         g_presets[i] = from;
         g_preset_types[i] = from->type;
         from->type = 0xff;
@@ -184,13 +191,50 @@ void hide_2026(char *owner)
     Selection *pool_from = nullptr, *pool_to = nullptr;
     find_pair<Selection>(pools[0], pools[1], sizeof(Selection), [](Selection *s) { return s->pool; }, kPoolFrom,
                          kPoolTo, pool_from, pool_to);
-    if (!g_pool && pool_from && pool_to) {
+    if (pool_from && pool_to && g_pool != pool_from && pool_from->setup_modes) {
         g_pool = pool_from;
         g_pool_modes = pool_from->setup_modes;
         pool_from->setup_modes = 0;
         swofty::log("[f2-feeder] custom season tracks: %s instead of %s", kPoolTo, kPoolFrom);
     }
 }
+
+// The season length owner is the schedule component's (+0x290). A career loaded during F2 hasn't been
+// through ApplyPreset when the season length screen opens, so its lists are hidden at the load too; when the
+// component isn't there yet, the frame tick tries again (a reloaded career opened that screen on the 2026
+// rounds, 14 Nov: the likely way a player picked 16 more rounds on top of the 2027 ones).
+constexpr uintptr_t kScheduleDesc = 0x6063100; // k_Career_ScheduleComponentDesc
+bool hide_for_career(const char *why)
+{
+    if (!known_build())
+        return true;
+    if (g_presets[0] && g_pool)
+        return true;
+    char *base = reinterpret_cast<char *>(GetModuleHandleW(nullptr));
+    char *schedule = static_cast<char *>(swofty::career::component("k_Career_ScheduleComponentDesc"));
+    const char *how = "by name";
+    if (!schedule) {
+        schedule = static_cast<char *>(swofty::career::component_by_desc(base + kScheduleDesc));
+        how = "by descriptor";
+    }
+    char *owner = schedule ? *reinterpret_cast<char **>(schedule + 0x290) : nullptr;
+    if (!owner) {
+        // an F2 season has no schedule component at all: said once a load, not at every try (103 lines, 14 Nov)
+        static const char *said = nullptr;
+        const char *what = schedule ? "the schedule component has no season length data yet" : "no schedule component yet";
+        if (said != why) {
+            swofty::log("[f2-feeder] season lists (%s): %s; trying again", why, what);
+            said = why;
+        }
+        return false;
+    }
+    hide_2026(owner);
+    bool hidden = g_presets[0] != nullptr;
+    swofty::log("[f2-feeder] season lists (%s): schedule component found %s, 2026 lists %s", why, how,
+                hidden ? "hidden" : "not found in it");
+    return hidden;
+}
+std::atomic<int> g_hide_tries{0};
 
 void show_2026(const char *why)
 {
@@ -372,6 +416,20 @@ Standing *standing_of(Standing *table, size_t &n, size_t cap, uint16_t driver)
 // one, sorted as the game's standings are: by points, then countback (most wins, then most P2s...).
 size_t read_standings(char *f2, Standing *out, size_t cap);
 
+// A championship's running season. The F1 championship holds a season entry for each of the career's ten
+// seasons from the start, so the last entry is an empty future season (14 Nov: the rookies' table read 0
+// rows after the first F1 race); +0x560 is the index of the one being raced. F2 has one season, index 0.
+char *running_season(char *champ)
+{
+    char *sb = at<char *>(champ, 0x548), *se = at<char *>(champ, 0x550);
+    if (!sb || se <= sb || (se - sb) % 16)
+        return nullptr;
+    int32_t index = at<int32_t>(champ, 0x560);
+    if (index < 0 || index >= (se - sb) / 16)
+        return at<char *>(se - 16, 8);
+    return at<char *>(sb + index * 16, 8);
+}
+
 // The finished F2 championship's results live only in the session the F2 season ends in: a loaded
 // save leaves its standings empty, and Career_Rebuild_ChampionshipStandings finds nothing to rebuild
 // them from (0.7.5 test). So the order read at the first Team HQ after F2 (before the player's Team
@@ -389,10 +447,147 @@ const char *result_name(swofty::career::Result r)
     return swofty::career::name(r);
 }
 
+// The id the career's data is kept under. A career loaded without a save slot picked first (Continue) gets the
+// career tracker's key from the core, "dc-" and the player's driver: every career of that driver shares it, and
+// a second Herta career read the first one's rounds and lost its own promotions (15 Nov). The core's index lists
+// each save slot under an id of its own ("driver_career_f2_26:<slot guid>", the id the career had when its slot
+// was picked or first saved), with the slot's driver and when it was last played. So a "dc-" id resolves to the
+// slot career of this profile, content and driver that was played last, which is the one Continue loads. Empty
+// until the player is known; the "dc-" id itself when the index has no such slot.
+std::string g_resolved_for, g_resolved;
+std::string career_id()
+{
+    std::string id = swofty::career::saves::current();
+    if (id.empty() || id.find(':') != std::string::npos)
+        return id;
+    if (id == g_resolved_for)
+        return g_resolved;
+    void *entity = swofty::career::entity();
+    uint16_t key = 0, player = 0;
+    if (!entity || !player_driver(entity, &key, &player))
+        return {};
+    std::string best, profile;
+    int64_t best_played = -1;
+    size_t slots = 0;
+    if (auto t = swofty::career::detail::live_saves(); t && t->index) {
+        std::string text = swofty::career::detail::grow(
+            [&](char *buf, size_t cap, size_t *len) { return t->index(buf, cap, len); });
+        swofty::json::Value v = text.empty() ? swofty::json::Value::object() : swofty::json::parse(text);
+        if (const auto *list = v["careers"].if_array()) {
+            for (const swofty::json::Value &c : *list)
+                if (c["career"].as_string() == id)
+                    profile = std::string(c["profile"].as_string());
+            for (const swofty::json::Value &c : *list) {
+                if (c["slot"].as_string().empty() || c["status"].as_string() != "present" ||
+                    c["content"].as_string() != kCareers[0].group || c["profile"].as_string() != profile ||
+                    c["driver_raw"].as_int() != player)
+                    continue;
+                ++slots;
+                if (int64_t played = c["last_played"].as_int(); played > best_played) {
+                    best_played = played;
+                    best = std::string(c["career"].as_string());
+                }
+            }
+        }
+    }
+    g_resolved_for = id;
+    g_resolved = best.empty() ? id : best;
+    swofty::log("[f2-feeder] career %s (no save slot picked): data kept under %s (%zu save slot(s) of driver %u in "
+                "profile '%s')",
+                id.c_str(), g_resolved.c_str(), slots, player, profile.c_str());
+    return g_resolved;
+}
+
+// A new career of ours has no data: what its provisional id still holds is the new career before it.
+void fresh_career()
+{
+    if (!g_new_career)
+        return;
+    std::string id = swofty::career::saves::current();
+    if (id.empty())
+        return; // asked before the core knows the career: the next read tries again
+    g_new_career = false;
+    if (id.find(":new") == std::string::npos) {
+        swofty::log("[f2-feeder] new career: the loaded career is %s, its data is left alone", id.c_str());
+        return;
+    }
+    swofty::career::Result r = swofty::career::saves::data(kAddonId).set_current(swofty::json::Value::object(), 1);
+    swofty::log("[f2-feeder] new career %s: career data cleared: %s", id.c_str(), result_name(r));
+}
+
+// A new career's first session runs under an id of its own, and the core keeps that id until the career is
+// left: "f1_career_f2_26.driver_career:new1" for the first new career of a game session (every save logs "still
+// on a provisional id"), "driver_career_f2_26:<guid>" for a later one. The next load gives the career its slot
+// id (dc-...), which has no data of ours: a career reloaded after round 1 was told its round 1 target again and
+// showed every team at 0% (14 Nov). So the first-session id is remembered in a storage file, and a loaded career
+// with no data takes what that id holds, when that is the same player's; the id is then emptied.
+constexpr const char *kFirstSessionFile = "first_session_career.txt";
+std::string g_first_session; // the id last written to the file
+
+// Slot ids have no ':' (the core's own test); both first-session forms do.
+void remember_first_session(const std::string &id)
+{
+    if (id.find(':') == std::string::npos || id == g_first_session)
+        return;
+    g_first_session = id;
+    swofty::storage::Result r = swofty::storage::write(kFirstSessionFile, id);
+    swofty::log("[f2-feeder] first-session career id %s remembered: %d", id.c_str(), static_cast<int>(r));
+}
+bool g_adopt_checked = false; // this load has been through adopt_provisional
+bool holds_player(const std::optional<swofty::career::saves::Stored> &held, unsigned player)
+{
+    if (!held || !held->value.is_object())
+        return false;
+    std::string table(held->value["table"].as_string());
+    unsigned kept_player = 0;
+    return !table.empty() && std::sscanf(table.c_str(), "%u", &kept_player) == 1 && kept_player == player;
+}
+void adopt_provisional()
+{
+    if (g_adopt_checked)
+        return;
+    std::string raw = swofty::career::saves::current(), id = career_id();
+    void *entity = swofty::career::entity();
+    uint16_t key = 0, player = 0;
+    if (id.empty() || !entity || !player_driver(entity, &key, &player))
+        return; // too early to tell: the next read tries again
+    g_adopt_checked = true;
+    if (raw.find(':') != std::string::npos) {
+        remember_first_session(raw);
+        return;
+    }
+    auto data = swofty::career::saves::data(kAddonId);
+    if (auto mine = data.get(id); mine && mine->value.is_object() &&
+                                  (mine->value.contains("table") || mine->value.contains("rounds")))
+        return;
+    std::string provisional;
+    if (swofty::storage::read(kFirstSessionFile, provisional) != swofty::storage::Result::ok || provisional.empty())
+        provisional = std::string(kCareers[0].group) + ".driver_career:new1"; // careers begun before the file
+    if (provisional != id && holds_player(data.get(provisional), player)) {
+        swofty::career::Result r = data.set(id, data.get(provisional)->value, 1);
+        swofty::career::Result emptied = data.set(provisional, swofty::json::Value::object(), 1);
+        swofty::log("[f2-feeder] career %s takes the data of its first session (%s, driver %u): %s; provisional id "
+                    "emptied: %s",
+                    id.c_str(), provisional.c_str(), player, result_name(r), result_name(emptied));
+        return;
+    }
+    // a career from before 15 Nov kept its data under the "dc-" id: the slot id takes a copy
+    if (raw != id && holds_player(data.get(raw), player)) {
+        swofty::career::Result r = data.set(id, data.get(raw)->value, 1);
+        swofty::log("[f2-feeder] career %s takes the data kept under %s (driver %u): %s", id.c_str(), raw.c_str(),
+                    player, result_name(r));
+        return;
+    }
+    swofty::log("[f2-feeder] career %s has no data, and neither %s nor %s holds any for driver %u", id.c_str(),
+                provisional.c_str(), raw.c_str(), player);
+}
+
 // The career's data object: {"table": the kept table text, "promoted": [{driver, team, replaced, place}]}.
 swofty::json::Value career_data()
 {
-    if (auto stored = swofty::career::saves::data(kAddonId).get_current(); stored && stored->value.is_object())
+    fresh_career();
+    adopt_provisional();
+    if (auto stored = swofty::career::saves::data(kAddonId).get(career_id()); stored && stored->value.is_object())
         return stored->value;
     return swofty::json::Value::object();
 }
@@ -406,15 +601,17 @@ void keep_table(const std::string &text, const char *why)
     swofty::storage::write(kStandingsFile, text);
     swofty::json::Value v = career_data();
     v["table"] = swofty::json::Value(text);
-    swofty::career::Result r = swofty::career::saves::data(kAddonId).set_current(v, 1);
+    swofty::career::Result r = swofty::career::saves::data(kAddonId).set(career_id(), v, 1);
     swofty::log("[f2-feeder] kept F2 table (%s): career data %s, career %s", why, result_name(r),
-                swofty::career::saves::current().c_str());
+                career_id().c_str());
 }
 
 // The career's own data first, else the 0.8.0 storage file.
 bool read_kept(std::string &text)
 {
-    if (auto stored = swofty::career::saves::data(kAddonId).get_current()) {
+    fresh_career();
+    adopt_provisional();
+    if (auto stored = swofty::career::saves::data(kAddonId).get(career_id())) {
         std::string_view t = stored->value["table"].as_string();
         if (!t.empty()) {
             text.assign(t);
@@ -456,10 +653,7 @@ size_t f2_standings(void *entity, uint16_t player, Standing *out, size_t cap)
 
 size_t read_standings(char *f2, Standing *out, size_t cap)
 {
-    char *sb = at<char *>(f2, 0x548), *se = at<char *>(f2, 0x550);
-    if (!sb || se <= sb || (se - sb) % 16)
-        return 0;
-    char *season = at<char *>(se - 16, 8);
+    char *season = running_season(f2);
     if (!season)
         return 0;
     char *st = season + 0x2a8;
@@ -555,23 +749,31 @@ constexpr TeamAsk kTeamAsks[] = {{476, 90}, {477, 90}, {478, 90}, {484, 90}, {47
                                  {481, 70}, {485, 70}, {482, 50}, {483, 50}, {486, 35}};
 constexpr int kAcademyDiscount = 15;
 // Super licence points the real F2 2026 drivers bring from 2024 and 2025 (the F2 season is the third of the
-// three that count). From the series' final standings; the drivers not listed have none, or weren't checked
-// (Bilinski, Fittipaldi Jr., Varrone). TO VERIFY against the FIA's own tables before a release.
+// three that count). Each driver's final place in each series he raced (Wikipedia's season pages, read on
+// 12 Nov 2026) against the FIA's points table (Appendix L, as on Wikipedia's FIA Super Licence page): F2
+// 40 40 40 30 20 10 8 6 4 3; IndyCar before 2026 40 30 20 10 8 6 4 3 2 1; F3 30 25 20 15 12 9 7 5 3 2; FRECA
+// 25 20 15 10 7 5 3 2 1; Formula Regional Oceania 18 14 12 10 6 4 3 2 1; GB3 and Eurocup-3 10 7 5 3 1.
+// The drivers not listed scored none: Miyata, Montoya, Maini, Shields, Villagomez, van Hoepen, Varrone
+// (WEC Hypercar 2025 27th), and Fittipaldi Jr. (Eurocup-3 2024 5th would be 1 point if the series counted
+// that year; left at 0).
 struct PriorLicence {
     uint16_t driver;
     int points;
 };
 constexpr PriorLicence kPriorLicence[] = {
-    {203, 55}, // Camara: FRECA 2024 1st, F3 2025 1st
-    {202, 34}, // Herta: IndyCar 2024 2nd, 2025 7th
+    {203, 55}, // Camara: FRECA 2024 1st (25), F3 2025 1st (30)
+    {202, 40}, // Herta: IndyCar 2024 2nd (30), 2025 7th (4), and the F1 practice sessions with Cadillac that
+               // completed his licence (1 point each; the count is the user's information, not checked)
     {174, 25}, // Tsolov: F3 2025 2nd
     {192, 25}, // Mini: F3 2024 2nd
     {204, 20}, // Boya: F3 2025 3rd
     {194, 20}, // Dunne: F2 2025 5th
-    {189, 17}, // Beganovic: F3 2024 6th, F2 2025 7th
+    {201, 18}, // Bilinski: Formula Regional Oceania 2024 1st
+    {189, 17}, // Beganovic: F3 2024 6th (9), F2 2025 7th (8)
     {205, 12}, // Stenshorne: F3 2025 5th
-    {164, 7},  // Duerksen: F2 2024 10th, 2025 9th
+    {164, 7},  // Duerksen: F2 2024 10th (3), 2025 9th (4)
     {191, 7},  // Goethe: F3 2024 7th
+    {197, 7},  // Bennett: GB3 2024 2nd
     {199, 7},  // Inthraphuvasak: F3 2025 7th
     {200, 2},  // Leon: F3 2024 10th
 };
@@ -749,10 +951,7 @@ std::vector<interest::Round> live_rounds(void *entity, uint16_t player, uint16_t
 {
     std::vector<interest::Round> out;
     char *champ = at<char *>(entity, 0x1058);
-    char *sb = champ ? at<char *>(champ, 0x548) : nullptr, *se = champ ? at<char *>(champ, 0x550) : nullptr;
-    if (!sb || se <= sb || (se - sb) % 16)
-        return out;
-    char *season = at<char *>(se - 16, 8);
+    char *season = champ ? running_season(champ) : nullptr;
     if (!season)
         return out;
     char *st = season + 0x2a8;
@@ -841,7 +1040,7 @@ void keep_rounds(void *entity, uint16_t player, uint16_t team)
         list.push_back(std::move(e));
     }
     v["rounds"] = std::move(list);
-    swofty::career::Result r = swofty::career::saves::data(kAddonId).set_current(v, 1);
+    swofty::career::Result r = swofty::career::saves::data(kAddonId).set(career_id(), v, 1);
     swofty::log("[f2-feeder] interest: rounds kept: career data %s", result_name(r));
 }
 
@@ -971,6 +1170,7 @@ void on_starting(const SwoftyEvent *e, void *)
         g_kept.clear(); // a new career has no data of its own yet
     }
     swofty::storage::Result r = swofty::storage::write(kStandingsFile, "0");
+    g_new_career = true;
     swofty::log("[f2-feeder] offers: new career, kept F2 table cleared: %d", static_cast<int>(r));
 }
 
@@ -1049,7 +1249,7 @@ void record_promotion(const F2RevampPromotion &p)
     e["replaced"] = swofty::json::Value(p.replaced_stat);
     e["place"] = swofty::json::Value(p.f2_place);
     v["promoted"].push_back(std::move(e));
-    swofty::career::Result r = swofty::career::saves::data(kAddonId).set_current(v, 1);
+    swofty::career::Result r = swofty::career::saves::data(kAddonId).set(career_id(), v, 1);
     swofty::log("[f2-feeder] promotion recorded (driver %u, team %u): career data %s", p.driver_stat, p.team_stat,
                 result_name(r));
     tell_market(p);
@@ -1227,20 +1427,20 @@ void set_titles(bool on, const char *why)
 void on_career(const SwoftyEvent *, void *)
 {
     bool mine = swofty::career::is(kCareers[0].group);
+    g_mine = mine;
+    // Until its first save a new career runs under a provisional id (":new1") that the new career before it
+    // had too, so that career's table, rounds and notices would answer for this one (a Herta career showed the
+    // Câmara career's points and counted its rounds, 13 Nov). A new career starts with no data.
+    // (fresh_career, called wherever the career data is read: at career.loaded the core has no id for it yet.)
     set_titles(mine, "career loaded or Team HQ");
     refresh_panel();
     if (!mine) {
         show_2026("another career");
     }
     else {
-        // The season length owner is the schedule component's (+0x290). A career loaded during F2 hasn't
-        // been through ApplyPreset when the Custom Season screen opens, so its lists go here too.
-        char *schedule = known_build() ? static_cast<char *>(swofty::career::component("k_Career_ScheduleComponentDesc"))
-                                       : nullptr;
-        if (schedule)
-            hide_2026(at<char *>(schedule, 0x290));
+        g_hide_tries = hide_for_career("career loaded or Team HQ") ? 0 : 600;
         give_real_academy();
-        g_notice_tries = tell_notices() ? 0 : 240;
+        g_notice_tries = 7200; // half-second steps: the player row and the career's id come later
     }
 }
 
@@ -1387,7 +1587,7 @@ void mark_rookie_season()
     if (kept)
         return;
     v["rookie_season"] = swofty::json::Value(pos->season_index);
-    swofty::career::Result r = swofty::career::saves::data(kAddonId).set_current(v, 1);
+    swofty::career::Result r = swofty::career::saves::data(kAddonId).set(career_id(), v, 1);
     swofty::log("[f2-feeder] rookie: season %d kept as the rookie season: career data %s", pos->season_index,
                 result_name(r));
 }
@@ -1426,6 +1626,7 @@ void refresh_panel()
     if (!player && entity && player_driver(entity, &key, &stat))
         player = stat;
     s.player = player ? driver_name(static_cast<uint16_t>(player), static_cast<uint16_t>(player)) : "";
+    s.waiting = !player || swofty::career::saves::current().empty();
     if (s.place > 1) {
         const f2panel::Row &r = s.table[s.place - 2];
         s.rival = "P" + std::to_string(s.place - 1) + " " + r.name + ", " + std::to_string(r.points - s.points) + " points ahead";
@@ -1493,8 +1694,9 @@ void refresh_panel()
         uint16_t team = player_team(entity);
         interest::Form f1 = interest::form(live_rounds(entity, static_cast<uint16_t>(player), teammate_of(entity, team)), 0);
         if (f1.compared)
+            // the F1 season keeps one session a round, the race (14 Nov probe): qualifying isn't in it
             s.rookie_line = "Ahead of your teammate in " + std::to_string(f1.ahead) + " of " +
-                            std::to_string(f1.compared) + " sessions this season";
+                            std::to_string(f1.compared) + (f1.compared == 1 ? " race this season" : " races this season");
     }
     f2panel::set(std::move(s));
 }
@@ -1510,7 +1712,9 @@ bool tell_notices(bool at_hub)
         return true;
     void *entity = swofty::career::entity();
     uint16_t key = 0, player = 0;
-    if (!entity || !player_driver(entity, &key, &player))
+    // without the core's id for the career its data reads empty: a round 1 target was told to a career in
+    // its third round (13 Nov)
+    if (!entity || !player_driver(entity, &key, &player) || swofty::career::saves::current().empty())
         return false;
     swofty::json::Value v = career_data();
     std::vector<interest::Round> rounds = kept_rounds(v);
@@ -1562,7 +1766,7 @@ bool tell_notices(bool at_hub)
         swofty::log("[f2-feeder] notice: no popup (%s): %s", swofty::popup::name(shown), title.c_str());
         return true;
     }
-    swofty::career::Result r = swofty::career::saves::data(kAddonId).set_current(v, 1);
+    swofty::career::Result r = swofty::career::saves::data(kAddonId).set(career_id(), v, 1);
     swofty::log("[f2-feeder] notice: %s: %s (career data %s)", title.c_str(), body.c_str(), result_name(r));
     return true;
 }
@@ -1576,14 +1780,21 @@ void panel_tick(double, void *)
         return;
     wait = 0;
     // a new career goes straight to its first session: the notice career.loaded couldn't tell, and the panel
+    if (g_hide_tries > 0 && g_mine)
+        g_hide_tries = hide_for_career("after career loaded") ? 0 : g_hide_tries - 1;
     if (g_notice_tries > 0) {
-        bool told = tell_notices();
-        int left = told ? 0 : g_notice_tries - 1;
+        void *entity = swofty::career::entity();
+        uint16_t key = 0, stat = 0;
+        bool ready = entity && player_driver(entity, &key, &stat) && !swofty::career::saves::current().empty();
+        int left = ready ? 0 : g_notice_tries - 1;
         g_notice_tries = left;
-        if (told)
+        if (ready) {
+            give_real_academy(); // before the notice, which names the academy
+            tell_notices();
             refresh_panel();
-        if (told || !left)
-            swofty::log("[f2-feeder] notice: after career loaded: %s", told ? "career ready" : "gave up waiting");
+        }
+        if (ready || !left)
+            swofty::log("[f2-feeder] notice: after career loaded: %s", ready ? "career ready" : "gave up waiting");
     }
     bool open = f2panel::g_open;
     if (swofty::hub::available() && (panel_open.get() == "open") != open)
@@ -1609,6 +1820,10 @@ void on_unloaded(const SwoftyEvent *, void *)
     g_market_told = false;
     g_notice_tries = 0;
     f2panel::enable(false);
+    g_mine = false;
+    g_hide_tries = 0;
+    g_adopt_checked = false;
+    g_resolved_for.clear();
     show_2026("career unloaded");
 }
 
@@ -1680,7 +1895,7 @@ SWOFTY_WRAP(Game_CareerWizard_StartsInF1, bool, void *entrants, void *wizard_dat
 {
     bool stock = orig(entrants, wizard_data, group);
     g_wizard_ours = ours(group);
-    if (!g_wizard_ours)
+    if (!g_wizard_ours && !g_mine)
         show_2026("another career's wizard");
     if (stock && !g_in_router && g_wizard_ours) {
         swofty::log("[f2-feeder] %s: Start in F2 offered", group);
@@ -1694,9 +1909,14 @@ SWOFTY_WRAP(Game_CareerWizard_StartsInF1, bool, void *entrants, void *wizard_dat
 SWOFTY_WRAP(Game_SeasonLength_ApplyPreset, void, void *component, uint8_t preset)
 {
     std::string group = swofty::career::current_data_group();
-    if (component && known_build() && (group.empty() ? g_wizard_ours : ours(group.c_str())))
+    // The loaded career decides first: a wizard check for another career's tile, or a data group the game
+    // doesn't answer with between the F2 and F1 seasons, must not bring the 2026 lists back in this career.
+    bool mine = g_mine || (group.empty() ? g_wizard_ours : ours(group.c_str()));
+    swofty::log("[f2-feeder] season length: preset %u applied for '%s' (%s; career loaded %d, wizard %d)", preset,
+                group.c_str(), mine ? "2027 lists" : "the game's lists", g_mine, g_wizard_ours);
+    if (component && known_build() && mine)
         hide_2026(*reinterpret_cast<char **>(static_cast<char *>(component) + 0x290));
-    else
+    else if (!mine)
         show_2026("another career's season length");
     orig(component, preset);
 }

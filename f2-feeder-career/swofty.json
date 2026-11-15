@@ -22,10 +22,7 @@
     "seasons": [
       "f1_2026"
     ],
-    "launcher": ">=1.8.36",
-    "platforms": [
-      "steam"
-    ]
+    "launcher": ">=1.9.34"
   },
   "requires": [
     {
@@ -45,17 +42,23 @@
       "id": "portimao",
       "type": "toggle",
       "label": "Portuguese GP (Portimao)",
-      "description": "Adds Portugal to the 2027 calendar. Only turn it on with the mod.portimao track addon enabled: without the track the game will not start. Choose before starting a career.",
+      "description": "Adds Portugal to the 2027 calendar. Needs the Portimao track addon on: while it is off, this stays off. Choose before starting a career.",
       "default": false,
-      "binds": "db"
+      "binds": "db",
+      "needs": [
+        "mod.portimao"
+      ]
     },
     {
       "id": "istanbul_park",
       "type": "toggle",
       "label": "Turkish GP (Istanbul Park)",
-      "description": "Adds Turkey to the 2027 calendar. Only turn it on with the track.istanbul_park track addon enabled: without the track the game will not start. Choose before starting a career.",
+      "description": "Adds Turkey to the 2027 calendar. Needs the Istanbul Park track addon on: while it is off, this stays off. Choose before starting a career.",
       "default": false,
-      "binds": "db"
+      "binds": "db",
+      "needs": [
+        "track.istanbul_park"
+      ]
     },
     {
       "id": "hub_panel",

@@ -36,6 +36,7 @@ struct Team {
 
 struct Snapshot {
     bool in_f2 = false;       // the F2 season is still running: the numbers are "as it stands"
+    bool waiting = false;     // the career isn't readable yet (a new career before its first session)
     std::vector<Row> table;   // best first
     size_t place = 0;         // the player's, 1-based; 0 unknown
     std::string player, rival; // rival: "P2 Nikola Tsolov, 7 points behind"
@@ -48,7 +49,7 @@ struct Snapshot {
     std::vector<Team> teams;
     std::vector<std::string> promoted; // "Nikola Tsolov to Racing Bulls (F2 P2)"
     std::vector<Row> rookies;          // the first F1 season: the player and the promoted drivers, by F1 points
-    std::string rookie_line;           // "Ahead of your teammate in 5 of 9 sessions this season"
+    std::string rookie_line;           // "Ahead of your teammate in 5 of 9 races this season"
 };
 
 inline std::mutex g_lock;
@@ -117,7 +118,9 @@ inline void paint(SwoftyPaint *p, void *)
     float fw = 0, fh = 0;
     ov::size(p, &fw, &fh);
     ov::rect(p, 0, 0, fw, fh, kShade);
-    float w = u.u(1500), h = u.u(900);
+    // 960 high: at Team HQ before the first F1 race the eleven teams and the three promotions show together,
+    // and at 900 the frame held one promotion (15 Nov)
+    float w = u.u(1500), h = u.u(960);
     ov::Rect c = ui::panel(u, {(fw - w) / 2, (fh - h) / 2, w, h}, s.in_f2 ? "F2 REVAMP  |  FORMULA 2 SEASON" : "F2 REVAMP  |  YOUR F2 SEASON");
     char line[160];
 
@@ -146,7 +149,9 @@ inline void paint(SwoftyPaint *p, void *)
     if (s.place)
         std::snprintf(line, sizeof line, "%s  |  P%zu  |  %d points", s.player.c_str(), s.place, s.points);
     else
-        std::snprintf(line, sizeof line, "%s", s.player.empty() ? "No F2 season in this career." : s.player.c_str());
+        std::snprintf(line, sizeof line, "%s", s.player.empty() ? (s.waiting ? "The career is still loading: this fills in at your first session."
+                                                                           : "No F2 season in this career.")
+                                                              : s.player.c_str());
     ui::label(u, {x, y, rw, row}, line, kText);
     y += row;
     if (s.has_form) {
@@ -242,6 +247,8 @@ inline void paint(SwoftyPaint *p, void *)
         heading(u, x, y, rw, "MOVED UP TO F1 WITH YOU");
         y += u.u(40);
         for (const std::string &m : s.promoted) {
+            if (y + row > c.y + c.h - u.u(30))
+                break; // the frame is full: a career holds three at most, more is another career's data
             ui::label(u, {x, y, rw, row}, m, kDim);
             y += row;
         }

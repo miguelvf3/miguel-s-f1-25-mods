@@ -433,3 +433,140 @@ Fixed after it (built, not installed: the game was open):
 For the Silly Season author: drivers outside his baseline get the name "Noel Leon Accent" and "Rafael Camara Accent" (`real grid: driver stat 200 is not in the baseline; added as Noel Leon Accent`), so his banner reads "FROM F2 TO RACING BULLS: ACCENT". The name is built on his side.
 
 Not tested yet: rookie standings after an F1 race, missed targets and the drop, the stock 2026 career.
+
+### The EA app crashes were the option-without-track crash (Swofty bot, 12 Nov)
+
+- Five EA Send Logs bundles had F2 Revamp 0.8.1 installed, four with it on. Two had `istanbul_park` and `portimao` on with no Portimao and Istanbul Park missing or off: both crashed at start-up, in the EA build's copy of the Steam crash (`Sess_Load_TrackDatabase+0x2d4a` from `Sess_Apply_ContentAvailability`, EA +0xdb3708f for Steam +0xf36a83c, `istanbul_park` in the registers).
+- Nobody crashed this way with both options off. Two EA players had both options off and both tracks on: one crashed mid-race from another addon (Manual Pit Lane, a known EA crash), the other's game closed in the menus with no error.
+- Across Steam and EA, all seven players with this crash had `istanbul_park` on with Istanbul Park missing or off, one of them with `portimao` off. A profile with only `portimao` on and no Portimao has not been seen, so whether that alone crashes is unknown.
+- It still happens on 0.9.0 (one EA report on 12 Nov): the new option text did not stop it.
+- So the EA app copy is not shown to be incompatible; it is untested. `compat.platforms` stays `["steam"]` until someone plays a career on it.
+
+### Prior super licence points checked (12 Nov)
+
+Every driver of the F2 2026 grid against his 2024 and 2025 final places (Wikipedia season pages and driver pages, through a fetch agent; the F2 2024 and F3 2024 tables and three driver records were read verbatim, the rest from the agent's extraction) and the FIA points table. The twelve values in the code were right. Two drivers had points and were at zero: Bilinski 18 (Formula Regional Oceania 2024 champion) and Bennett 7 (GB3 2024 2nd). Herta goes from 34 to 40: the user's information is that his F1 practice sessions with Cadillac completed his licence; the number of sessions was not checked. Fittipaldi Jr. stays at 0 (1 point at most, if Eurocup-3 counted in 2024). Varrone 0. In the working tree only: the released 0.9.0 has the old table.
+
+### Steam-only tag removed (12 Nov)
+
+- `compat.platforms` is gone from `swofty.json`: the EA crashes were the option-without-track crash, and launcher 1.9.23 names F2 Revamp among the career addons whose tiles came back on the EA copy, so EA players already use it.
+- `compat.launcher` stays `>=1.8.36`: 0.9.0 was only run on 1.8.35 and later.
+- The EA copy is still untested by us. Not in the released 0.9.0, which keeps the tag.
+
+### Track options tied to their addons; preset hiding hardened (13 Nov)
+
+- **Launcher 1.9.34** added what we asked Swofty for: `"when": { "addon": id }` on ops and `"needs": [ids]` on a toggle (docs: reference > addons > settings, "Content that needs another addon"). While a needed addon is off the build reads the toggle as off, so the existing `when: {portimao: true}` ops drop by themselves.
+- `portimao` needs `mod.portimao` and `istanbul_park` needs `track.istanbul_park`; `compat.launcher` is `>=1.9.34`; the build warning op is gone. Defaults stay off: on by default would add rounds to the calendar of players who have the tracks on and never touched the setting.
+- Not built on 1.9.34 here: the installed launcher is 1.9.30, which predates `needs`.
+- **32 rounds after choosing 16 (Swofty bot, a 0.9.0 player's logs):** F1_2027_16 plus the stock 2026 sixteen, sorted by date; a 2027 round three days after a stock one ends as it starts and reloads. Another player had 44 rounds, one 22-round list twice. The bot reads it as the 2026 preset not being hidden for that call.
+- Two ways the hiding can be off: another exe build (`known_build()` false, which is every EA copy: then nothing is hidden), or a kept pointer to a preset row after the lists were built again (`hide_2026` skipped a swap whose pointer was already set). The second is fixed: the row found now is compared with the kept one and hidden when it differs. Unproven which one the player hit; ask the bot for the log's `game exe stamp` and `season length` lines. The 44-round case is not explained by either.
+
+### The 32-round report's logs (13 Nov)
+
+- Send Logs bundle from the bot (launcher 1.9.37, Steam, exe stamp known build, F2 Revamp 0.9.0, 38 addons with Progressive, Career Editor, Silly Season, ten Classic Seasons). Three sessions; none holds the F2 -> F1 step that made the 32. The career was already in F1 when the first one starts (its race ends every 15 s), and the save loads as `custom_track_list ... 32 stored entries -> 24 calendar events` (the core's guard drops 8).
+- What the logs do show: the 2026 lists are hidden at every career load; a Skip to F1 career with 16 rounds made in the second session is right (`round 1 of 16`, 16 entries saved); only F2 Revamp adds rows to `schedule.all_track_events` (ids 137 to 172, no clash); a new career saves 24 calendar events before `career.loaded`, so before the lists are hidden.
+- The stock `F1_2026_16` has Zandvoort and Madrid; the bot's description of the extra 16 (Barcelona and Austin, no Monaco or Madrid) doesn't match it. The stored entries are not in the bundle.
+- So neither guess from the entry above is shown (known build; no sign of a moved list). Cause unknown.
+- Hardening, unproven as the fix: `g_mine` (career loaded) keeps the 2026 lists hidden when a wizard check for another career's tile runs, or when the data group reads empty inside `Game_SeasonLength_ApplyPreset`; before, either brought the 2026 lists back. Every `ApplyPreset` call now logs its preset, data group and which lists it took.
+- To reproduce: finish an F2 season with Progressive on and choose 16 races.
+
+### A new career read the previous new career's data (user's test, 13 Nov)
+
+- A new career as Herta showed the earlier Câmara career's F2 points in the panel until its first session ended, and after it the log read `interest: rounds live 1 kept 2 -> 2 ... 1 races, 28 points, 1 wins` after one qualifying session: the old career's kept rounds were counted.
+- Cause: the career data (`saves::data(kAddonId)`) of a new career is kept under the provisional id `f1_career_f2_26.driver_career:new1` until its first save, and the next new career gets the same id. `on_starting` cleared only the storage file and the cached table.
+- Fix: `on_starting` sets `g_new_career`; the first `career.loaded` of that career, if its id holds `:new`, sets the career data to an empty object. To confirm in game.
+- Same test: Herta got no academy. `give_real_academy` ran only at `career.loaded`, where a new career's player row isn't ready, and returned without a log line. It now runs again when the frame-tick retry finds the career ready. To confirm in game (log line `academy: ...`).
+
+### career.loaded is too early for the career data (user's test, 14 Nov)
+
+- The clearing above never ran: at `career.loaded` `saves::current()` is still empty for a new career, so the `:new` test failed and nothing was logged. The Câmara test career again counted two rounds of the career before it (`rounds live 1 kept 2 -> 3`).
+- A career reloaded from its slot (`dc-00cb0000`) read empty data at `career.loaded` too: the notice told "Target for round 1" in round 3 (`career data invalid`) and the panel showed 0% for every team until the next session ended.
+- Fixes: `fresh_career()` clears a new career's data at the first read where the core has its id; `tell_notices` and the frame-tick retry wait for the entity, the player row and the id (retry is 7200 half-second steps, was 240); the academy is given before the notice; the panel says the career is still loading instead of "No F2 season in this career". To confirm in game.
+- Still true: a new career that goes straight into its first session has no player row before it, so the round 1 target can only be told once that session loads.
+
+### F2 -> F1 with the dev copy (user's test, 14 Nov)
+
+- 16 rounds chosen after F2: the F1 calendar has 16 (`custom_track_list saved ... 16 calendar events`), every `ApplyPreset` call logged `2027 lists`.
+- **The season length screen first showed the 2026 circuits; going forward and back showed 2027.** The log has no `season length ... instead of` line at either career load of the session (16:59 new, 17:33 Continue): the lists were hidden only at the first `ApplyPreset` (18:02:15). So `on_career` found no schedule component, or one with no +0x290, and said nothing. In the 0.9.0 player's logs (launcher 1.9.37) the load did hide them. This is the likely origin of the 32-round calendar: a Custom Season screen on the 2026 pool with the 2027 rounds already applied. Fix: `hide_for_career` looks the component up by name, then by its descriptor (0x146063100), logs what it found, and the frame tick retries (600 half-second steps). To confirm in game.
+- **Promotions listed twice, no F2 review, three Silly Season mails:** the promoted list held two entries of the career before (`market: driver 200 signed by team 482`, then the new `483`), and `review` was already 1. Both are the inherited career data fixed above (not yet installed for this test). Whether the repeated mails come from the five market calls is unproven.
+
+## Rookies' table read 0 rows in F1 (14 Nov)
+
+After the first F1 race the panel still showed the F2 screen: the live table read 0 rows. A log probe at Team HQ
+showed why: the F1 championship holds 10 season entries from the start (one per career season), and the reader
+took the last entry, an empty future season. Championship +0x560 is the index of the season being raced (0 here,
+with 1 points round and 1 result round). `running_season()` now reads that entry in `read_standings` and
+`live_rounds`; F2 has one season, so nothing changes there. Not yet tested in game.
+
+The same load logged `season lists (career loaded or Team HQ): schedule component found by name, 2026 lists
+hidden`, so the lists are now hidden at career load.
+
+The panel stops drawing promotions at the frame's edge (five entries from inherited data ran past it).
+
+Tested in game the same day: the rookies' table shows (player P1 25, Mini P11, Bilinski P12, Leon P21). A second
+probe showed the F1 season keeps one session a round, the race (22 point records and 22 result records;
+qualifying is not there), so the line now reads "Ahead of your teammate in N of M races this season". Both
+probes are removed.
+
+## A reloaded new career lost its first session's data (14 Nov)
+
+New career (Herta), round 1 run, quit to the menu, reloaded: the panel showed the table but no rounds, every
+team at 0%, and the round 1 target was told again. The log: the whole first session ran as
+`f1_career_f2_26.driver_career:new1` (every save: "1 career(s) still on a provisional id are left out of this
+save"), and the reload came back as `dc-00ca0000`, which has no data of ours. The core does not move addon
+career data from the provisional id to the slot id (career_saves_logic.hpp only skips provisional ids). The
+table still showed because it also sits in the 0.8.0 storage file. This, not the timing of career.loaded, is
+what the 13 Nov "teams at 0% after a reload" was.
+
+Fix: `adopt_provisional()`: a loaded career with no table and no rounds takes the provisional id's data when
+its table is the same player's, and the provisional id is emptied. Silly Season keeps its own
+`careers/provisional.json` for the same reason. Limits: starting another new career before reloading the
+first one clears the provisional data (the first career then refills from the game's rounds at its next
+session end). Built, not yet tested in game.
+
+The "season lists ... trying again" line is now logged once per load: an F2 season has no schedule component,
+and the retry wrote 103 lines.
+
+Second test (15 Nov, Bilinski, a second new career in the same game session): its first session ran as
+`driver_career_f2_26:7b1b33f2eaec2cec`, not `...:new1`, and reloaded as `dc-00c90000`; the handoff looked at
+`:new1` and found nothing. So the first-session id is now written to the storage file
+`first_session_career.txt` when a career with a ':' in its id is first read, and the handoff reads the id from
+there (`:new1` stays as the fallback). Bilinski's 18 prior licence points showed. Built, not yet tested in game.
+
+## Tests of 15 Nov (dev copy, profile test)
+
+Passed in game: the handoff (`career dc-00c50000 takes the data of its first session ... ok`, panel the same
+after the reload); Bennett 7 and Bilinski 18 prior licence points; the academy drop (warning after two missed
+targets, the drop notice after the third, "Academy: none" and the dropped line; Aston Martin and Cadillac are
+then the two always-open teams, as for any driver with no academy); the F2 -> F1 season screen opened on the
+2027 rounds; three promotions made and recorded, the F2 review notice told.
+
+Found: at Team HQ before the first F1 race the panel listed one promotion of three. The frame-edge stop added
+on 14 Nov cut the other two, because the eleven team bars are still shown then. The frame is now 960 high (was
+900), which holds the teams and three promotions. Not yet seen in game.
+
+Silly Season's mails at Team HQ: its log registers three mail bodies (preview, radar, grid), so the "three
+mails" are most likely its three different mails, not one repeated; our six `sign` calls (three at the
+promotion, three by tell_market_all) each return 0 and it logs one signing per driver.
+
+## Two careers of one driver shared their data (15 Nov)
+
+Test: a second Herta career went from its creation to F1 in one game session (academy dropped, three
+promotions). Loaded in the next game session, the panel showed the first Herta career's numbers (round 1,
+30 points, Cadillac 1 of 1) and no promotions, and the F2 review was told again with 28 points.
+
+Cause: the core's career id. `snapshots_career_loaded` (core, `snapshots/runtime.cpp`) gives
+`driver_career_f2_26:<slot guid>` when a save slot was picked before the load, and the career tracker's key
+otherwise ("no save slot was selected before this load"). That key is `dc-%08x` of the player's driver
+(`career_state.hpp`): `dc-00ca0000` is Herta (202), `dc-00c50000` Bennett (197). Every career of that driver
+shares it. The second career's own data sat untouched under `driver_career_f2_26:7d17e4eee1872b7f`, the id of
+its first session.
+
+Fix: `career_id()` in `f2_feeder.cpp`. A `dc-` id resolves through the core's index (`careers/index.json`, read
+with the saves table's `index`) to the slot entry of the same profile, content and `driver_raw` with status
+`present` and the greatest `last_played`; all data reads and writes use it. With no such slot the `dc-` id
+stays. A slot id without data takes the first-session data (the file) or, failing that, a copy of what the
+`dc-` id holds for that driver (careers from before this build). Log line:
+`career dc-... (no save slot picked): data kept under ... (N save slot(s) of driver D in profile 'P')`.
+
+Tested in game (15 Nov, Herta's second career, loaded with Continue): `career dc-00ca0000 (no save slot picked): data kept under driver_career_f2_26:7d17e4eee1872b7f (1 save slot(s) of driver 202 in profile 'test')`; the panel showed its three rounds, the academy drop, the three promotions inside the 960 frame, and after the first F1 race the rookies' table with "1 of 1 race this season". The game log is now at `%LOCALAPPDATA%/Swofty/sessions/<stamp>/loader.log`. Limit: two saved careers of one driver in a profile, loaded without picking a slot,
+resolve to the one played last.

@@ -146,21 +146,46 @@ void find_pair(char *begin, char *end, size_t stride, Name name, const char *fro
     }
 }
 
-// The offsets and addresses here come from one exe. Another build's PE timestamp
+// The addresses here are not launcher bindings: each game build has its own row, and a build without one
 // leaves everything that reads them off; the tiles and titles go through Swofty, and keep working.
-constexpr DWORD kKnownExeStamp = 1789118616;
+// 1.0.145 (16 Nov): found from the launcher's own old > new pairs (code and data moved in blocks) and checked
+// in the exe: the descriptors' readers use the same fields, the vtable follows its class name and its slot 10
+// tests the team_selected hash, and the save loader's call lands on the map function.
+struct Build {
+    DWORD stamp;                 // the exe's PE timestamp
+    const char *name;
+    uintptr_t schedule_desc;     // k_Career_ScheduleComponentDesc, when the launcher doesn't find it by name
+    uintptr_t academies_desc;    // DriverAcademiesComponent's descriptor
+    uintptr_t academy_map_find;  // find or add in the driver > academy map
+    uintptr_t rival_desc;        // RivalManagerComponent's descriptor
+    uintptr_t team_select_vtable; // DriverCareerTeamSelectViewModel
+    size_t team_select_team;     // the screen's team key (u32, team in the high word)
+};
+constexpr Build kBuilds[] = {
+    {1789118616, "Steam d873a1c8", 0x6063100, 0x605c0b8, 0xe091e0, 0x60631a0, 0x5729db0, 0x564},
+    // +0xf20 is the key the handler itself tests at team_selected (word +0xf22 against 0x3fff)
+    {1794312636, "Steam 1.0.145", 0x6065100, 0x605e0b8, 0xe09d60, 0x60651a0, 0x572bee0, 0xf20},
+};
 
+const Build *build()
+{
+    static const Build *const found = [] {
+        auto *dos = reinterpret_cast<const IMAGE_DOS_HEADER *>(GetModuleHandleW(nullptr));
+        auto *nt = reinterpret_cast<const IMAGE_NT_HEADERS *>(reinterpret_cast<const char *>(dos) + dos->e_lfanew);
+        const Build *hit = nullptr;
+        for (const Build &b : kBuilds)
+            if (b.stamp == nt->FileHeader.TimeDateStamp)
+                hit = &b;
+        swofty::log("[f2-feeder] game exe stamp %lu: %s%s", static_cast<unsigned long>(nt->FileHeader.TimeDateStamp),
+                    hit ? hit->name : "a build this version doesn't know",
+                    hit ? "" : "; calendar lists, academies and promotion stay off");
+        return hit;
+    }();
+    return found;
+}
 bool known_build()
 {
-    auto *dos = reinterpret_cast<const IMAGE_DOS_HEADER *>(GetModuleHandleW(nullptr));
-    auto *nt = reinterpret_cast<const IMAGE_NT_HEADERS *>(reinterpret_cast<const char *>(dos) + dos->e_lfanew);
-    static const bool known = [nt] {
-        bool same = nt->FileHeader.TimeDateStamp == kKnownExeStamp;
-        swofty::log("[f2-feeder] game exe stamp %lu: %s", static_cast<unsigned long>(nt->FileHeader.TimeDateStamp),
-                    same ? "known build" : "another build; calendar lists, academies and promotion stay off");
-        return same;
-    }();
-    return known;
+    return build() != nullptr;
 }
 
 void hide_2026(char *owner)
@@ -203,7 +228,6 @@ void hide_2026(char *owner)
 // through ApplyPreset when the season length screen opens, so its lists are hidden at the load too; when the
 // component isn't there yet, the frame tick tries again (a reloaded career opened that screen on the 2026
 // rounds, 14 Nov: the likely way a player picked 16 more rounds on top of the 2027 ones).
-constexpr uintptr_t kScheduleDesc = 0x6063100; // k_Career_ScheduleComponentDesc
 bool hide_for_career(const char *why)
 {
     if (!known_build())
@@ -214,7 +238,7 @@ bool hide_for_career(const char *why)
     char *schedule = static_cast<char *>(swofty::career::component("k_Career_ScheduleComponentDesc"));
     const char *how = "by name";
     if (!schedule) {
-        schedule = static_cast<char *>(swofty::career::component_by_desc(base + kScheduleDesc));
+        schedule = static_cast<char *>(swofty::career::component_by_desc(base + build()->schedule_desc));
         how = "by descriptor";
     }
     char *owner = schedule ? *reinterpret_cast<char **>(schedule + 0x290) : nullptr;
@@ -269,12 +293,11 @@ constexpr DriverAcademy kDriverAcademies[] = {
 };
 
 // The academies component (DriverAcademiesComponent, F1 25 Steam build d873a1c8; found statically,
-// 2026-11-02): descriptor 0x14605c0b8; +0x278 the entity; +0x298..+0x2a0 its academies, 16-byte
+// 2026-11-02; the addresses per build are in kBuilds): descriptor 0x14605c0b8; +0x278 the entity; +0x298..+0x2a0 its academies, 16-byte
 // entries with the academy record at +8 (record +0: u16 statId); +0x2b0 the driver -> academy map,
 // entries at +0x2c8 (16 bytes: u16 driver key, +8 academy record). The save loader (0x140d6ee39)
 // calls 0x140e091e0(map, &slot, &key): status 1 the key was there, 2 or 3 a new slot (write the key),
 // 0 a failure; then it stores the record in the slot.
-constexpr uintptr_t kAcademiesDesc = 0x605c0b8, kAcademyMapFindOrAdd = 0xe091e0;
 
 struct MapSlot {
     uint64_t index;
@@ -313,7 +336,7 @@ void give_real_academy()
         return;
     char *base = reinterpret_cast<char *>(GetModuleHandleW(nullptr));
     void *entity = swofty::career::entity();
-    char *comp = static_cast<char *>(swofty::career::component_by_desc(base + kAcademiesDesc));
+    char *comp = static_cast<char *>(swofty::career::component_by_desc(base + build()->academies_desc));
     uint16_t key = 0, stat = 0;
     if (!entity || !comp || at<void *>(comp, 0x278) != entity || !player_driver(entity, &key, &stat))
         return;
@@ -334,7 +357,7 @@ void give_real_academy()
         return;
     }
     MapSlot slot{};
-    reinterpret_cast<FindOrAdd *>(base + kAcademyMapFindOrAdd)(comp + 0x2b0, &slot, &key);
+    reinterpret_cast<FindOrAdd *>(base + build()->academy_map_find)(comp + 0x2b0, &slot, &key);
     if (slot.status == 0) {
         swofty::log("[f2-feeder] academy: the map refused driver %u", stat);
         return;
@@ -454,19 +477,11 @@ const char *result_name(swofty::career::Result r)
 // was picked or first saved), with the slot's driver and when it was last played. So a "dc-" id resolves to the
 // slot career of this profile, content and driver that was played last, which is the one Continue loads. Empty
 // until the player is known; the "dc-" id itself when the index has no such slot.
-std::string g_resolved_for, g_resolved;
-std::string career_id()
+// The save slots of a driver in the profile and content of career `id`, from the core's index: how many are
+// present, and the one played last.
+size_t driver_slots(const std::string &id, unsigned player, std::string *latest, std::string *profile_out)
 {
-    std::string id = swofty::career::saves::current();
-    if (id.empty() || id.find(':') != std::string::npos)
-        return id;
-    if (id == g_resolved_for)
-        return g_resolved;
-    void *entity = swofty::career::entity();
-    uint16_t key = 0, player = 0;
-    if (!entity || !player_driver(entity, &key, &player))
-        return {};
-    std::string best, profile;
+    std::string profile;
     int64_t best_played = -1;
     size_t slots = 0;
     if (auto t = swofty::career::detail::live_saves(); t && t->index) {
@@ -485,11 +500,31 @@ std::string career_id()
                 ++slots;
                 if (int64_t played = c["last_played"].as_int(); played > best_played) {
                     best_played = played;
-                    best = std::string(c["career"].as_string());
+                    if (latest)
+                        *latest = std::string(c["career"].as_string());
                 }
             }
         }
     }
+    if (profile_out)
+        *profile_out = profile;
+    return slots;
+}
+
+std::string g_resolved_for, g_resolved;
+std::string career_id()
+{
+    std::string id = swofty::career::saves::current();
+    if (id.empty() || id.find(':') != std::string::npos)
+        return id;
+    if (id == g_resolved_for)
+        return g_resolved;
+    void *entity = swofty::career::entity();
+    uint16_t key = 0, player = 0;
+    if (!entity || !player_driver(entity, &key, &player))
+        return {};
+    std::string best, profile;
+    size_t slots = driver_slots(id, player, &best, &profile);
     g_resolved_for = id;
     g_resolved = best.empty() ? id : best;
     swofty::log("[f2-feeder] career %s (no save slot picked): data kept under %s (%zu save slot(s) of driver %u in "
@@ -552,11 +587,34 @@ void adopt_provisional()
     if (id.empty() || !entity || !player_driver(entity, &key, &player))
         return; // too early to tell: the next read tries again
     g_adopt_checked = true;
+    auto data = swofty::career::saves::data(kAddonId);
     if (raw.find(':') != std::string::npos) {
         remember_first_session(raw);
+        // A career that was only ever loaded with Continue before 0.9.1 kept its data under the tracker's key
+        // ("dc-" and the driver), and its slot id has none: picked from the load list it showed no table, or
+        // another driver's from the old shared file (the Camara career showed Herta's, 16 Nov). Every career of
+        // the driver shares that key, so the copy is taken only when this is the driver's one slot.
+        if (auto mine = data.get(id); mine && mine->value.is_object() &&
+                                      (mine->value.contains("table") || mine->value.contains("rounds")))
+            return;
+        char tracker[16];
+        std::snprintf(tracker, sizeof tracker, "dc-%04x0000", static_cast<unsigned>(key));
+        size_t slots = driver_slots(id, player, nullptr, nullptr);
+        if (auto held = data.get(tracker); slots == 1 && holds_player(held, player)) {
+            swofty::json::Value v = held->value;
+            if (auto mine = data.get(id); mine && mine->value.is_object())
+                for (const auto &[name, value] : *mine->value.if_object())
+                    v[name] = value; // what this id already holds (the rookie season) stays
+            swofty::career::Result r = data.set(id, v, 1);
+            swofty::log("[f2-feeder] career %s takes the data kept under %s (driver %u, its only save slot): %s",
+                        id.c_str(), tracker, player, result_name(r));
+        } else {
+            swofty::log("[f2-feeder] career %s has no table of its own; %s %s (%zu save slot(s) of driver %u)",
+                        id.c_str(), tracker, holds_player(held, player) ? "holds one, not taken" : "holds none", slots,
+                        player);
+        }
         return;
     }
-    auto data = swofty::career::saves::data(kAddonId);
     if (auto mine = data.get(id); mine && mine->value.is_object() &&
                                   (mine->value.contains("table") || mine->value.contains("rounds")))
         return;
@@ -618,7 +676,16 @@ bool read_kept(std::string &text)
             return true;
         }
     }
-    return swofty::storage::read(kStandingsFile, text) == swofty::storage::Result::ok;
+    // the file from before 0.8.1 is one per profile, not per career: it only answers for its own driver
+    void *entity = swofty::career::entity();
+    uint16_t key = 0, player = 0;
+    unsigned kept_player = 0;
+    if (swofty::storage::read(kStandingsFile, text) == swofty::storage::Result::ok && entity &&
+        player_driver(entity, &key, &player) && std::sscanf(text.c_str(), "%u", &kept_player) == 1 &&
+        kept_player == player)
+        return true;
+    text.clear();
+    return false;
 }
 
 size_t f2_standings(void *entity, uint16_t player, Standing *out, size_t cap)
@@ -721,7 +788,6 @@ Seat seat_of(void *entity, uint16_t driver)
 // Offers after F2: Team Select refuses a team that offers no seat. Its screen object (vtable 0x145729db0) takes
 // every UI message in slot 10 (0x141a69a50: this, name, data): team_selected is the confirm, and +0x564 holds
 // the focused team's key (Frida, 7 Nov). A created driver's academy isn't read yet, only kDriverAcademies'.
-constexpr uintptr_t kTeamSelectVtable = 0x5729db0;
 constexpr size_t kTeamSelectMessageSlot = 10;
 constexpr uint32_t kTeamSelectedHash = 0xb2738f54;
 constexpr uint16_t kOpenSeatTeams[] = {483, 482};  // Haas, Racing Bulls: the seats kLeavingSeats opens
@@ -881,8 +947,10 @@ int academy_of_driver(void *entity, uint16_t driver)
     for (const DriverAcademy &d : kDriverAcademies)
         if (d.driver == driver)
             return d.academy;
+    if (!known_build())
+        return -1;
     char *comp = static_cast<char *>(swofty::career::component_by_desc(
-        reinterpret_cast<char *>(GetModuleHandleW(nullptr)) + kAcademiesDesc));
+        reinterpret_cast<char *>(GetModuleHandleW(nullptr)) + build()->academies_desc));
     if (!comp || at<void *>(comp, 0x278) != entity)
         return -1;
     char *e = at<char *>(comp, 0x2c8), *end = at<char *>(comp, 0x2d0);
@@ -1144,7 +1212,7 @@ TeamSelectMessage *g_team_select_message = nullptr;
 
 void *team_select_message(void *screen, const uint32_t *const *name, void *data, void *extra)
 {
-    uint16_t team = static_cast<uint16_t>(at<uint32_t>(screen, 0x564) >> 16);
+    uint16_t team = static_cast<uint16_t>(at<uint32_t>(screen, build()->team_select_team) >> 16);
     // The same screen opens Start in F2 with the F2 teams: only an F1 pick is an offer.
     if (name && *name && **name == kTeamSelectedHash && team && (team < 489 || team > 499)) {
         if (Offer offer = read_offer(); offer.place) {
@@ -1177,7 +1245,7 @@ void on_starting(const SwoftyEvent *e, void *)
 void hook_team_select()
 {
     auto **slot = reinterpret_cast<TeamSelectMessage **>(reinterpret_cast<char *>(GetModuleHandleW(nullptr)) +
-                                                         kTeamSelectVtable) + kTeamSelectMessageSlot;
+                                                         build()->team_select_vtable) + kTeamSelectMessageSlot;
     DWORD old = 0;
     if (!VirtualProtect(slot, sizeof *slot, PAGE_READWRITE, &old))
         return;
@@ -1451,12 +1519,11 @@ void on_career(const SwoftyEvent *, void *)
 // 0x14124fad0 starts a teammate rivalry only for a manager without one (Game_Rivalry_Start 0x141249ce0, type 0),
 // with the teammate's entrant key (row +0x50), so a promotion after the grid is set leaves the released driver
 // as the rival (0.8.0). Read from the code, 9 Nov.
-constexpr uintptr_t kRivalManagerDesc = 0x60631a0;
 
 void fix_teammate_rival(void *entity)
 {
     uint16_t key = 0, player = 0;
-    if (!entity || !player_driver(entity, &key, &player))
+    if (!known_build() || !entity || !player_driver(entity, &key, &player))
         return;
     uint16_t team = player_team(entity);
     uint32_t mate_key = 0;
@@ -1472,7 +1539,7 @@ void fix_teammate_rival(void *entity)
     if (!mate_key || !f1_team(team))
         return;
     char *base = reinterpret_cast<char *>(GetModuleHandleW(nullptr));
-    char *comp = static_cast<char *>(swofty::career::component_by_desc(base + kRivalManagerDesc));
+    char *comp = static_cast<char *>(swofty::career::component_by_desc(base + build()->rival_desc));
     if (!comp || at<void *>(comp, 0x278) != entity)
         return;
     for (char *m = at<char *>(comp, 0xbd8), *me = at<char *>(comp, 0xbe0); m && m < me; m += 0x10) {

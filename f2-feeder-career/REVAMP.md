@@ -570,3 +570,44 @@ stays. A slot id without data takes the first-session data (the file) or, failin
 
 Tested in game (15 Nov, Herta's second career, loaded with Continue): `career dc-00ca0000 (no save slot picked): data kept under driver_career_f2_26:7d17e4eee1872b7f (1 save slot(s) of driver 202 in profile 'test')`; the panel showed its three rounds, the academy drop, the three promotions inside the 960 frame, and after the first F1 race the rookies' table with "1 of 1 race this season". The game log is now at `%LOCALAPPDATA%/Swofty/sessions/<stamp>/loader.log`. Limit: two saved careers of one driver in a profile, loaded without picking a slot,
 resolve to the one played last.
+
+## Game 1.0.145 and the launcher's bindings notice (16 Nov, 0.9.2)
+
+Swofty asked addon authors not to use their own offsets. This addon has five addresses that are not launcher
+bindings, all in `kBuilds` in `f2_feeder.cpp`, one row per exe PE timestamp; a build without a row turns off
+what reads them, as before.
+
+| what | Steam d873a1c8 (1789118616) | Steam 1.0.145 (1794312636) |
+|---|---|---|
+| `k_Career_ScheduleComponentDesc` (fallback only: asked by name first) | 0x6063100 | 0x6065100 |
+| DriverAcademiesComponent descriptor | 0x605c0b8 | 0x605e0b8 |
+| driver > academy map find or add | 0xe091e0 | 0xe09d60 |
+| RivalManagerComponent descriptor | 0x60631a0 | 0x60651a0 |
+| `vt_Game_DriverCareerTeamSelectViewModel` (slot 10 swapped) | 0x5729db0 | 0x572bee0 |
+| Team Select team key | +0x564 | +0xf20 |
+
+How the 1.0.145 row was found, with no copy of the old exe: the launcher's `re/db/signatures.json` (old match)
+and `re/db/builds/steam-26566308.json` (new match) give old > new pairs; code and data moved in blocks (code
++0xb80 near 0xe0xxxx, +0x17e0 near 0x1a6xxxx; the descriptors +0x2000, the view model vtables +0x2130).
+Checked in the exe: the descriptors' readers use the same fields (+0x278, +0x298, +0x2b0, +0x2c8; +0xbd8,
++0xbe0), the vtable follows its class name string and its slot 10 (0x141a6b230) tests the `team_selected` hash
+0xb2738f54, and the save loader's call at 0x140d6f9b9 lands on the map function. The handler tests the team
+at word +0xf22 against 0x3fff, so the new row reads +0xf20; +0x564 does not show in the new code.
+Scripts: `C:\Users\megul\f2work\b145`.
+
+In game (16 Nov, dev copy, profile test, Camara's career): `game exe stamp 1794312636: Steam 1.0.145`, `offers:
+Team Select hooked`, the three season lengths swapped and `2026 lists hidden`. Not tested on 1.0.145: Team
+Select after F2 (+0xf20), the real academy and the promotions of a new career. Season, championship and entity
+offsets were only spot-checked (they show in named functions of the new build).
+
+To do: send the four addresses to the launcher as bindings (the submission page was not found in the repo; ask
+Swofty), then drop `kBuilds`. That also brings the EA app.
+
+The same test showed Herta's table in Camara's career: its slot id held only `rookie_season` (the table sat
+under `dc-00cb0000` from Continue loads), and `read_kept` fell back to the per-profile `f2_standings.txt`, last
+written by Herta's career. Fix: the file only answers when its first line is the loaded career's driver, and a
+slot career without a table takes the one under its driver's `dc-` id when it is that driver's only present
+slot. In game the career was then loaded with Continue and the 0.9.1 path made the copy
+(`takes the data kept under dc-00cb0000 (driver 203): ok`); the new slot path and the file filter did not run.
+
+While the game runs the log is `<F1 25>/swofty/loader.log`; it moves to the session folder at exit.

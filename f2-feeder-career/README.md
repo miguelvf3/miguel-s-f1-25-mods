@@ -88,6 +88,7 @@ In your first F1 season the panel shows the rookie standings: you and the driver
 - A promoted driver can be missing from the Driver Rating Comparison (seems tied to the Iconic Edition driver icons).
 - Repeating F2 after a poor season isn't possible yet: the F2 championship runs one season.
 - With two saved careers of the same driver, Continue from the main menu uses the data of the one played last. Pick the save from the load list to be sure.
+- The calendar lists, the real academy, the promotions and the Team Select offers read game addresses that are not launcher bindings yet. They work on the Steam builds this version knows (up to 1.0.145) and turn themselves off on any other build, the EA app included, until an update; the tiles, titles and panel keep working.
 
 ## For other addons
 

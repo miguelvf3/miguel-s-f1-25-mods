@@ -22,7 +22,10 @@
     "seasons": [
       "f1_2026"
     ],
-    "launcher": ">=1.10.13"
+    "launcher": ">=1.10.13",
+    "platforms": [
+      "steam"
+    ]
   },
   "requires": [
     {

@@ -661,8 +661,10 @@ per-build address table) and the vtable slot swap of Team Select are gone. The f
 launcher by name at run time (`game()` in `f2_feeder.cpp`), the Team Select handler is a launcher wrap mixin,
 and the schedule component is only asked by name. Launcher 1.10.50 binds all four on Steam 1.0.145 and EA 1.0.145
 (`re/db/builds/ea-1-0-145.json`, `steam-26566308.json`), so the EA app gets the calendar lists, academies,
-promotions and offers too. `compat.launcher` is now `>=1.10.13`. An older launcher loads the addon with those
-parts off. The Team Select team key is the launcher's `selected_team_key` field offset (+0xf20).
+promotions and offers too. `compat.launcher` is now `>=1.10.13`: an older launcher refuses to install or build
+it (the run-time lookup still turns those parts off if a name is missing). `compat.platforms` is `["steam"]`,
+per the publishing docs (the copies tested on; add `"ea"` once someone tests it there). Built against the
+launcher's 1.10.50 headers (API version 9, the same as 1.9.3's). The Team Select team key is the launcher's `selected_team_key` field offset (+0xf20).
 
 Still own offsets (field reads, not hooks): the career entity's rows and standings, the season length presets
 (+0x290, +0xc0, +0xe0), DriverAcademiesComponent +0x278 and +0x2d0, the rival manager's +0x7a. If Swofty asks for

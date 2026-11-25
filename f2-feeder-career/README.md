@@ -14,7 +14,7 @@ Later F1 seasons repeat the year, as in the game's own careers.
 
 ## Requirements
 
-- Swofty Launcher 1.9.34 or later, with `swofty.core` 0.2.13 or later. Made and tested on the Steam copy of the game; the EA app copy is allowed but untested by the author.
+- Swofty Launcher 1.10.13 or later, with `swofty.core` 0.2.13 or later. Made and tested on the Steam copy of the game; the EA app copy uses the same launcher bindings but is untested by the author.
 - Optional track addons, for the two rounds F1 25 has no circuit for. Each round has its own setting on the addon, off by default. The setting is locked off while its track addon is off. Turn both on before starting a career:
   - `portimao` needs `mod.portimao` (Portimão, by Pajko);
   - `istanbul_park` needs `track.istanbul_park` (Istanbul Park, by Apoc & RK), in the Swofty addon catalogue.
@@ -88,7 +88,8 @@ In your first F1 season the panel shows the rookie standings: you and the driver
 - A promoted driver can be missing from the Driver Rating Comparison (seems tied to the Iconic Edition driver icons).
 - Repeating F2 after a poor season isn't possible yet: the F2 championship runs one season.
 - With two saved careers of the same driver, Continue from the main menu uses the data of the one played last. Pick the save from the load list to be sure.
-- The calendar lists, the real academy, the promotions and the Team Select offers read game addresses that are not launcher bindings yet. They work on the Steam builds this version knows (up to 1.0.145) and turn themselves off on any other build, the EA app included, until an update; the tiles, titles and panel keep working.
+- The calendar lists, the real academy, the promotions and the Team Select offers need the launcher's bindings for them (1.10.13 or later; Steam and EA 1.0.145 as of launcher 1.10.50). On a launcher or game build without them they turn themselves off; the tiles, titles and panel keep working.
+- A season can show more rounds than its list has (32 in one report), with two weekends of the same Grand Prix a day apart; the career then stops on a finished weekend. 0.9.3 logs it and warns at the Team HQ; removing the extra rounds (Swofty's Career Editor) or a new career fixes it.
 
 ## For other addons
 

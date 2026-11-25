@@ -611,3 +611,62 @@ slot. In game the career was then loaded with Continue and the 0.9.1 path made t
 (`takes the data kept under dc-00cb0000 (driver 203): ok`); the new slot path and the file filter did not run.
 
 While the game runs the log is `<F1 25>/swofty/loader.log`; it moves to the session folder at exit.
+
+## Launcher bindings for the fixed addresses (16 Nov, after 0.9.2, not released)
+
+The binding request went to the Swofty Manager bot and was taken (launcher commit 1a68f086, PR 1256, in the
+release after 1.9.59): `k_Career_DriverAcademiesComponentDesc`, `k_Career_RivalManagerComponentDesc`,
+`Career_DriverAcademies_MapFindOrAdd`, `Game_DriverCareerTeamSelect_OnMessage` (bound as `void(vm, name)`),
+and the struct fields but DriverAcademiesComponent +0x278 / +0x2d0 and the rival manager's +0x7a, which the
+addon still reads on its own. EA is not covered yet.
+
+`game()` in `f2_feeder.cpp` asks each name with `swofty::api->resolve` at run time and falls back to the
+`kBuilds` row; `known_build()` is now "the three addresses are known from either". Not `fn<>` or
+`SWOFTY_WRAP`: `detail::init` refuses to load an addon when one wanted name doesn't resolve, and launcher
+1.9.59 doesn't list these. A name the launcher doesn't list costs one `[core] addon ... needs ...` log line.
+Team Select: when the handler resolves, a wrap mixin is added in `register_tiles` (the init check, before the
+launcher takes the list) and the vtable slot is left alone; the team key is the row's offset, or +0xf20 on a
+build with no row. The schedule descriptor fallback only runs with a row.
+
+Consequence: on a build with no row where the launcher resolves the three names (a later game update, later
+the EA app), everything turns on with the addon's own entity, season and championship offsets unchecked there.
+
+Built and unit tests pass against the 1.9.3 headers. Not run in game: on 1.9.59 only the fallback path can
+run, and the launcher path needs the next release. When it is out: test Team Select after F2 through the wrap,
+then drop `kBuilds` once no supported launcher lacks the names.
+
+## Calendar check (25 Nov, not released)
+
+A Send Logs report through the Swofty Manager bot (launcher 1.10.35 to 1.10.50, addon 0.9.2, Steam 1.0.145):
+an F1 2027 season (Silly Season reads season 2027; player team 483) with 32 race weekends in its saved
+`custom_track_list`, while the season event list holds 24 and no list of this addon has more. The career is stuck
+after round 2: weekend complete (7 of 7 sessions), but its calendar item is still running (days 28-31, id 12) and
+the next race weekend starts inside it (days 29-32, id 14), so every Continue loads the finished race again. The
+32 entries were already in the save in the oldest report. Likely cause (not proven, the logs have no event
+names): the 2027 rounds are copies of the 2026 ones dated on their 2027 Thursday, mostly a day before the 2026
+weekend of the same GP; another schedule component of the save has 16 entries, so 16 picked rounds probably loaded
+both copies each. The launcher's "each stored custom_track_list entry loads one event" guard looks like the fix
+for new saves. Reply drafted in `dist/F2-Revamp-reply-calendar-loop.md`.
+
+The addon now logs it, with launcher calls only: a `hooks::after` on `career.calendar.add_activity` notes the
+player's race weekends (type 0x0a) and logs two that start less than 4 days apart; `current_round()` after the
+career loads and at the Team HQ logs the round count, and over 24 shows a "Calendar problem" popup at the Team
+HQ once per load. Built, unit tests pass; not run in game (whether add_activity fires when a save loads, or only
+when a season is built, is unknown).
+
+## 0.9.3: launcher bindings only (25 Nov)
+
+Swofty's rule of 25 Nov: addons with code must use the launcher's bindings; no custom hooks. `kBuilds` (the
+per-build address table) and the vtable slot swap of Team Select are gone. The four addresses come from the
+launcher by name at run time (`game()` in `f2_feeder.cpp`), the Team Select handler is a launcher wrap mixin,
+and the schedule component is only asked by name. Launcher 1.10.50 binds all four on Steam 1.0.145 and EA 1.0.145
+(`re/db/builds/ea-1-0-145.json`, `steam-26566308.json`), so the EA app gets the calendar lists, academies,
+promotions and offers too. `compat.launcher` is now `>=1.10.13`. An older launcher loads the addon with those
+parts off. The Team Select team key is the launcher's `selected_team_key` field offset (+0xf20).
+
+Still own offsets (field reads, not hooks): the career entity's rows and standings, the season length presets
+(+0x290, +0xc0, +0xe0), DriverAcademiesComponent +0x278 and +0x2d0, the rival manager's +0x7a. If Swofty asks for
+those too, they need a second binding request.
+
+Not run in game: built and unit tests pass against the 1.9.3 headers. The user will post it untested and
+friends will test, on Steam and the EA app.

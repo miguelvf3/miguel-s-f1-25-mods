@@ -31,6 +31,7 @@
 #include <swofty/career_wizard.hpp>
 #include <swofty/events.hpp>
 #include <swofty/game.hpp>
+#include <swofty/hooks.hpp>
 #include <swofty/hub.hpp>
 #include <swofty/lang.hpp>
 #include <swofty/mixin.hpp>
@@ -146,46 +147,47 @@ void find_pair(char *begin, char *end, size_t stride, Name name, const char *fro
     }
 }
 
-// The addresses here are not launcher bindings: each game build has its own row, and a build without one
-// leaves everything that reads them off; the tiles and titles go through Swofty, and keep working.
-// 1.0.145 (16 Nov): found from the launcher's own old > new pairs (code and data moved in blocks) and checked
-// in the exe: the descriptors' readers use the same fields, the vtable follows its class name and its slot 10
-// tests the team_selected hash, and the save loader's call lands on the map function.
-struct Build {
-    DWORD stamp;                 // the exe's PE timestamp
-    const char *name;
-    uintptr_t schedule_desc;     // k_Career_ScheduleComponentDesc, when the launcher doesn't find it by name
-    uintptr_t academies_desc;    // DriverAcademiesComponent's descriptor
-    uintptr_t academy_map_find;  // find or add in the driver > academy map
-    uintptr_t rival_desc;        // RivalManagerComponent's descriptor
-    uintptr_t team_select_vtable; // DriverCareerTeamSelectViewModel
-    size_t team_select_team;     // the screen's team key (u32, team in the high word)
-};
-constexpr Build kBuilds[] = {
-    {1789118616, "Steam d873a1c8", 0x6063100, 0x605c0b8, 0xe091e0, 0x60631a0, 0x5729db0, 0x564},
-    // +0xf20 is the key the handler itself tests at team_selected (word +0xf22 against 0x3fff)
-    {1794312636, "Steam 1.0.145", 0x6065100, 0x605e0b8, 0xe09d60, 0x60651a0, 0x572bee0, 0xf20},
-};
-
-const Build *build()
+// Every game address comes from the launcher's bindings (Swofty's rule of 25 Nov: no custom hooks or own
+// offsets for hooks). These four were added on request (16 Nov, launcher commit 1a68f086; Steam and EA 1.0.145
+// by 1.10.50). They are asked by name at run time, not as fn<>/SWOFTY_WRAP: a static binding the installed
+// launcher doesn't list stops the whole addon from loading, and this way an older launcher only turns off the
+// calendar lists, academies, promotions and offers (one "[core] addon ... needs ..." line per name).
+uintptr_t bound(const char *id)
 {
-    static const Build *const found = [] {
-        auto *dos = reinterpret_cast<const IMAGE_DOS_HEADER *>(GetModuleHandleW(nullptr));
-        auto *nt = reinterpret_cast<const IMAGE_NT_HEADERS *>(reinterpret_cast<const char *>(dos) + dos->e_lfanew);
-        const Build *hit = nullptr;
-        for (const Build &b : kBuilds)
-            if (b.stamp == nt->FileHeader.TimeDateStamp)
-                hit = &b;
-        swofty::log("[f2-feeder] game exe stamp %lu: %s%s", static_cast<unsigned long>(nt->FileHeader.TimeDateStamp),
-                    hit ? hit->name : "a build this version doesn't know",
-                    hit ? "" : "; calendar lists, academies and promotion stay off");
-        return hit;
+    return swofty::api && swofty::api->resolve ? swofty::api->resolve(id) : 0;
+}
+
+struct Game {
+    uintptr_t academies_desc;      // k_Career_DriverAcademiesComponentDesc
+    uintptr_t academy_map_find;    // Career_DriverAcademies_MapFindOrAdd
+    uintptr_t rival_desc;          // k_Career_RivalManagerComponentDesc
+    uintptr_t team_select_message; // Game_DriverCareerTeamSelect_OnMessage
+};
+// DriverCareerTeamSelectViewModel.selected_team_key in the launcher's struct headers (u32, team in the high word)
+constexpr size_t kTeamSelectTeam = 0xf20;
+
+const Game *game()
+{
+    static const Game *const found = []() -> const Game * {
+        static Game g{};
+        g.academies_desc = bound("k_Career_DriverAcademiesComponentDesc");
+        g.academy_map_find = bound("Career_DriverAcademies_MapFindOrAdd");
+        g.rival_desc = bound("k_Career_RivalManagerComponentDesc");
+        g.team_select_message = bound("Game_DriverCareerTeamSelect_OnMessage");
+        bool ok = g.academies_desc && g.academy_map_find && g.rival_desc;
+        swofty::log("[f2-feeder] launcher bindings: academies %s, map %s, rivals %s, Team Select %s%s",
+                    g.academies_desc ? "ok" : "missing", g.academy_map_find ? "ok" : "missing",
+                    g.rival_desc ? "ok" : "missing", g.team_select_message ? "ok" : "missing",
+                    ok ? "" : "; calendar lists, academies and promotion stay off until the launcher is updated");
+        return ok ? &g : nullptr;
     }();
     return found;
 }
+
+// The parts that read the game's career data run when the launcher binds what they need.
 bool known_build()
 {
-    return build() != nullptr;
+    return game() != nullptr;
 }
 
 void hide_2026(char *owner)
@@ -234,13 +236,8 @@ bool hide_for_career(const char *why)
         return true;
     if (g_presets[0] && g_pool)
         return true;
-    char *base = reinterpret_cast<char *>(GetModuleHandleW(nullptr));
     char *schedule = static_cast<char *>(swofty::career::component("k_Career_ScheduleComponentDesc"));
     const char *how = "by name";
-    if (!schedule) {
-        schedule = static_cast<char *>(swofty::career::component_by_desc(base + build()->schedule_desc));
-        how = "by descriptor";
-    }
     char *owner = schedule ? *reinterpret_cast<char **>(schedule + 0x290) : nullptr;
     if (!owner) {
         // an F2 season has no schedule component at all: said once a load, not at every try (103 lines, 14 Nov)
@@ -293,7 +290,7 @@ constexpr DriverAcademy kDriverAcademies[] = {
 };
 
 // The academies component (DriverAcademiesComponent, F1 25 Steam build d873a1c8; found statically,
-// 2026-11-02; the addresses per build are in kBuilds): descriptor 0x14605c0b8; +0x278 the entity; +0x298..+0x2a0 its academies, 16-byte
+// 2026-11-02; now the launcher's bindings): descriptor 0x14605c0b8; +0x278 the entity; +0x298..+0x2a0 its academies, 16-byte
 // entries with the academy record at +8 (record +0: u16 statId); +0x2b0 the driver -> academy map,
 // entries at +0x2c8 (16 bytes: u16 driver key, +8 academy record). The save loader (0x140d6ee39)
 // calls 0x140e091e0(map, &slot, &key): status 1 the key was there, 2 or 3 a new slot (write the key),
@@ -334,9 +331,9 @@ void give_real_academy()
 {
     if (!known_build())
         return;
-    char *base = reinterpret_cast<char *>(GetModuleHandleW(nullptr));
     void *entity = swofty::career::entity();
-    char *comp = static_cast<char *>(swofty::career::component_by_desc(base + build()->academies_desc));
+    char *comp = static_cast<char *>(
+        swofty::career::component_by_desc(reinterpret_cast<const void *>(game()->academies_desc)));
     uint16_t key = 0, stat = 0;
     if (!entity || !comp || at<void *>(comp, 0x278) != entity || !player_driver(entity, &key, &stat))
         return;
@@ -357,7 +354,7 @@ void give_real_academy()
         return;
     }
     MapSlot slot{};
-    reinterpret_cast<FindOrAdd *>(base + build()->academy_map_find)(comp + 0x2b0, &slot, &key);
+    reinterpret_cast<FindOrAdd *>(game()->academy_map_find)(comp + 0x2b0, &slot, &key);
     if (slot.status == 0) {
         swofty::log("[f2-feeder] academy: the map refused driver %u", stat);
         return;
@@ -785,10 +782,10 @@ Seat seat_of(void *entity, uint16_t driver)
     return {};
 }
 
-// Offers after F2: Team Select refuses a team that offers no seat. Its screen object (vtable 0x145729db0) takes
-// every UI message in slot 10 (0x141a69a50: this, name, data): team_selected is the confirm, and +0x564 holds
-// the focused team's key (Frida, 7 Nov). A created driver's academy isn't read yet, only kDriverAcademies'.
-constexpr size_t kTeamSelectMessageSlot = 10;
+// Offers after F2: Team Select refuses a team that offers no seat. Its screen's UI message handler (the launcher's
+// Game_DriverCareerTeamSelect_OnMessage) takes every message: team_selected is the confirm, and
+// kTeamSelectTeam holds the focused team's key (Frida, 7 Nov). A created driver's academy isn't read yet, only
+// kDriverAcademies'.
 constexpr uint32_t kTeamSelectedHash = 0xb2738f54;
 constexpr uint16_t kOpenSeatTeams[] = {483, 482};  // Haas, Racing Bulls: the seats kLeavingSeats opens
 constexpr size_t kLicencePlaces = 3;               // F2 P1-P3 carry the 40 super licence points
@@ -949,8 +946,8 @@ int academy_of_driver(void *entity, uint16_t driver)
             return d.academy;
     if (!known_build())
         return -1;
-    char *comp = static_cast<char *>(swofty::career::component_by_desc(
-        reinterpret_cast<char *>(GetModuleHandleW(nullptr)) + build()->academies_desc));
+    char *comp = static_cast<char *>(
+        swofty::career::component_by_desc(reinterpret_cast<const void *>(game()->academies_desc)));
     if (!comp || at<void *>(comp, 0x278) != entity)
         return -1;
     char *e = at<char *>(comp, 0x2c8), *end = at<char *>(comp, 0x2d0);
@@ -1212,7 +1209,7 @@ TeamSelectMessage *g_team_select_message = nullptr;
 
 void *team_select_message(void *screen, const uint32_t *const *name, void *data, void *extra)
 {
-    uint16_t team = static_cast<uint16_t>(at<uint32_t>(screen, build()->team_select_team) >> 16);
+    uint16_t team = static_cast<uint16_t>(at<uint32_t>(screen, kTeamSelectTeam) >> 16);
     // The same screen opens Start in F2 with the F2 teams: only an F1 pick is an offer.
     if (name && *name && **name == kTeamSelectedHash && team && (team < 489 || team > 499)) {
         if (Offer offer = read_offer(); offer.place) {
@@ -1244,15 +1241,17 @@ void on_starting(const SwoftyEvent *e, void *)
 
 void hook_team_select()
 {
-    auto **slot = reinterpret_cast<TeamSelectMessage **>(reinterpret_cast<char *>(GetModuleHandleW(nullptr)) +
-                                                         build()->team_select_vtable) + kTeamSelectMessageSlot;
-    DWORD old = 0;
-    if (!VirtualProtect(slot, sizeof *slot, PAGE_READWRITE, &old))
+    const Game *g = game();
+    if (!g->team_select_message) {
+        swofty::log("[f2-feeder] offers: Team Select not wrapped: the launcher doesn't bind its handler");
         return;
-    g_team_select_message = *slot;
-    *slot = team_select_message;
-    VirtualProtect(slot, sizeof *slot, old, &old);
-    swofty::log("[f2-feeder] offers: Team Select hooked");
+    }
+    // Joins the addon's mixins before the launcher takes them (this runs as SwoftyAddonInit's check). The
+    // binding is void(vm, name); the two extra arguments are passed through as they came.
+    new swofty::detail::mixin("Game_DriverCareerTeamSelect_OnMessage", SWOFTY_MIXIN_WRAP, 0,
+                              reinterpret_cast<void *>(&team_select_message),
+                              reinterpret_cast<void **>(&g_team_select_message));
+    swofty::log("[f2-feeder] offers: Team Select wrapped through the launcher");
 }
 
 // Silly Season's market (aleex0428), as proposed on 9 Nov: each promotion is told to it as a signing with a
@@ -1538,8 +1537,8 @@ void fix_teammate_rival(void *entity)
     uint16_t mate = static_cast<uint16_t>(mate_key >> 16);
     if (!mate_key || !f1_team(team))
         return;
-    char *base = reinterpret_cast<char *>(GetModuleHandleW(nullptr));
-    char *comp = static_cast<char *>(swofty::career::component_by_desc(base + build()->rival_desc));
+    char *comp = static_cast<char *>(
+        swofty::career::component_by_desc(reinterpret_cast<const void *>(game()->rival_desc)));
     if (!comp || at<void *>(comp, 0x278) != entity)
         return;
     for (char *m = at<char *>(comp, 0xbd8), *me = at<char *>(comp, 0xbe0); m && m < me; m += 0x10) {
@@ -1768,6 +1767,8 @@ void refresh_panel()
     f2panel::set(std::move(s));
 }
 
+void check_calendar(bool at_hub);
+
 // What the player should hear once, as the game's message popup (inbox mails can't be kept to this career yet:
 // REVAMP.md). In F2: the academy's verdict on the round just judged and the next target; "told" in the career
 // data is the number of judged rounds told, plus one. In F1: the F2 season's review, once ("review").
@@ -1859,6 +1860,7 @@ void panel_tick(double, void *)
             give_real_academy(); // before the notice, which names the academy
             tell_notices();
             refresh_panel();
+            check_calendar(false); // a career stuck in a weekend never reaches the Team HQ
         }
         if (ready || !left)
             swofty::log("[f2-feeder] notice: after career loaded: %s", ready ? "career ready" : "gave up waiting");
@@ -1868,8 +1870,75 @@ void panel_tick(double, void *)
         swofty::hub::set_option(kAddonId, "panel_open", open ? "open" : "closed");
 }
 
+// Calendar check (25 Nov). A Send Logs report (launcher 1.10.35 to 1.10.50) had an F1 2027 season of 32 race
+// weekends, while no list of this addon has more than 24, and two weekends a day apart (days 28-31 and 29-32):
+// the game loads the finished round again on every Continue. The 2027 rounds are copies of the 2026 ones dated
+// on their 2027 Thursday, mostly a day before the 2026 weekend of the same GP, so a calendar holding both
+// copies overlaps. Only launcher calls here: the activities the game adds to the player's calendar, and the
+// round count at the Team HQ.
+constexpr int kMaxRounds = 24;     // F1_2027_full with Portugal and Turkey; F2 has 14
+constexpr uint8_t kRaceWeekend = 0x0a;
+constexpr uint32_t kWeekendDays = 4; // a race weekend runs days d to d+3
+std::mutex g_calendar_lock;
+std::vector<std::pair<void *, uint32_t>> g_weekend_days; // (calendar, first day) of the player's race weekends
+int g_overlaps_logged = 0;
+bool g_calendar_checked = false; // the round count, once per career load
+bool g_calendar_warned = false;
+
+void on_add_activity(const swofty::career::events::AddActivity &a, const swofty::hooks::Outcome &)
+{
+    if (a.type != kRaceWeekend || !a.player || !swofty::career::is(kCareers[0].group))
+        return;
+    std::lock_guard<std::mutex> lock(g_calendar_lock);
+    for (const auto &[calendar, day] : g_weekend_days) {
+        if (calendar != a.calendar)
+            continue;
+        uint32_t gap = day > a.day ? day - a.day : a.day - day;
+        if (gap < kWeekendDays && g_overlaps_logged < 10) {
+            ++g_overlaps_logged;
+            swofty::log("[f2-feeder] calendar: race weekends overlap: days %u-%u and %u-%u (calendar %p); the career "
+                        "can't leave the first one. A season mixing the 2026 and 2027 copies of a GP does this",
+                        day, day + kWeekendDays - 1, a.day, a.day + kWeekendDays - 1, a.calendar);
+        }
+    }
+    g_weekend_days.emplace_back(a.calendar, a.day);
+}
+
+void check_calendar(bool at_hub)
+{
+    // checked once per load; a long season found before the Team HQ still gets its popup there
+    if ((g_calendar_checked && (!at_hub || g_calendar_warned)) || !swofty::career::is(kCareers[0].group))
+        return;
+    std::optional<swofty::career::RoundPosition> at = swofty::career::current_round();
+    if (!at || at->rounds <= 0)
+        return;
+    bool first = !g_calendar_checked;
+    g_calendar_checked = true;
+    if (at->rounds <= kMaxRounds) {
+        g_calendar_warned = true; // nothing to warn about
+        if (first)
+            swofty::log("[f2-feeder] calendar: %d rounds (round %d), within this career's lists", at->rounds, at->round);
+        return;
+    }
+    if (first)
+        swofty::log("[f2-feeder] calendar: %d rounds (round %d), more than the %d any list of this career has: the "
+                "season holds rounds from another list (likely both the 2026 and the 2027 copy of some GPs, a day "
+                "apart), and the career can stop on a finished weekend",
+                at->rounds, at->round, kMaxRounds);
+    if (g_calendar_warned || !at_hub || !swofty::popup::available())
+        return;
+    g_calendar_warned = true;
+    std::string body = "This season has " + std::to_string(at->rounds) + " rounds; F2 Revamp's F1 calendars have at "
+                       "most " + std::to_string(kMaxRounds) + ". Some Grands Prix are likely in it twice, a day "
+                       "apart, and the career can get stuck after one of them. Removing the extra rounds (Swofty's "
+                       "Career Editor can) or starting the career again fixes it.";
+    swofty::popup::Result r = swofty::popup::show("Calendar problem", body);
+    swofty::log("[f2-feeder] calendar: warning popup: %s", swofty::popup::name(r));
+}
+
 void on_hub(const SwoftyEvent *e, void *user)
 {
+    check_calendar(true);
     on_career(e, user);
     if (swofty::career::is(kCareers[0].group) && known_build()) {
         promote_f2_drivers();
@@ -1883,6 +1952,13 @@ void on_hub(const SwoftyEvent *e, void *user)
 
 void on_unloaded(const SwoftyEvent *, void *)
 {
+    {
+        std::lock_guard<std::mutex> lock(g_calendar_lock);
+        g_weekend_days.clear();
+        g_overlaps_logged = 0;
+    }
+    g_calendar_checked = false;
+    g_calendar_warned = false;
     set_titles(false, "career unloaded");
     g_market_told = false;
     g_notice_tries = 0;
@@ -1924,6 +2000,8 @@ bool register_tiles()
                 swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_SESSION_END, on_f2_session)));
     swofty::log("[f2-feeder] subscribe %s: %s", SWOFTY_EVENT_RESULTS,
                 swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_RESULTS, on_f2_session)));
+    swofty::log("[f2-feeder] calendar: watch %s: %s", swofty::career::events::AddActivity::point,
+                swofty::events::name(swofty::hooks::after<swofty::career::events::AddActivity>(on_add_activity)));
     swofty::log("[f2-feeder] subscribe %s: %s", SWOFTY_EVENT_CAREER_UNLOADED,
                 swofty::events::name(swofty::events::subscribe(SWOFTY_EVENT_CAREER_UNLOADED, on_unloaded)));
     swofty::log("[f2-feeder] service %s v%u: %s", F2RevampCareer::name, F2RevampCareer::version,
